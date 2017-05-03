@@ -1,332 +1,619 @@
 #####  TFM
 
-## En esta ruta está el script que nos ha enviado Israel por correo 
-setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM")
+## En esta ruta est? el script que nos ha enviado Israel por correo 
+#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+
 
 ## Apertura del dataset
 vuelos <- read.table("operations_leg.csv", header = T, sep = "^")
 
 
-### (1). eliminar variables innecesarias
-vuelos2 <- vuelos
-vuelos2$snapshot_date <- NULL
-vuelos2$snapshot_time <- NULL
-vuelos2$airline_code <- NULL
-vuelos2$arrival_date <- NULL
-vuelos2$estimated_time_of_departure <- NULL
-vuelos2$estimated_time_of_arrival <- NULL
-vuelos2$est_blocktime <- NULL
-vuelos2$cabin_3_code <- NULL
-vuelos2$cabin_3_fitted_configuration <- NULL
-vuelos2$cabin_3_saleable <- NULL
-vuelos2$cabin_3_pax_boarded <- NULL
-vuelos2$cabin_3_rpk <- NULL
-vuelos2$cabin_3_ask <- NULL
-vuelos2$cabin_4_code <- NULL
-vuelos2$cabin_4_fitted_configuration <- NULL
-vuelos2$cabin_4_saleable <- NULL
-vuelos2$cabin_4_pax_boarded <- NULL
-vuelos2$cabin_4_rpk <- NULL
-vuelos2$cabin_4_ask <- NULL
+## 1. Primera visualizacion de los datos
+summary(vuelos)
+
+## 2. Eliminamos variables que no contienen informacion
+vuelos$arrival_date <- NULL
+vuelos$cabin_3_code <- NULL
+vuelos$cabin_3_fitted_configuration <- NULL
+vuelos$cabin_3_saleable <- NULL
+vuelos$cabin_3_pax_boarded <- NULL
+vuelos$cabin_3_rpk <- NULL
+vuelos$cabin_3_ask <- NULL
+vuelos$cabin_4_code <- NULL
+vuelos$cabin_4_fitted_configuration <- NULL
+vuelos$cabin_4_saleable <- NULL
+vuelos$cabin_4_pax_boarded <- NULL
+vuelos$cabin_4_rpk <- NULL
+vuelos$cabin_4_ask <- NULL
+
+summary(vuelos)
+
+## Nos centraremos en la variable "general_status_code" .
+vuelosCancelled <- vuelos[vuelos$general_status_code=="Cancelled",]   ## 1601 registros
+vuelosDeparted <- vuelos[vuelos$general_status_code=="Departed",]     ## 220247 registros
+vuelosLocked <- vuelos[vuelos$general_status_code=="Locked",]         ## 3 registros
+vuelosOpen <- vuelos[vuelos$general_status_code=="Open",]             ## 154 registros
+vuelosSuspended <- vuelos[vuelos$general_status_code=="Suspended",]   ## 7 registros
+
+## 2.1 Analizamos cada dataframe para ver si tiene sentido incluirlo en el estudio
+## 2.1.1 vuelosCancelled
+str(vuelosCancelled)
+summary(vuelosCancelled)
+
+## Para este caso, las horas de salida y de llegada se encuentran vacias en la mayor parte de sus datos
+library(lubridate)
+vuelosCancelled$scheduled_time_of_departure <- ymd_hms(vuelosCancelled$scheduled_time_of_departure)
+vuelosCancelled$estimated_time_of_departure <- ymd_hms(vuelosCancelled$estimated_time_of_departure)
+vuelosCancelled$actual_time_of_departure <- ymd_hms(vuelosCancelled$actual_time_of_departure)
+vuelosCancelled$scheduled_time_of_arrival <- ymd_hms(vuelosCancelled$scheduled_time_of_arrival)
+vuelosCancelled$estimated_time_of_arrival <- ymd_hms(vuelosCancelled$estimated_time_of_arrival)
+vuelosCancelled$actual_time_of_arrival <- ymd_hms(vuelosCancelled$actual_time_of_arrival)
+
+summary(vuelosCancelled)
+
+## Observamos que las fechas reales de salida y de llegada no estan indicadas, por lo que no es relevante para el estudio
+
+## 2.2.2 vuelosLocked
+str(vuelosLocked)
+summary(vuelosLocked)
+
+## Este DF tiene 3 registros. Ninguno de ellos tiene fechas indicadas de salida y llegada, por lo que no es relevante para el estudio
+
+## 2.2.3 vuelosOpen
+str(vuelosOpen)
+summary(vuelosOpen)
+
+## Este DF tiene 154 registros. Ninguno de ellos tiene fechas indicadas de salida y llegada, por lo que no es relevante para el estudio
+
+## 2.2.4 vuelosSuspended
+str(vuelosSuspended)
+summary(vuelosSuspended)
+
+## Este DF tiene 7 registros. Ninguno de ellos tiene fechas indicadas de salida y llegada, por lo que no es relevante para el estudio
+
+## 2.2.5 vuelosDeparted
+str(vuelosDeparted)
+summary(vuelosDeparted)
+
+vuelosDeparted$scheduled_time_of_departure <- ymd_hms(vuelosDeparted$scheduled_time_of_departure)
+vuelosDeparted$estimated_time_of_departure <- ymd_hms(vuelosDeparted$estimated_time_of_departure)
+vuelosDeparted$actual_time_of_departure <- ymd_hms(vuelosDeparted$actual_time_of_departure)
+vuelosDeparted$scheduled_time_of_arrival <- ymd_hms(vuelosDeparted$scheduled_time_of_arrival)
+vuelosDeparted$estimated_time_of_arrival <- ymd_hms(vuelosDeparted$estimated_time_of_arrival)
+vuelosDeparted$actual_time_of_arrival <- ymd_hms(vuelosDeparted$actual_time_of_arrival)
+
+summary(vuelosDeparted)
+
+## En este DF se encuentran los datos que queremos estudiar, por lo tanto utilizaremos "vuelosDeparted"
+
+
+## 3. Eliminamos variables innecesarias del DF
+vuelosDeparted$snapshot_date <- NULL ## La fecha de captura de datos es irrelevante para el estudio
+vuelosDeparted$snapshot_time <- NULL ## La hora de captura de datos es irrelevante para el estudio
+vuelosDeparted$estimated_time_of_departure <- NULL  ## La fecha estimada de salida es irrelevante para el estudio
+vuelosDeparted$estimated_time_of_arrival <- NULL    ## La fecha estimada de llegada es irrelevante para el estudio
+vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
 
 
 
-##################################################
-## (2). Transformacion de datos
+## Una vez tenemos los datos que queremos estudiar, realizamos un analisis y transformacion de variables si fuera necesario
+str(vuelosDeparted)
+## Se observa que hay variables que deben ser transformadas.
 
-### (2.1). flight_number
+## 4. Transformacion de datos
+
+### 4.1 flight_number
 ###############################################################################################
 
-str(vuelos2$flight_number)
-summary(vuelos2$flight_number)
+str(vuelosDeparted$flight_number)
+summary(vuelosDeparted$flight_number)
 
 ### Esta variable esta guardada como entero. Al ser un numero de vuelo lo transformamos a factor
-vuelos2$flight_number <- as.factor(vuelos2$flight_number)
+vuelosDeparted$flight_number <- as.factor(vuelosDeparted$flight_number)
 
 options(max.print=999999)  ### incrementar la salida del summary
-summary(vuelos2$flight_number, maxsum = 1100)
+summary(vuelosDeparted$flight_number, maxsum = 1100)
 
-unique(vuelos2$flight_number)
-vuelos2[vuelos2$flight_number=="9999",]
-
-######  Preguntas sobre esta variable
-# ¿Son correctos los valores 0 y 9999?
+unique(vuelosDeparted$flight_number)  ## 1045 vuelos distintos
 
 
-### (2.2). flight_date
+### 4.2 flight_date
 ###############################################################################################
 
-str(vuelos2$flight_date)
-summary(vuelos2$flight_date, maxsum = 835)
+## Comprobamos la necesidad de esta variable
+fechasVuelos <- subset(vuelosDeparted, select = c("flight_date","actual_time_of_departure"))
 
-### Esta variable se muestra como factor, se debe cambiar a DATE
+head(fechasVuelos,20)
+tail(fechasVuelos,20)
 
-vuelos2$flight_date <- as.Date(vuelos2$flight_date)
+## Observamos que esta variable (flight_date) ya esta incluida en la variable "actual_time_of_departure"
 
-### No existen fechas nulas al pasar los datos
-######  Preguntas sobre esta variable
+## Comprobamos que la variable "actual_time_of_departure" no tiene NAs
+summary(vuelosDeparted$actual_time_of_departure)
+
+## Eliminamos del DF la variable flight_date
+vuelosDeparted$flight_date <- NULL
+
+summary(vuelosDeparted)
 
 
-### (2.3). board_point
+### 4.3 board_point
 ###############################################################################################
 
-str(vuelos2$board_point)
-summary(vuelos2$board_point, maxsum = 159)
+str(vuelosDeparted$board_point)
+summary(vuelosDeparted$board_point, maxsum = 159)
 
-### Esta variable se almacena como factor, por lo que no la modificaremos
+### Esta variable no contiene NAs y se almacena como factor, por lo que no la modificaremos
 
 
-### (2.4). board_lat
+
+### 4.4 board_lat
 ###############################################################################################
 
-str(vuelos2$board_lat)
-summary(vuelos2$board_lat)
+str(vuelosDeparted$board_lat)
+summary(vuelosDeparted$board_lat)
 
-### Esta variable se almacena como numeric, de momento la dejamos asi
+### Esta variable no contiene NAs y se almacena como numeric, de momento la dejamos asi
 
 
-### (2.5). board_lon
+### 4.5 board_lon
 ###############################################################################################
 
-str(vuelos2$board_lon)
-summary(vuelos2$board_lon)
+str(vuelosDeparted$board_lon)
+summary(vuelosDeparted$board_lon)
 
-### Esta variable se almacena como numeric, de momento la dejamos asi
+### Esta variable no contiene NAs y se almacena como numeric, de momento la dejamos asi
 
 
 
-### (2.6) board_country_code ( y off_country_code )
+### 4.6 board_country_code ( y off_country_code )
 ###############################################################################################
 
-str(vuelos2$board_country_code)
-summary(vuelos2$board_country_code)
+str(vuelosDeparted$board_country_code)
+summary(vuelosDeparted$board_country_code)
 
 ### Variable almacenada como factor
-### Exsiten NAs. Se debe determinar un procedimiento para asignar codigos de embarque de cada pais en
-###              funcion de la latitud y longitud
+### Existen NAs. Comprobamos la latitud y longitud de los NAs
 
-### (2.6.1). Dataframe de codigos de paises de salida con sus latitudes y longitudes
-vuelosCodeLatLonBoard <- subset(vuelos2, select=c("board_country_code", "board_lat", "board_lon"))
+### 4.6.1 Dataframe de codigos de paises de salida con sus latitudes y longitudes
+vuelosCodeLatLonBoard <- subset(vuelosDeparted, select=c("board_country_code", "board_lat", "board_lon"))
 vuelosCodeLatLonBoard <- unique(vuelosCodeLatLonBoard)
 
 vuelosCodeLatLonBoard[is.na(vuelosCodeLatLonBoard$board_country_code)==TRUE,]
-### se observa que los NA tienen la misma latitud y longitud, por lo que se trata de un único aeropuerto
+### se observa que los NA tienen la misma latitud y longitud, por lo que se trata de un ?nico aeropuerto
 
-head(vuelos2[is.na(vuelos2$board_country_code)== TRUE,],5)
-head(vuelosCodeLatLonBoard[vuelosCodeLatLonBoard$board_lon==17.08323,],5)
 
-### (2.6.2). Comprobamos si los datos de aeropuertos de llegada guardan estas latitudes
-vuelosCodeLatLonArrive <- subset(vuelos2, select = c("off_country_code","off_lat","off_lon"))
+### 4.6.2. Comprobamos si los datos de aeropuertos de llegada guardan estas latitudes
+vuelosCodeLatLonArrive <- subset(vuelosDeparted, select = c("off_country_code","off_lat","off_lon"))
 vuelosCodeLatLonArrive <- unique(vuelosCodeLatLonArrive)
 
-summary(vuelosCodeLatLonArrive)
-
-head(vuelosCodeLatLonArrive[vuelosCodeLatLonArrive$off_lon==17.08323,],5)
-head(vuelosCodeLatLonArrive[vuelosCodeLatLonArrive$off_lat==-22.55941,],5)
-
+vuelosCodeLatLonArrive[is.na(vuelosCodeLatLonArrive$off_country_code)==TRUE,]
 ### Se observa que en los datos de llegadas tambien existen NA con los mismos valores para latitud y longitud 
 
-### (2.6.3). Para salidas y llegadas de vuelos, si buscamos la ruta realizada en funcion de latitud y longitud 
+### 4.6.3 Para salidas y llegadas de vuelos, si buscamos la ruta realizada en funcion de latitud y longitud 
 ### observamos que el codigo de aeropuerto corresponde a WDH
-unique(subset(vuelos2, vuelos2$board_lon==17.08323 & vuelos2$board_lat==-22.55941, select = c("routing")))
-unique(subset(vuelos2, vuelos2$off_lon==17.08323 & vuelos2$off_lat==-22.55941, select = c("routing")))
+unique(subset(vuelosDeparted, vuelosDeparted$board_lon==17.08323 & vuelosDeparted$board_lat==-22.55941, select = c("routing")))
+unique(subset(vuelosDeparted, vuelosDeparted$off_lon==17.08323 & vuelosDeparted$off_lat==-22.55941, select = c("routing")))
 
 ### Buscando en internet el codigo de aeropuerto encontramos varias paginas donde se indica
 ### que el codigo WDH corresponde a Namibia:
 ### http://www.mundocity.com/vuelos/aeropuertos/windhoek+wdh.html
 ### https://es.wikipedia.org/wiki/Aeropuerto_Internacional_de_Windhoek_Hosea_Kutako
 
-### (2.6.4). Como el aeropuerto es de Namibia sustituiremos los NAs por NM.
+### 4.6.4 Como el aeropuerto es de Namibia sustituiremos los NAs por NM.
 ### Comprobamos si existe el codigo de aeropuerto escogido en los aeropuertos de salida y de llegada
 vuelosCodeLatLonBoard[vuelosCodeLatLonBoard$board_country_code=="NM",]
 vuelosCodeLatLonArrive[vuelosCodeLatLonArrive$off_country_code=="NM",]
 
-### (2.6.5). Sustituimos NAs por NM en los datos de salida y de llegada
-summary(vuelos2$board_country_code)  ## NAs -> 829 valores
-vuelos2$board_country_code <- as.character(vuelos2$board_country_code)
-vuelos2$board_country_code <- replace(vuelos2$board_country_code, is.na(vuelos2$board_country_code), "NM")
-vuelos2$board_country_code <- as.factor(vuelos2$board_country_code)
-summary(vuelos2$board_country_code)  ## NM -> 829 valores
+### 4.6.5 Sustituimos NAs por NM en los datos de salida y de llegada
+summary(vuelosDeparted$board_country_code)  ## NAs -> 826 valores
+vuelosDeparted$board_country_code <- as.character(vuelosDeparted$board_country_code)
+vuelosDeparted$board_country_code <- replace(vuelosDeparted$board_country_code, is.na(vuelosDeparted$board_country_code), "NM")
+vuelosDeparted$board_country_code <- as.factor(vuelosDeparted$board_country_code)
+summary(vuelosDeparted$board_country_code)  ## NM -> 826 valores
 
-summary(vuelos2$off_country_code)  ## NAs -> 815 valores
-vuelos2$off_country_code <- as.character(vuelos2$off_country_code)
-vuelos2$off_country_code <- replace(vuelos2$off_country_code, is.na(vuelos2$off_country_code), "NM")
-vuelos2$off_country_code <- as.factor(vuelos2$off_country_code)
-summary(vuelos2$off_country_code)  ## NM -> 815 valores
+summary(vuelosDeparted$off_country_code)  ## NAs -> 812 valores
+vuelosDeparted$off_country_code <- as.character(vuelosDeparted$off_country_code)
+vuelosDeparted$off_country_code <- replace(vuelosDeparted$off_country_code, is.na(vuelosDeparted$off_country_code), "NM")
+vuelosDeparted$off_country_code <- as.factor(vuelosDeparted$off_country_code)
+summary(vuelosDeparted$off_country_code)  ## NM -> 812 valores
 
 
-### (2.7). departure_date
+summary(vuelosDeparted)
+
+### 4.7 departure_date
 ###############################################################################################
 
-str(vuelos2$departure_date)
-summary(vuelos2$departure_date, maxsum = 835)
+### Comprobamos la necesidad de esta variable
+departure <- subset(vuelosDeparted, select = c("departure_date","actual_time_of_departure"))
 
-### Esta variable esta almacenada como tipo factor. La pasamos a tipo Date
-vuelos2$departure_date <- as.Date(vuelos2$departure_date)
+head(departure,10)
+tail(departure,10)
+
+## Comprobamos si la variable "actual_time_of_departure" tiene algun NA
+summary(vuelosDeparted$actual_time_of_departure)
+
+## No existen NAs en "actual_time_of_departure", por lo tanto podemos eliminar la variable "departure_date"
+vuelosDeparted$departure_date <- NULL
+
+summary(vuelosDeparted)
 
 
-### (2.8). off_point
+### 4.8 off_point
 ###############################################################################################
 
-str(vuelos2$off_point)
-summary(vuelos2$off_point, maxsum = 161)
+str(vuelosDeparted$off_point)
+summary(vuelosDeparted$off_point, maxsum = 161)
 
-### Esta variable esta almacenada como tipo factor y por lo tanto no se hacen modificaciones
+### Esta variable no contiene NAs y esta almacenada como tipo factor, por lo tanto no se hacen modificaciones
 
 
-### (2.9). off_lat
+### 4.9 off_lat
 ###############################################################################################
 
-str(vuelos2$off_lat)
-summary(vuelos2$off_lat)
+str(vuelosDeparted$off_lat)
+summary(vuelosDeparted$off_lat)
 
-### Variable almacenada como tipo numeric. Por ahora no se hacen cambios
+### Variable que no contiene NAs y almacenada como tipo numeric. Por ahora no se hacen cambios
 
 
-### (2.10). off_lon
+### 4.10 off_lon
 ###############################################################################################
 
-str(vuelos2$off_lon)
-summary(vuelos2$off_lon)
+str(vuelosDeparted$off_lon)
+summary(vuelosDeparted$off_lon)
 
-### Variable almacenada como tipo numeric. Por ahora no se hacen cambios
+### Variable que no contiene NAs y almacenada como tipo numeric. Por ahora no se hacen cambios
 
 
-### (2.11). distance
+### 4.11 distance
 ###############################################################################################
-str(vuelos2$distance)
-summary(vuelos2$distance)
+str(vuelosDeparted$distance)
+summary(vuelosDeparted$distance)
 
-### El valor se encuentra almacenado como int. No haremos cambios en este campo
-
-### Visualizamos las apariciones de cada valor
-table(vuelos2$distance)
+### Esta variable no contiene NAs y se encuentra almacenado como int. No haremos cambios en este campo
 
 
-### (2.12). scheduled_time_of_departure
+
+### 4.12 scheduled_time_of_departure
 ###############################################################################################
 
-str(vuelos2$scheduled_time_of_departure)
-summary(vuelos2$scheduled_time_of_departure)
+str(vuelosDeparted$scheduled_time_of_departure)
+summary(vuelosDeparted$scheduled_time_of_departure)
 
-### La variable se encuentra almacenada como factor. Debemos cambiar el tipo de la variable a Date
-### teniendo en cuenta que tambien vienen almacenadas la hora, minuto y segundo
-
-### Utilizamos lubridate para el manejo de fechas
-head(vuelos2$scheduled_time_of_departure, 10)
-
-library(lubridate)
-
-vuelos2$scheduled_time_of_departure <- ymd_hms(vuelos2$scheduled_time_of_departure)
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
 
 
-### (2.13). actual_time_of_departure
+
+### 4.13 actual_time_of_departure
 ###############################################################################################
-vuelos2$actual_time_of_departure <- vuelos$actual_time_of_departure
-str(vuelos2$actual_time_of_departure)
-summary(vuelos2$actual_time_of_departure)
 
-### (2.13.1). La variable se encuentra almacenada como factor. Debemos cambiar el tipo de la variable a Date
-### teniendo en cuenta que tambien vienen almacenadas la hora, minuto y segundo
+str(vuelosDeparted$actual_time_of_departure)
+summary(vuelosDeparted$actual_time_of_departure)
 
-### Utilizamos lubridate para el manejo de fechas
-head(vuelos2$actual_time_of_departure, 10)
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
 
-vuelos2$actual_time_of_departure <- ymd_hms(vuelos2$actual_time_of_departure)
-
-### (2.13.2). Al hacer de nuevo un summary vemos que existen NAs (1765), por lo que estudiaremos la forma de 
-### obtener la fecha programada en fucion de las variables scheduled_time_of_departure, departure_delay,
-### sched_blocktime y act_blocktime
-
-fechasVuelos <- subset(vuelos2, select = c("scheduled_time_of_departure","actual_time_of_departure","departure_delay","sched_blocktime","act_blocktime"))
-
-fechasVuelosNA <- fechasVuelos[is.na(fechasVuelos$actual_time_of_departure)==TRUE,]
-
-### (2.13.3). Si el campo "departure_delay" no es nulo podemos determinar que "actual_time_of_departure" es igual
-### a la suma de "scheduled_time_of_departure" y "departure_delay"
-fechasVuelosNA[is.na(fechasVuelosNA$departure_delay)==FALSE,]
-
-### El numero de registros del campo departure_delay no nulos son los siguientes
-NoNulos <- fechasVuelosNA[is.na(fechasVuelosNA$departure_delay)==FALSE,]
-length(NoNulos$departure_delay)
-### 118 valores no nulos
-
-head(fechasVuelosNA, 5)
-
-### (2.13.4). Sumar los retrasos de salida a la salida programada y asi dar valor a la salida real
-
-vuelos2$actual_time_of_departure <- vuelos2$scheduled_time_of_departure + minutes(vuelos2$departure_delay)
-
-### Si volvemos a hacer un summary vemos que los NAs han disminuido. Antes habia 1765 y ahora hay 1647,
-### que corresponden con los valores no nulos en departure_delay
-
-### (2.13.5). El siguiente paso es determinar los minutos a sumar o restar a cada fecha de salida programada
-### para almacenarla como fecha de salida real (Tiene toda la pinta de que sera la media de retrasos de 
-### las salidas)
+summary(vuelosDeparted)
 
 
 
+### 4.14 scheduled_time_of_arrival
+###############################################################################################
+
+str(vuelosDeparted$scheduled_time_of_arrival)
+summary(vuelosDeparted$scheduled_time_of_arrival)
+
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
+
+
+
+### 4.15 actual_time_of_arrival   
+## (PENDIENTE)
+###############################################################################################
+
+str(vuelosDeparted$actual_time_of_arrival)
+summary(vuelosDeparted$actual_time_of_arrival)
+
+### Esta variable ya fue transformada a tipo Date pero contiene NAs, por lo que hay que determinar si es posible sustituir los NAs por
+### algun valor determinado en funcion de otras variables existentes
+
+summary(vuelosDeparted)
+
+## 4.15.1 Creamos un DF con las variables actual_time_of_departure, actual_time_of_arrival, scheduled_time_of_arrival y arrival_delay 
+llegadas <- subset(vuelosDeparted, select = c("actual_time_of_departure","scheduled_time_of_arrival", "actual_time_of_arrival", "arrival_delay"))
+
+summary(llegadas)
+
+## Con el summary anterior vemos que la variable actual_time_of_arrival tiene mas NAs que la variable arrival_delay, por lo que podemos hacer
+## una suma de la variable scheduled_time_of_arrival y arrival_delay (en minutos) para obtener actual_time_of_arrival para aquellos registros
+## que tienen un arrival_delay informado
+llegadasNA <- llegadas[is.na(llegadas$actual_time_of_arrival)==TRUE,]
+llegadasNA$actual_time_of_arrival <- llegadasNA$scheduled_time_of_arrival+minutes(llegadasNA$arrival_delay)
+
+
+llegadasOK <- llegadasNA[is.na(llegadasNA$arrival_delay)==FALSE,]
+
+str(llegadasOK)
+
+head(llegadasNA,5)
+tail(llegadasNA, 5)
+
+head(llegadasOK)
+tail(llegadasOK)
+
+####################################################################################################################
+###################   PENDIENTE DE TERMINAR 
+####################################################################################################################
+
+summary(vuelosDeparted)
+
+### 4.16 departure_delay
+###############################################################################################
+
+str(vuelosDeparted$departure_delay)
+summary(vuelosDeparted$departure_delay)
+
+## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
+
+
+
+summary(vuelosDeparted)
+
+
+### 4.17 arrival_delay 
+## (PENDIENTE)
+###############################################################################################
+
+
+
+### 4.18 sched_blocktime
+###############################################################################################
+
+str(vuelosDeparted$sched_blocktime)
+summary(vuelosDeparted$sched_blocktime)
+
+## Este campo esta almacenado como int y no contiene NAs. De momento no se modificara
+
+
+
+### 4.19 act_blocktime 
+## (PENDIENTE)
+###############################################################################################
+
+
+
+### 4.20 aircraft_type
+###############################################################################################
+
+str(vuelosDeparted$aircraft_type)
+summary(vuelosDeparted$aircraft_type)
+
+## Este campo no contiene NAs y esta almacenado como tipo factor. No realizaremos cambios.
+
+
+
+### 4.21 aircraft_registration_number
+###############################################################################################
+
+str(vuelosDeparted$aircraft_registration_number)
+summary(vuelosDeparted$aircraft_registration_number)
+
+## Este campo no contiene NAs y esta almacenado como tipo factor. No realizaremos cambios.
+
+
+
+### 4.22 general_status_code 
+###############################################################################################
+## Este campo se analizo en un principio.
+
+
+
+### 4.23 routing
+###############################################################################################
+
+str(vuelosDeparted$routing)
+summary(vuelosDeparted$routing, maxsum = 357)
+
+## Este campo se almacena como factor y no contiene NAs.
+
+
+
+### 4.24 cabin_1_code / cabin_2_code 
+## (PENDIENTE)
+###############################################################################################
+
+str(vuelosDeparted$cabin_1_code)
+summary(vuelosDeparted$cabin_1_code)
+
+## Se almacena como factor, todos los datos de esta variable son Y
+
+str(vuelosDeparted$cabin_2_code)
+summary(vuelosDeparted$cabin_2_code)
+
+## Se almacena como factor. Tiene 96705 registros vacios (que no NAs) y 123542 registros con J
 
 
 
 
-pM <- head(prueba,5)
-pM
-pM2 <- pM
+### 4.25 cabin_1_fitted_configuration / cabin_2_fitted_configuration -> Numero de asientos
+###############################################################################################
 
-pM3 <- head(fechasVuelosNA,10)
+str(vuelosDeparted$cabin_1_fitted_configuration)
+summary(vuelosDeparted$cabin_1_fitted_configuration)
 
-pM2$actual_time_of_departure <- pM2$scheduled_time_of_departure + minutes(pM2$departure_delay)
-pM3
-pM3$actual_time_of_departure <- pM3$scheduled_time_of_departure + minutes(pM3$departure_delay)
-pM2
-pM3
-result2 <- retrasoRealSalida(pM$scheduled_time_of_departure, pM$actual_time_of_departure, pM$departure_delay)
+## Esta variable se almacena como int y no contiene NAs.
 
-pM$scheduled_time_of_departure
-pM$departure_delay
-result
+str(vuelosDeparted$cabin_2_fitted_configuration)
+summary(vuelosDeparted$cabin_2_fitted_configuration)
 
-pruebaModificada$actual_time_of_departure <- 
-  retrasoRealSalida(pruebaModificada$scheduled_time_of_departure, pruebaModificada$actual_time_of_departure, pruebaModificada$departure_delay)
+## Esta variable se almacena como int y tiene 96705 Nas. Por ahora no se modifica
 
 
 
-str(vuelos2)
-summary(vuelos2)
+### 4.26 cabin_1_saleable / cabin_2_saleable  -> numero de asientos en venta
+###############################################################################################
 
-head(vuelos2, 1)
+str(vuelosDeparted$cabin_1_saleable)
+summary(vuelosDeparted$cabin_1_saleable)
 
+## No contiene NAs y se almacena como entero
 
-library(lubridate)
-ymd_hms(vuelos2$actual_time_of_departure)
+str(vuelosDeparted$cabin_2_saleable)
+summary(vuelosDeparted$cabin_2_saleable)
 
-
-ejemFecha <- head(vuelos2$actual_time_of_departure, 10)
-class(ejemFecha)
-ejemFecha
-ej <- as.Time(ejemFecha, format = "%Y-%m-%d %H:%M:%S")
-class(ej)
+## Campo almacenado como entero y contiene 96751 NAs
 
 
-f1 <- ej[1]
+
+### 4.27 cabin_1_pax_boarded / cabin_2_pax_boarded 
+## (PENDIENTE)
+###############################################################################################
+
+str(vuelosDeparted$cabin_1_pax_boarded)
+summary(vuelosDeparted$cabin_1_pax_boarded)
+
+## Campo almacenado como entero. Existen 4050 NAs
+
+str(vuelosDeparted$cabin_2_pax_boarded)
+summary(vuelosDeparted$cabin_2_pax_boarded)
+
+## Campo almacenado como entero. Existen 96963 NAs
 
 
-?as.date
 
-?date
+### 4.28 cabin_1_rpk / cabin_2_rpk  Beneficio en funcion de los pasajeros o unidad tipica para evaluar la demanda 
+## (PENDIENTE)
+###############################################################################################
 
-vuelos2$actual_time_of_departure = as.Date(vuelos2$actual_time_of_departure, format = "%Y/%m/%d %H:%M:%S")
-vuelos2$actual_time_of_arrival = as.Date(vuelos2$actual_time_of_arrival, format = "%Y/%m/%d %h:%m:%s")
-head(vuelos2[vuelos2$actual_time_of_departure > vuelos2$actual_time_of_arrival ,],5)
+str(vuelosDeparted$cabin_1_rpk)
+summary(vuelosDeparted$cabin_1_rpk)
+
+## Campo almacenado como entero. Existen 4050 NAs
+
+str(vuelosDeparted$cabin_2_rpk)
+summary(vuelosDeparted$cabin_2_rpk)
+
+## Campo almacenado como entero. Existen 96963 NAs
 
 
-barplot(vuelos2$flight_date)
 
-boxplot(as.Date(vuelos2$flight_date), xlab="flight_date")
-boxplot(as.Date(vuelos2$actual_time_of_departure), xlab="actual_time_of_departure")
-boxplot(as.Date(vuelos2$actual_time_of_arrival), xlab="actual_time_of_arrival")
+### 4.29 cabin_1_ask / cabin_2_ask  -> unidad tipica para evaluar la oferta
+###############################################################################################
 
-str(vuelos2$actual_time_of_arrival)
+str(vuelosDeparted$cabin_1_ask)
+summary(vuelosDeparted$cabin_1_ask)
 
-summary(vuelos2)
+## Campo almacenado como int. No contiene NAs
+
+str(vuelosDeparted$cabin_2_ask)
+summary(vuelosDeparted$cabin_2_ask)
+
+## Campo almacenado como int. Contiene 96751 NAs
+
+
+
+### 4.30 total_rpk
+###############################################################################################
+
+str(vuelosDeparted$total_rpk)
+summary(vuelosDeparted$total_rpk)
+
+## Campo almacenado como entero. Existen 4050 NAs
+
+
+
+### 4.31 total_ask
+###############################################################################################
+
+str(vuelosDeparted$total_ask)
+summary(vuelosDeparted$total_ask)
+
+## Campo almacenado como int. No existen NAs
+
+
+
+### 4.32 load_factor
+###############################################################################################
+
+str(vuelosDeparted$load_factor)
+summary(vuelosDeparted$load_factor)
+
+## Campo almacenado como num. Existen 4050 NAs
+
+
+
+### 4.33 total_pax
+###############################################################################################
+
+str(vuelosDeparted$total_pax)
+summary(vuelosDeparted$total_pax)
+
+## Campo almacenado como int. Existen 4050 NAs
+
+
+
+### 4.34 total_no_shows
+###############################################################################################
+
+str(vuelosDeparted$total_no_shows)
+summary(vuelosDeparted$total_no_shows)
+
+## Campo almacenado como int. No existen NAs
+
+
+
+### 4.35 total_cabin_crew (PENDIENTE)
+###############################################################################################
+
+str(vuelosDeparted$total_cabin_crew)
+summary(vuelosDeparted$total_cabin_crew)
+
+## Campo almacenado como int. Existen 1014 NAs
+
+
+
+
+### 4.36 total_technical_crew
+###############################################################################################
+
+str(vuelosDeparted$total_technical_crew)
+summary(vuelosDeparted$total_technical_crew)
+
+## Campo almacenado como int. Existen 1014 NAs
+
+
+
+### 4.37 total_baggage_weight
+###############################################################################################
+
+str(vuelosDeparted$total_baggage_weight)
+summary(vuelosDeparted$total_baggage_weight)
+
+## Campo almacenado como int. Existen 1014 NAs
+
+
+
+### 4.38 number_of_baggage_pieces
+###############################################################################################
+
+str(vuelosDeparted$number_of_baggage_pieces)
+summary(vuelosDeparted$number_of_baggage_pieces)
+
+## Campo almacenado como int. Existen 1014 NAs
+
+
+
+### 4.39 file_sequence_number
+###############################################################################################
+
+str(vuelosDeparted$file_sequence_number)
+summary(vuelosDeparted$file_sequence_number)
+
+## Campo almacenado como factor. No existen los valores 2 y 3. Existen los valores P (220229) y 1 (18)
+
+
+
+
+
+###
