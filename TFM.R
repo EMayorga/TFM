@@ -93,7 +93,7 @@ vuelosDeparted$snapshot_date <- NULL ## La fecha de captura de datos es irreleva
 vuelosDeparted$snapshot_time <- NULL ## La hora de captura de datos es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_departure <- NULL  ## La fecha estimada de salida es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_arrival <- NULL    ## La fecha estimada de llegada es irrelevante para el estudio
-vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
+##vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
 
 
 
@@ -308,8 +308,7 @@ summary(vuelosDeparted$scheduled_time_of_arrival)
 
 
 
-### 4.15 actual_time_of_arrival   
-## (PENDIENTE)
+### 4.15 actual_time_of_arrival  
 ###############################################################################################
 
 str(vuelosDeparted$actual_time_of_arrival)
@@ -321,30 +320,46 @@ summary(vuelosDeparted$actual_time_of_arrival)
 summary(vuelosDeparted)
 
 ## 4.15.1 Creamos un DF con las variables actual_time_of_departure, actual_time_of_arrival, scheduled_time_of_arrival y arrival_delay 
-llegadas <- subset(vuelosDeparted, select = c("actual_time_of_departure","scheduled_time_of_arrival", "actual_time_of_arrival", "arrival_delay"))
+#llegadas <- subset(vuelosDeparted, select = c("actual_time_of_departure","scheduled_time_of_arrival", "actual_time_of_arrival", "arrival_delay"))
 
-summary(llegadas)
+#head(llegadas,1)
+
+#summary(llegadas)
 
 ## Con el summary anterior vemos que la variable actual_time_of_arrival tiene mas NAs que la variable arrival_delay, por lo que podemos hacer
 ## una suma de la variable scheduled_time_of_arrival y arrival_delay (en minutos) para obtener actual_time_of_arrival para aquellos registros
 ## que tienen un arrival_delay informado
-llegadasNA <- llegadas[is.na(llegadas$actual_time_of_arrival)==TRUE,]
-llegadasNA$actual_time_of_arrival <- llegadasNA$scheduled_time_of_arrival+minutes(llegadasNA$arrival_delay)
+#llegadasNA <- llegadas[is.na(llegadas$actual_time_of_arrival)==TRUE,]
+#str(llegadasNA)  ## 3770 objetos
+
+#head(llegadasNA,10)
+
+#llegadasNA$actual_time_of_arrival <- llegadasNA$scheduled_time_of_arrival+minutes(llegadasNA$arrival_delay)
+
+#llegadasOK <- llegadasNA[is.na(llegadasNA$arrival_delay)==FALSE,]
+
+#str(llegadasOK)  ## 413 indican un retraso en la llegada
+
+#head(llegadasNA,5)
+#tail(llegadasNA, 5)
+
+#head(llegadasOK)
+#tail(llegadasOK)
+
+## 4.15.3
+vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
+str(vuelosFechaNula)  ## 3770 vuelos con fecha nula
+
+vuelosDeparted$actual_time_of_arrival <- vuelosDeparted$scheduled_time_of_arrival+minutes(vuelosDeparted$arrival_delay)
+
+vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
+str(vuelosFechaNula)  ## 3357 vuelos con fecha nula
 
 
-llegadasOK <- llegadasNA[is.na(llegadasNA$arrival_delay)==FALSE,]
+## Debido a que es imposible calcular la fecha de llegada de vuelos donde no se ha indicado la fecha y tampoco se indica un retraso
+## en la llegada, nos vemos obligados a descartar estos datos para el estudio
+vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==FALSE,]
 
-str(llegadasOK)
-
-head(llegadasNA,5)
-tail(llegadasNA, 5)
-
-head(llegadasOK)
-tail(llegadasOK)
-
-####################################################################################################################
-###################   PENDIENTE DE TERMINAR 
-####################################################################################################################
 
 summary(vuelosDeparted)
 
@@ -355,10 +370,6 @@ str(vuelosDeparted$departure_delay)
 summary(vuelosDeparted$departure_delay)
 
 ## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
-
-
-
-summary(vuelosDeparted)
 
 
 ### 4.17 arrival_delay 
@@ -382,6 +393,27 @@ summary(vuelosDeparted$sched_blocktime)
 ###############################################################################################
 
 
+## Eliminamos los NAs de este campo realizando una resta entre la hora de llegada y la hora de salida del vuelo.
+## Almacenamos este valor en minutos en una nueva variable llamada "tiempoVuelo"
+vuelosDeparted$tiempoVuelo <- as.integer(difftime(vuelosDeparted$actual_time_of_arrival,vuelosDeparted$actual_time_of_departure,units = "mins"))
+
+head(vuelosDeparted,3)
+
+## Comprobamos si hay tiempos de vuelo negativos en los nuevos tiempos calculados
+tiempos <- subset(vuelosDeparted, select = c("actual_time_of_departure","actual_time_of_arrival","act_blocktime","tiempoVuelo",
+                                             "routing", "board_lat","board_lon","off_lat","off_lon"))
+tiemposNegativos <- tiempos[tiempos$tiempoVuelo<0,]
+
+head(tiemposNegativos,10)
+
+tiemposPositivos <- tiempos[tiempos$tiempoVuelo>0,]
+
+tiemposPositivosSinNA <- tiemposPositivos[is.na(tiemposPositivos$act_blocktime)==FALSE,]
+tiemposPositivosSinNA[tiemposPositivosSinNA$act_blocktime<0,]
+
+head(tiemposPositivos,10)
+
+str(tiemposPositivos)
 
 ### 4.20 aircraft_type
 ###############################################################################################
