@@ -473,9 +473,24 @@ fechasRetrasos <- subset(tiemposDiferentes,
 
 head(fechasRetrasos,5)
 
+table(fechasRetrasos$routing)
+
+
+## Obtenemos diferentes rutas
+## AMV-LEU      AMV +1
+## CNF-LEU      CNF -5
+## YZF-LEU
+
+fechasRetrasos$difTiempoMin <- fechasRetrasos$BlocktimeNEW - fechasRetrasos$act_blocktime
+
+tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
+head(tiempoRuta)
+
+unique(tiempoRuta$difTiempoMin)
+
 
 #### Para entender completamente estos datos es necesario hacer una funcion que determine la diferencia
-#### horaria entre el punto de salida del vuelo y el punto de aterrizaje 
+#### horaria entre el punto de salida del vuelo y el punto de aterrizaje (por latitud y longitud)
 
 
 
