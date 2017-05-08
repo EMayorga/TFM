@@ -468,10 +468,14 @@ head(tiemposDiferentes)
 
 fechasRetrasos <- subset(tiemposDiferentes, 
                 select = c("scheduled_time_of_departure","actual_time_of_departure","scheduled_time_of_arrival",
-                           "actual_time_of_arrival","departure_delay","arrival_delay","act_blocktime","BlocktimeNEW"))
+                           "actual_time_of_arrival","departure_delay","arrival_delay","act_blocktime","BlocktimeNEW",
+                           "routing"))
 
 head(fechasRetrasos,5)
 
+
+#### Para entender completamente estos datos es necesario hacer una funcion que determine la diferencia
+#### horaria entre el punto de salida del vuelo y el punto de aterrizaje 
 
 
 
