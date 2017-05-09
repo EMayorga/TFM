@@ -1,8 +1,8 @@
 #####  TFM
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
-#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 
 
 ## Apertura del dataset
@@ -104,6 +104,7 @@ str(vuelosDeparted)
 ## 4. Transformacion de datos
 
 ### 4.1 flight_number
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$flight_number)
@@ -116,39 +117,54 @@ options(max.print=999999)  ### incrementar la salida del summary
 summary(vuelosDeparted$flight_number, maxsum = 1100)
 
 unique(vuelosDeparted$flight_number)  ## 1045 vuelos distintos
-
+table(vuelosDeparted$flight_number)
 
 ### 4.2 flight_date
+## (COMPLETADA)
 ###############################################################################################
 
 ## Comprobamos la necesidad de esta variable
-fechasVuelos <- subset(vuelosDeparted, select = c("flight_date","actual_time_of_departure"))
+fechasVuelos <- subset(vuelosDeparted, select = c("flight_date","actual_time_of_departure","actual_time_of_arrival", "act_blocktime", "routing"))
+
+fechasVuelos$fecha <- as.Date(fechasVuelos$actual_time_of_departure)
+str(fechasVuelos)
+
+fechasVuelos$flight_date <- as.Date(fechasVuelos$flight_date)
 
 head(fechasVuelos,20)
 tail(fechasVuelos,20)
 
-## Observamos que esta variable (flight_date) ya esta incluida en la variable "actual_time_of_departure"
+## Comprobamos si alguna fecha no coincide
+fechaIncorrecta <- fechasVuelos[fechasVuelos$flight_date!=fechasVuelos$fecha,]
+
+str(fechaIncorrecta)  ## Existen 432 fechas de vuelos que no coinciden con las fechas reales de salida
+head(fechaIncorrecta)
+#### Existen fechas de vuelo que no corresponden a las fechas reales de salida
 
 ## Comprobamos que la variable "actual_time_of_departure" no tiene NAs
 summary(vuelosDeparted$actual_time_of_departure)
 
-## Eliminamos del DF la variable flight_date
+## Eliminamos del DF la variable flight_date.
+## Aunque existen fechas que no coinciden, nos guiamos por la variable actual_time_of_departure para determinar 
+## la fecha de salida de los vuelos
 vuelosDeparted$flight_date <- NULL
 
 summary(vuelosDeparted)
 
 
-### 4.3 board_point
+### 4.3 board_point 
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$board_point)
-summary(vuelosDeparted$board_point, maxsum = 159)
+table(vuelosDeparted$board_point)
 
 ### Esta variable no contiene NAs y se almacena como factor, por lo que no la modificaremos
 
 
 
 ### 4.4 board_lat
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$board_lat)
@@ -158,6 +174,7 @@ summary(vuelosDeparted$board_lat)
 
 
 ### 4.5 board_lon
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$board_lon)
@@ -168,6 +185,7 @@ summary(vuelosDeparted$board_lon)
 
 
 ### 4.6 board_country_code ( y off_country_code )
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$board_country_code)
@@ -223,6 +241,7 @@ summary(vuelosDeparted$off_country_code)  ## NM -> 812 valores
 summary(vuelosDeparted)
 
 ### 4.7 departure_date
+## (COMPLETADA)
 ###############################################################################################
 
 ### Comprobamos la necesidad de esta variable
@@ -233,23 +252,39 @@ tail(departure,10)
 
 ## Comprobamos si la variable "actual_time_of_departure" tiene algun NA
 summary(vuelosDeparted$actual_time_of_departure)
+## No existen NAs en "actual_time_of_departure"
 
-## No existen NAs en "actual_time_of_departure", por lo tanto podemos eliminar la variable "departure_date"
+## obtenemos las fechas de la variable actual_time_of_departure
+departure$fechaReal <- as.Date(departure$actual_time_of_departure)
+
+str(departure)
+
+## Buscamos fechas que no coincidan
+departure$departure_date <- as.Date(departure$departure_date)
+fechaErronea <- departure[departure$departure_date!=departure$fechaReal,]
+
+str(fechaErronea)
+## Existen 385 fechas erroneas
+
+## Como existen fechas erroneas eliminaremos la variable "departure_date". Utilizaremos la variable 
+## "actual_time_of_departure" en su lugar
 vuelosDeparted$departure_date <- NULL
 
 summary(vuelosDeparted)
 
 
 ### 4.8 off_point
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$off_point)
-summary(vuelosDeparted$off_point, maxsum = 161)
+table(vuelosDeparted$off_point)
 
 ### Esta variable no contiene NAs y esta almacenada como tipo factor, por lo tanto no se hacen modificaciones
 
 
 ### 4.9 off_lat
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$off_lat)
@@ -259,6 +294,7 @@ summary(vuelosDeparted$off_lat)
 
 
 ### 4.10 off_lon
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$off_lon)
@@ -268,6 +304,7 @@ summary(vuelosDeparted$off_lon)
 
 
 ### 4.11 distance
+## (COMPLETADA)
 ###############################################################################################
 str(vuelosDeparted$distance)
 summary(vuelosDeparted$distance)
@@ -277,6 +314,7 @@ summary(vuelosDeparted$distance)
 
 
 ### 4.12 scheduled_time_of_departure
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$scheduled_time_of_departure)
@@ -287,6 +325,7 @@ summary(vuelosDeparted$scheduled_time_of_departure)
 
 
 ### 4.13 actual_time_of_departure
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$actual_time_of_departure)
@@ -294,11 +333,11 @@ summary(vuelosDeparted$actual_time_of_departure)
 
 ### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
 
-summary(vuelosDeparted)
 
 
 
 ### 4.14 scheduled_time_of_arrival
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$scheduled_time_of_arrival)
@@ -309,61 +348,65 @@ summary(vuelosDeparted$scheduled_time_of_arrival)
 
 
 ### 4.15 actual_time_of_arrival  
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$actual_time_of_arrival)
 summary(vuelosDeparted$actual_time_of_arrival)
 
-### Esta variable ya fue transformada a tipo Date pero contiene NAs, por lo que hay que determinar si es posible sustituir los NAs por
-### algun valor determinado en funcion de otras variables existentes
+### Esta variable ya fue transformada a tipo Date pero contiene NAs, por lo que hay que determinar si es posible sustituir 
+### los NAs por algun valor determinado en funcion de otras variables existentes
 
-summary(vuelosDeparted)
-
-## 4.15.1 Creamos un DF con las variables actual_time_of_departure, actual_time_of_arrival, scheduled_time_of_arrival y arrival_delay 
-#llegadas <- subset(vuelosDeparted, select = c("actual_time_of_departure","scheduled_time_of_arrival", "actual_time_of_arrival", "arrival_delay"))
-
-#head(llegadas,1)
-
-#summary(llegadas)
-
-## Con el summary anterior vemos que la variable actual_time_of_arrival tiene mas NAs que la variable arrival_delay, por lo que podemos hacer
-## una suma de la variable scheduled_time_of_arrival y arrival_delay (en minutos) para obtener actual_time_of_arrival para aquellos registros
-## que tienen un arrival_delay informado
-#llegadasNA <- llegadas[is.na(llegadas$actual_time_of_arrival)==TRUE,]
-#str(llegadasNA)  ## 3770 objetos
-
-#head(llegadasNA,10)
-
-#llegadasNA$actual_time_of_arrival <- llegadasNA$scheduled_time_of_arrival+minutes(llegadasNA$arrival_delay)
-
-#llegadasOK <- llegadasNA[is.na(llegadasNA$arrival_delay)==FALSE,]
-
-#str(llegadasOK)  ## 413 indican un retraso en la llegada
-
-#head(llegadasNA,5)
-#tail(llegadasNA, 5)
-
-#head(llegadasOK)
-#tail(llegadasOK)
-
-## 4.15.3
+## 4.15.1
 vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
 str(vuelosFechaNula)  ## 3770 vuelos con fecha nula
 
-vuelosDeparted$actual_time_of_arrival <- vuelosDeparted$scheduled_time_of_arrival+minutes(vuelosDeparted$arrival_delay)
+## 4.15.2 Para aquellos casos en los que la fecha actual de llegada es nula, utilizaremos la suma de la fecha programada
+## de llegada mas el retraso de llegada para obtener una fecha real de llegada del vuelo
+vuelosDeparted2 <- vuelosDeparted
+vuelosDeparted2$actual_time_of_arrival2 <- vuelosDeparted2$scheduled_time_of_arrival+minutes(vuelosDeparted2$arrival_delay)
 
-vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
-str(vuelosFechaNula)  ## 3357 vuelos con fecha nula
+## Comprobamos que la fechas calculadas (programada + retraso de salida) coinciden con las fechas actuales que ya tenemos
+fechasIncorrectas <- vuelosDeparted2[vuelosDeparted2$actual_time_of_arrival!=vuelosDeparted2$actual_time_of_arrival2,]
+
+fechasIncorrectas <- subset(fechasIncorrectas, 
+                            select = c("scheduled_time_of_departure", "departure_delay", "actual_time_of_departure",
+                                       "scheduled_time_of_arrival","arrival_delay","actual_time_of_arrival","actual_time_of_arrival2",
+                                       "act_blocktime"))
+
+str(fechasIncorrectas)  ## 7669 fechas incorrectas con NAs en "actual_time_of_arrival"
+
+## Eliminamos NAs
+fechasIncorrectas <- fechasIncorrectas[is.na(fechasIncorrectas$actual_time_of_arrival)==FALSE,]
+str(fechasIncorrectas)  ## 3899 fechas incorrectas sin NAs en actual_time_of_arrival
+head(fechasIncorrectas,1)
+
+## 4.15.3 Al haber realizado estos pasos nos hemos dado cuenta de que NO TIENE SENTIDO calcular el tiempo
+## actual de llegada en base al tiempo de llegada programado mas el retraso de salida, ya que puede haber 
+## datos que no cumplan con este criterio, como por ejemplo el siguiente:
+head(fechasIncorrectas,1)
+## Con este dato se observa lo siguiente:
+## La suma de la hora planificada de salida mas el retraso de salida no corresponde con la hora real de salida.
+## Lo mismo ocurre con la hora planificada de llegada y la hora real de llegada. Sin embargo, la diferencia de 
+## tiempo entre ambas fechas coincide con el blocktime indicado.
+## ESTE DATO ES PERFECTAMENTE VALIDO, pero si nos basamos en la suma correspondiente a la fecha planificada de salida 
+## mas el retraso de salida y en la fecha planificada de llegada mas el retraso de llegada este dato no seria valido.
+## Por lo tanto, no tiene sentido calcular fechas reales en base a fechas planificadas y retrasos
 
 
-## Debido a que es imposible calcular la fecha de llegada de vuelos donde no se ha indicado la fecha y tampoco se indica un retraso
-## en la llegada, nos vemos obligados a descartar estos datos para el estudio
+
+## 4.15.4 Debido a que es imposible calcular con certeza la fecha de llegada de vuelos en base a datos del dataset, 
+## descartaremos aquellos registros cuya variable "actual_time_of_arrival" sea nula.
 vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==FALSE,]
-
 
 summary(vuelosDeparted)
 
+
+
+
+
 ### 4.16 departure_delay
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$departure_delay)
@@ -372,13 +415,21 @@ summary(vuelosDeparted$departure_delay)
 ## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
 
 
+
 ### 4.17 arrival_delay 
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
+
+str(vuelosDeparted$arrival_delay)
+summary(vuelosDeparted$arrival_delay)
+
+## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
+
 
 
 
 ### 4.18 sched_blocktime
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$sched_blocktime)
@@ -388,34 +439,66 @@ summary(vuelosDeparted$sched_blocktime)
 
 
 
+
 ### 4.19 act_blocktime 
 ## (PENDIENTE)
+## Tiempo de vuelo. Diferencia entre hora de llegada y hora de salida. Indicado en minutos
 ###############################################################################################
 
+str(vuelosDeparted$act_blocktime)
+summary(vuelosDeparted$act_blocktime)
 
-## Eliminamos los NAs de este campo realizando una resta entre la hora de llegada y la hora de salida del vuelo.
-## Almacenamos este valor en minutos en una nueva variable llamada "tiempoVuelo"
-vuelosDeparted$tiempoVuelo <- as.integer(difftime(vuelosDeparted$actual_time_of_arrival,vuelosDeparted$actual_time_of_departure,units = "mins"))
+## Dato almacenado como entero.
+## No existen nulos pero existen valores negativos. (Estos valores negativos no tienen sentido)
 
-head(vuelosDeparted,3)
+## 4.19.1 almacenamos en una nueva variable la diferencia entre la fecha de llegada y la fecha de salida
+vuelosDeparted2 <- vuelosDeparted
+vuelosDeparted2$BlocktimeNEW <- as.integer(
+                    difftime(vuelosDeparted2$actual_time_of_arrival, vuelosDeparted2$actual_time_of_departure, units = "mins"))
 
-## Comprobamos si hay tiempos de vuelo negativos en los nuevos tiempos calculados
-tiempos <- subset(vuelosDeparted, select = c("actual_time_of_departure","actual_time_of_arrival","act_blocktime","tiempoVuelo",
-                                             "routing", "board_lat","board_lon","off_lat","off_lon"))
-tiemposNegativos <- tiempos[tiempos$tiempoVuelo<0,]
+head(vuelosDeparted2)
 
-head(tiemposNegativos,10)
+## Comprobamos si hay registros donde la nueva variable calculada (BlocktimeNEW) sea diferente a act_blocktime
+str(vuelosDeparted2)
+tiemposDiferentes <- vuelosDeparted2[vuelosDeparted2$act_blocktime!=vuelosDeparted2$BlocktimeNEW,]
 
-tiemposPositivos <- tiempos[tiempos$tiempoVuelo>0,]
+str(tiemposDiferentes)
+head(tiemposDiferentes)
 
-tiemposPositivosSinNA <- tiemposPositivos[is.na(tiemposPositivos$act_blocktime)==FALSE,]
-tiemposPositivosSinNA[tiemposPositivosSinNA$act_blocktime<0,]
 
-head(tiemposPositivos,10)
+fechasRetrasos <- subset(tiemposDiferentes, 
+                select = c("scheduled_time_of_departure","actual_time_of_departure","scheduled_time_of_arrival",
+                           "actual_time_of_arrival","departure_delay","arrival_delay","act_blocktime","BlocktimeNEW",
+                           "routing"))
 
-str(tiemposPositivos)
+head(fechasRetrasos,5)
+
+table(fechasRetrasos$routing)
+
+
+## Obtenemos diferentes rutas
+## AMV-LEU      AMV +1
+## CNF-LEU      CNF -5
+## YZF-LEU
+
+fechasRetrasos$difTiempoMin <- fechasRetrasos$BlocktimeNEW - fechasRetrasos$act_blocktime
+
+tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
+head(tiempoRuta)
+
+unique(tiempoRuta$difTiempoMin)
+
+
+#### Para entender completamente estos datos es necesario hacer una funcion que determine la diferencia
+#### horaria entre el punto de salida del vuelo y el punto de aterrizaje (por latitud y longitud)
+
+
+
+
+
 
 ### 4.20 aircraft_type
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$aircraft_type)
@@ -425,7 +508,9 @@ summary(vuelosDeparted$aircraft_type)
 
 
 
+
 ### 4.21 aircraft_registration_number
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$aircraft_registration_number)
@@ -435,13 +520,15 @@ summary(vuelosDeparted$aircraft_registration_number)
 
 
 
-### 4.22 general_status_code 
+### 4.22 general_status_code
+## (COMPLETADA)
 ###############################################################################################
 ## Este campo se analizo en un principio.
 
 
 
 ### 4.23 routing
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$routing)
