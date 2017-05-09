@@ -613,14 +613,20 @@ str(vuelosDeparted$cabin_2_fitted_configuration)
 summary(vuelosDeparted$cabin_2_fitted_configuration)
 
 ## Esta variable se almacena como int y tiene 93506 NAs, que coinciden con los registros vacios del
-## campo "cabin_2_code". No se modifica
+## campo "cabin_2_code".
+
+## Comprobamos los registros vacios
+cabin2Vacio <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_fitted_configuration)==TRUE,]
+summary(cabin2Vacio)
+
+## Estos datos coinciden con los datos de cabin_2_code. Todo OK.
 
 
 
 
 
 ### 4.26 cabin_1_saleable / cabin_2_saleable  -> numero de asientos en venta
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_saleable)
@@ -631,49 +637,100 @@ summary(vuelosDeparted$cabin_1_saleable)
 str(vuelosDeparted$cabin_2_saleable)
 summary(vuelosDeparted$cabin_2_saleable)
 
-## Campo almacenado como entero y contiene 93574 NAs, Son mas NAs de los que aparecen en el campo anterior
-## Estudiar este caso
+## Campo almacenado como entero y contiene 93547 NAs, Son mas NAs de los que aparecen en el campo anterior
+
+
+## Estudiamos los NAs de esta variable
+cabinNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_saleable)==TRUE,]
+
+str(cabinNA)
+summary(cabinNA)
+head(cabinNA)
+
+## Se observa que hay 41 registros con cabin_2_code = J, que son lo que hacen la diferencia de esta variable
+## con respecto a los NAs existentes en cabin_2_code
+
+cabinJ <- cabinNA[cabinNA$cabin_2_code=="J",]
+
+str(cabinJ)
+summary(cabinJ)
+head(cabinJ)
+
+
+## Estos 41 registros deben ser eliminados
+vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" | 
+                            (vuelosDeparted$cabin_2_code=="J" & is.na(vuelosDeparted$cabin_2_saleable)==FALSE),]
+
+
 
 
 
 
 
 ### 4.27 cabin_1_pax_boarded / cabin_2_pax_boarded 
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_pax_boarded)
 summary(vuelosDeparted$cabin_1_pax_boarded)
 
-## Campo almacenado como entero. Existen 3737 NAs
+## Campo almacenado como entero. Existen 3540 NAs
+
+## Comprobacion de los NAs
+cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_1_pax_boarded)==TRUE,]
+
+str(cabinPaxNA)
+summary(cabinPaxNA)
+
+## Las variables cabin_1_... y cabin_2_... son NAs. Eliminamos estos 3540 registros
+vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$cabin_1_pax_boarded)==FALSE,]
+
+## cabin_2_pax_boarded
 
 str(vuelosDeparted$cabin_2_pax_boarded)
 summary(vuelosDeparted$cabin_2_pax_boarded)
 
-## Campo almacenado como entero. Existen 93745 NAs
+## Campo almacenado como entero. Existen 89966 NAs 
+
+## Obtenemos los NAs
+cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_pax_boarded)==TRUE,]
+
+summary(cabinPaxNA)
+## Haciendo el summary existen 198 registros con el campo "cabin_2_code" = J
+cabinPaxNAJ <- cabinPaxNA[cabinPaxNA$cabin_2_code=="J",]
+
+summary(cabinPaxNAJ)
+
+## eliminamos estos 198 registros, ya que no tiene datos en los campos cabin_2_...
+vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" | 
+                                   (vuelosDeparted$cabin_2_code=="J" & is.na(vuelosDeparted$cabin_2_pax_boarded)==FALSE),]
+
+summary(vuelosDeparted)
+
+
 
 
 
 ### 4.28 cabin_1_rpk / cabin_2_rpk  Beneficio en funcion de los pasajeros o unidad tipica para evaluar la demanda 
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_rpk)
 summary(vuelosDeparted$cabin_1_rpk)
 
-## Campo almacenado como entero. Existen 3737 NAs
+## Campo almacenado como entero.
 
 str(vuelosDeparted$cabin_2_rpk)
 summary(vuelosDeparted$cabin_2_rpk)
 
-## Campo almacenado como entero. Existen 93745 NAs
+## Campo almacenado como entero. Existen 89966 NAs
 
 
 
 
 
 ### 4.29 cabin_1_ask / cabin_2_ask  -> unidad tipica para evaluar la oferta
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_ask)
@@ -684,18 +741,21 @@ summary(vuelosDeparted$cabin_1_ask)
 str(vuelosDeparted$cabin_2_ask)
 summary(vuelosDeparted$cabin_2_ask)
 
-## Campo almacenado como int. Contiene 93547 NAs
+## Campo almacenado como int. Contiene 89966 NAs, que corresponden a los valores cabin_1... que no tienen cabin_2...
+
 
 
 
 ### 4.30 total_rpk
-### (PENDIENTE)
+### (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_rpk)
 summary(vuelosDeparted$total_rpk)
 
-## Campo almacenado como entero. Existen 3737 NAs
+## Campo almacenado como entero
+
+
 
 
 
@@ -713,13 +773,13 @@ summary(vuelosDeparted$total_ask)
 
 
 ### 4.32 load_factor
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$load_factor)
 summary(vuelosDeparted$load_factor)
 
-## Campo almacenado como num. Existen 3737 NAs
+## Campo almacenado como num. No existen NAs
 
 
 
@@ -727,13 +787,13 @@ summary(vuelosDeparted$load_factor)
 
 
 ### 4.33 total_pax
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_pax)
 summary(vuelosDeparted$total_pax)
 
-## Campo almacenado como int. Existen 3737 NAs
+## Campo almacenado como int. No existen NAs
 
 
 
@@ -751,52 +811,52 @@ summary(vuelosDeparted$total_no_shows)
 
 
 ### 4.35 total_cabin_crew 
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_cabin_crew)
 summary(vuelosDeparted$total_cabin_crew)
 
-## Campo almacenado como int. Existen 738 NAs
+## Campo almacenado como int. No existen NAs
 
 
 
 
 
 ### 4.36 total_technical_crew
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_technical_crew)
 summary(vuelosDeparted$total_technical_crew)
 
-## Campo almacenado como int. Existen 738 NAs
+## Campo almacenado como int. No existen NAs
 
 
 
 
 
 ### 4.37 total_baggage_weight
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_baggage_weight)
 summary(vuelosDeparted$total_baggage_weight)
 
-## Campo almacenado como int. Existen 738 NAs
+## Campo almacenado como int. No existen NAs
 
 
 
 
 
 ### 4.38 number_of_baggage_pieces
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$number_of_baggage_pieces)
 summary(vuelosDeparted$number_of_baggage_pieces)
 
-## Campo almacenado como int. Existen 738 NAs
+## Campo almacenado como int. No existen NAs
 
 
 
@@ -814,6 +874,12 @@ summary(vuelosDeparted$file_sequence_number)
 
 vuelosDeparted$file_sequence_number <- NULL
 
+
+
+
+### RESULTADO DEL DATAFRAME QUE UTILIZAREMOS PARA AÑADIR DATOS CLIMATICOS
+str(vuelosDeparted)   ## 212698 objetos
+str(vuelos)           ## original -> 222012 objetos
 
 
 
