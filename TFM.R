@@ -3,10 +3,13 @@
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
 setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+#setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
 ## Apertura del dataset
 vuelos <- read.table("operations_leg.csv", header = T, sep = "^")
+
+
 
 
 ## 1. Primera visualizacion de los datos
@@ -877,10 +880,11 @@ vuelosDeparted$file_sequence_number <- NULL
 
 
 
-### RESULTADO DEL DATAFRAME QUE UTILIZAREMOS PARA AÑADIR DATOS CLIMATICOS
+### RESULTADO DEL DATAFRAME QUE UTILIZAREMOS PARA A?ADIR DATOS CLIMATICOS
 str(vuelosDeparted)   ## 212698 objetos
 str(vuelos)           ## original -> 222012 objetos
 
-
-
+##escribimos el dataframe resultante para reusarlo en la siguiente fase
+write.csv('vuelosDeparted.csv',x = vuelosDeparted)
 ###
+
