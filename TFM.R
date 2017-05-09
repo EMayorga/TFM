@@ -116,6 +116,7 @@ vuelosDeparted$flight_number <- as.factor(vuelosDeparted$flight_number)
 options(max.print=999999)  ### incrementar la salida del summary
 summary(vuelosDeparted$flight_number, maxsum = 1100)
 
+str(vuelosDeparted$flight_number)
 unique(vuelosDeparted$flight_number)  ## 1045 vuelos distintos
 table(vuelosDeparted$flight_number)
 
@@ -157,6 +158,7 @@ summary(vuelosDeparted)
 ###############################################################################################
 
 str(vuelosDeparted$board_point)
+summary(vuelosDeparted$board_point, maxsum = 160)
 table(vuelosDeparted$board_point)
 
 ### Esta variable no contiene NAs y se almacena como factor, por lo que no la modificaremos
@@ -441,7 +443,7 @@ summary(vuelosDeparted$sched_blocktime)
 
 
 ### 4.19 act_blocktime 
-## (PENDIENTE)
+## (COMPLETADA)
 ## Tiempo de vuelo. Diferencia entre hora de llegada y hora de salida. Indicado en minutos
 ###############################################################################################
 
@@ -450,6 +452,10 @@ summary(vuelosDeparted$act_blocktime)
 
 ## Dato almacenado como entero.
 ## No existen nulos pero existen valores negativos. (Estos valores negativos no tienen sentido)
+
+negativos <- vuelosDeparted[vuelosDeparted$act_blocktime<0,]
+head(negativos)
+
 
 ## 4.19.1 almacenamos en una nueva variable la diferencia entre la fecha de llegada y la fecha de salida
 vuelosDeparted2 <- vuelosDeparted
@@ -467,31 +473,38 @@ head(tiemposDiferentes)
 
 
 fechasRetrasos <- subset(tiemposDiferentes, 
-                select = c("scheduled_time_of_departure","actual_time_of_departure","scheduled_time_of_arrival",
-                           "actual_time_of_arrival","departure_delay","arrival_delay","act_blocktime","BlocktimeNEW",
-                           "routing"))
+                select = c("actual_time_of_departure","actual_time_of_arrival",
+                           "act_blocktime","BlocktimeNEW","routing"))
 
 head(fechasRetrasos,5)
 
 table(fechasRetrasos$routing)
 
-
-## Obtenemos diferentes rutas
-## AMV-LEU      AMV +1
+## Obtenemos diferentes rutas de ejemplo
+## AMV-LEU      AMV +1            
 ## CNF-LEU      CNF -5
-## YZF-LEU
 
 fechasRetrasos$difTiempoMin <- fechasRetrasos$BlocktimeNEW - fechasRetrasos$act_blocktime
 
+### AMV-LEU
 tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
-head(tiempoRuta)
+str(tiempoRuta)
+head(tiempoRuta, 54)
+
 
 unique(tiempoRuta$difTiempoMin)
+## AMV es el aeropuerto de Amderma, en Rusia
+## Este unique da como resultado -120 y -60. Estos valores indican las diferencias horarias para la ruta AMV-LEU
+## que coinciden con el horario de verano y horario de invierno en europa. Es decir, en diferentes articulos como
+## este (http://www.elmundo.es/elmundo/2011/02/08/ciencia/1297174335.html, de 2011) se indica que Rusia suprime el
+## cambio horario, sin embargo la Union Europea lo mantiene y, por tanto, en invierno hay dos horas de diferencia 
+## entre Rusia y Europa pero en verano solo hay 1 hora de diferencia
+## Si utilizamos la ruta CNF-LEU ocurre lo mismo. Las diferencias encontradas son por los diferentes husos horarios
+## y los cambios horarios establecidos localmente en verano e invierno
 
 
-#### Para entender completamente estos datos es necesario hacer una funcion que determine la diferencia
-#### horaria entre el punto de salida del vuelo y el punto de aterrizaje (por latitud y longitud)
-
+## Como se puede observar con la ruta anterior, los valores negativos son correctos ya que se obtienen en funcion
+## de la zona horaria y los cambios horarios de cada pais
 
 
 
@@ -509,6 +522,7 @@ summary(vuelosDeparted$aircraft_type)
 
 
 
+
 ### 4.21 aircraft_registration_number
 ## (COMPLETADA)
 ###############################################################################################
@@ -520,10 +534,13 @@ summary(vuelosDeparted$aircraft_registration_number)
 
 
 
+
 ### 4.22 general_status_code
 ## (COMPLETADA)
 ###############################################################################################
 ## Este campo se analizo en un principio.
+
+
 
 
 
@@ -538,24 +555,53 @@ summary(vuelosDeparted$routing, maxsum = 357)
 
 
 
+
+
 ### 4.24 cabin_1_code / cabin_2_code 
-## (PENDIENTE)
+## (COMPLETADA)
 ###############################################################################################
+
+## Por los correos tenemos que los codigos son los siguientes: 
+### Y economy, W premium eco, J business, F first
+
 
 str(vuelosDeparted$cabin_1_code)
 summary(vuelosDeparted$cabin_1_code)
 
-## Se almacena como factor, todos los datos de esta variable son Y
+## Se almacena como factor, todos los datos de esta variable son Y (economy)
 
 str(vuelosDeparted$cabin_2_code)
 summary(vuelosDeparted$cabin_2_code)
 
-## Se almacena como factor. Tiene 96705 registros vacios (que no NAs) y 123542 registros con J
+## Se almacena como factor. Tiene 93506 registros vacios (que no NAs) y 122971 registros con J (business)
+
+## Comprobamos los registros vacios
+cabin2Vacio <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="",]
+head(cabin2Vacio)
+
+## Comprobamos si algun registro con cabin_2_code vacio tiene valores almacenados en algun campo de cabin_2
+cabin2ask <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
+cabin2saleable  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_saleable)==FALSE,]
+cabin2fitted_configuration  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_fitted_configuration)==FALSE,]
+cabin2pax_boarded  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_pax_boarded)==FALSE,]
+cabin2rpk  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_rpk)==FALSE,]
+cabin2ask  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
+
+str(cabin2ask)
+str(cabin2saleable)
+str(cabin2fitted_configuration)
+str(cabin2pax_boarded)
+str(cabin2rpk)
+str(cabin2ask)
+
+## No existen datos anomalos
+
 
 
 
 
 ### 4.25 cabin_1_fitted_configuration / cabin_2_fitted_configuration -> Numero de asientos
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_fitted_configuration)
@@ -566,11 +612,15 @@ summary(vuelosDeparted$cabin_1_fitted_configuration)
 str(vuelosDeparted$cabin_2_fitted_configuration)
 summary(vuelosDeparted$cabin_2_fitted_configuration)
 
-## Esta variable se almacena como int y tiene 96705 Nas. Por ahora no se modifica
+## Esta variable se almacena como int y tiene 93506 NAs, que coinciden con los registros vacios del
+## campo "cabin_2_code". No se modifica
+
+
 
 
 
 ### 4.26 cabin_1_saleable / cabin_2_saleable  -> numero de asientos en venta
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_saleable)
@@ -581,7 +631,10 @@ summary(vuelosDeparted$cabin_1_saleable)
 str(vuelosDeparted$cabin_2_saleable)
 summary(vuelosDeparted$cabin_2_saleable)
 
-## Campo almacenado como entero y contiene 96751 NAs
+## Campo almacenado como entero y contiene 93574 NAs, Son mas NAs de los que aparecen en el campo anterior
+## Estudiar este caso
+
+
 
 
 
@@ -592,12 +645,12 @@ summary(vuelosDeparted$cabin_2_saleable)
 str(vuelosDeparted$cabin_1_pax_boarded)
 summary(vuelosDeparted$cabin_1_pax_boarded)
 
-## Campo almacenado como entero. Existen 4050 NAs
+## Campo almacenado como entero. Existen 3737 NAs
 
 str(vuelosDeparted$cabin_2_pax_boarded)
 summary(vuelosDeparted$cabin_2_pax_boarded)
 
-## Campo almacenado como entero. Existen 96963 NAs
+## Campo almacenado como entero. Existen 93745 NAs
 
 
 
@@ -608,16 +661,19 @@ summary(vuelosDeparted$cabin_2_pax_boarded)
 str(vuelosDeparted$cabin_1_rpk)
 summary(vuelosDeparted$cabin_1_rpk)
 
-## Campo almacenado como entero. Existen 4050 NAs
+## Campo almacenado como entero. Existen 3737 NAs
 
 str(vuelosDeparted$cabin_2_rpk)
 summary(vuelosDeparted$cabin_2_rpk)
 
-## Campo almacenado como entero. Existen 96963 NAs
+## Campo almacenado como entero. Existen 93745 NAs
+
+
 
 
 
 ### 4.29 cabin_1_ask / cabin_2_ask  -> unidad tipica para evaluar la oferta
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$cabin_1_ask)
@@ -628,21 +684,23 @@ summary(vuelosDeparted$cabin_1_ask)
 str(vuelosDeparted$cabin_2_ask)
 summary(vuelosDeparted$cabin_2_ask)
 
-## Campo almacenado como int. Contiene 96751 NAs
+## Campo almacenado como int. Contiene 93547 NAs
 
 
 
 ### 4.30 total_rpk
+### (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$total_rpk)
 summary(vuelosDeparted$total_rpk)
 
-## Campo almacenado como entero. Existen 4050 NAs
+## Campo almacenado como entero. Existen 3737 NAs
 
 
 
 ### 4.31 total_ask
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_ask)
@@ -652,27 +710,36 @@ summary(vuelosDeparted$total_ask)
 
 
 
+
+
 ### 4.32 load_factor
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$load_factor)
 summary(vuelosDeparted$load_factor)
 
-## Campo almacenado como num. Existen 4050 NAs
+## Campo almacenado como num. Existen 3737 NAs
+
+
+
 
 
 
 ### 4.33 total_pax
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$total_pax)
 summary(vuelosDeparted$total_pax)
 
-## Campo almacenado como int. Existen 4050 NAs
+## Campo almacenado como int. Existen 3737 NAs
+
 
 
 
 ### 4.34 total_no_shows
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$total_no_shows)
@@ -682,55 +749,70 @@ summary(vuelosDeparted$total_no_shows)
 
 
 
-### 4.35 total_cabin_crew (PENDIENTE)
+
+### 4.35 total_cabin_crew 
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$total_cabin_crew)
 summary(vuelosDeparted$total_cabin_crew)
 
-## Campo almacenado como int. Existen 1014 NAs
+## Campo almacenado como int. Existen 738 NAs
+
 
 
 
 
 ### 4.36 total_technical_crew
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$total_technical_crew)
 summary(vuelosDeparted$total_technical_crew)
 
-## Campo almacenado como int. Existen 1014 NAs
+## Campo almacenado como int. Existen 738 NAs
+
+
 
 
 
 ### 4.37 total_baggage_weight
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$total_baggage_weight)
 summary(vuelosDeparted$total_baggage_weight)
 
-## Campo almacenado como int. Existen 1014 NAs
+## Campo almacenado como int. Existen 738 NAs
+
+
 
 
 
 ### 4.38 number_of_baggage_pieces
+## (PENDIENTE)
 ###############################################################################################
 
 str(vuelosDeparted$number_of_baggage_pieces)
 summary(vuelosDeparted$number_of_baggage_pieces)
 
-## Campo almacenado como int. Existen 1014 NAs
+## Campo almacenado como int. Existen 738 NAs
+
+
 
 
 
 ### 4.39 file_sequence_number
+## (COMPLETADA)
 ###############################################################################################
 
 str(vuelosDeparted$file_sequence_number)
 summary(vuelosDeparted$file_sequence_number)
 
-## Campo almacenado como factor. No existen los valores 2 y 3. Existen los valores P (220229) y 1 (18)
+## Campo almacenado como factor. No existen los valores 1, 2 y 3. Existen los valores P (220229)
+## Al ser siempre el mismo valor la eliminamos del conjunto de datos
 
+vuelosDeparted$file_sequence_number <- NULL
 
 
 
