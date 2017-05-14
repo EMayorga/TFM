@@ -2,8 +2,8 @@
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
 #setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
-#setwd("~/GitHub/TFM") ##RUTA SERGIO
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
 ## Apertura del dataset
@@ -890,6 +890,8 @@ str(vuelos)           ## original -> 222012 objetos
 ### 5. Creacion de nuevas variables en el dataframe
 ## 5.1. Mes de salida del vuelo
 vuelosDeparted$mesSalida <- as.integer(month(vuelosDeparted$actual_time_of_departure))
+## 5.1.1 ano de salida del vuelo
+vuelosDeparted$anyoSalida <- as.integer(year(vuelosDeparted$actual_time_of_departure))
 ## 5.2. Dia de salida del vuelo
 vuelosDeparted$diaSalida <- as.integer(day(vuelosDeparted$actual_time_of_departure))
 ## 5.3. Hora de salida del vuelo
@@ -899,6 +901,8 @@ vuelosDeparted$horaSalida <- as.factor(vuelosDeparted$horaSalida)
 
 ## 5.4 Mes de llegada del vuelo
 vuelosDeparted$mesLlegada <- as.integer(month(vuelosDeparted$actual_time_of_arrival))
+## 5.1.1 ano de llegada del vuelo
+vuelosDeparted$anyoLlegada <- as.integer(year(vuelosDeparted$actual_time_of_arrival))
 ## 5.5 Dia de llegada del vuelo
 vuelosDeparted$diaLlegada <- as.integer(day(vuelosDeparted$actual_time_of_arrival))
 ## 5.6 Hora de llegada del vuelo
