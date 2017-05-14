@@ -1,8 +1,8 @@
 #####  TFM
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
-setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 #setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
@@ -883,6 +883,49 @@ vuelosDeparted$file_sequence_number <- NULL
 ### RESULTADO DEL DATAFRAME QUE UTILIZAREMOS PARA A?ADIR DATOS CLIMATICOS
 str(vuelosDeparted)   ## 212698 objetos
 str(vuelos)           ## original -> 222012 objetos
+
+
+
+
+### 5. Creacion de nuevas variables en el dataframe
+## 5.1. Mes de salida del vuelo
+vuelosDeparted$mesSalida <- as.integer(month(vuelosDeparted$actual_time_of_departure))
+## 5.2. Dia de salida del vuelo
+vuelosDeparted$diaSalida <- as.integer(day(vuelosDeparted$actual_time_of_departure))
+## 5.3. Hora de salida del vuelo
+vuelosDeparted$horaSalida <- format(vuelosDeparted$actual_time_of_departure,'%H:%M:%S')
+vuelosDeparted$horaSalida <- as.factor(vuelosDeparted$horaSalida)
+
+
+## 5.4 Mes de llegada del vuelo
+vuelosDeparted$mesLlegada <- as.integer(month(vuelosDeparted$actual_time_of_arrival))
+## 5.5 Dia de llegada del vuelo
+vuelosDeparted$diaLlegada <- as.integer(day(vuelosDeparted$actual_time_of_arrival))
+## 5.6 Hora de llegada del vuelo
+vuelosDeparted$horaLlegada <- format(vuelosDeparted$actual_time_of_arrival, "%H:%M:%S")
+vuelosDeparted$horaLlegada <- as.factor(vuelosDeparted$horaLlegada)
+
+
+
+
+## 5.7. Dia de la semana para la salida de los vuelos
+vuelosDeparted$diaSemanaSalida <- weekdays(as.Date(vuelosDeparted$actual_time_of_departure))
+vuelosDeparted$diaSemanaSalida <- as.factor(vuelosDeparted$diaSemanaSalida)
+## 5.8. Dia de la semana para la llegada de los vuelos
+vuelosDeparted$diaSemanaLlegada <- weekdays(as.Date(vuelosDeparted$actual_time_of_arrival))
+vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
+
+
+
+## diahora <- subset(vuelosDeparted, select = c("actual_time_of_departure","mesSalida","diaSalida","horaSalida",
+##                                             "diaSemanaSalida", "actual_time_of_arrival","mesLlegada","diaLlegada",
+##                                             "horaLlegada","diaSemanaLlegada"))
+
+summary(vuelosDeparted)
+str(vuelosDeparted)
+
+
+tail(vuelosDeparted, 1)
 
 ##escribimos el dataframe resultante para reusarlo en la siguiente fase
 write.csv('vuelosDeparted.csv',x = vuelosDeparted)
