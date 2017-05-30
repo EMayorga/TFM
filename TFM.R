@@ -1015,7 +1015,9 @@ indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
 muestra <- vuelosDeparted[ indices, ]
 
 str(muestra)
-summary(muestra)
+summary(muestra$horaLlegada)
+
+
 
 muestra$cabin_1_code <- NULL
 muestra$est_blocktime <- NULL
@@ -1026,9 +1028,116 @@ muestra$cabin_2_rpk <- NULL
 muestra$cabin_2_ask <- NULL
 
 ## Regresion lineal
+
+
+normalizar <- function(vec){
+  maximo <- max(vec)
+  minimo <- min(vec)
+  vectorSalida <- vector()
+  
+  for(i in 1:length(vec)){
+    if(is.na(vectorSalida[i])==FALSE){
+      vectorSalida[i] <- (vec[i]-minimo)/(maximo - minimo)
+    }
+    else{
+      vectorSalida[i] <- vec[i]
+    }
+  }
+  
+  return(vectorSalida)
+  
+}
+
+
+
+muestra$distance <- normalizar(muestra$distance)
+muestra$sched_blocktime <- normalizar(muestra$sched_blocktime)
+muestra$act_blocktime <- normalizar(muestra$act_blocktime)
+muestra$cabin_1_fitted_configuration <- normalizar(muestra$cabin_1_fitted_configuration)
+muestra$distance <- normalizar(muestra$distance)
+muestra$sched_blocktime <- normalizar(muestra$sched_blocktime)
+muestra$act_blocktime <- normalizar(muestra$act_blocktime)
+muestra$cabin_1_fitted_configuration <- normalizar(muestra$cabin_1_fitted_configuration)
+muestra$cabin_1_saleable <- normalizar(muestra$cabin_1_saleable)
+muestra$cabin_1_pax_boarded <- normalizar(muestra$cabin_1_pax_boarded)
+muestra$cabin_1_rpk <- normalizar(muestra$cabin_1_rpk)
+muestra$cabin_1_ask <- normalizar(muestra$cabin_1_ask)
+muestra$cabin_2_fitted_configuration <- normalizar(muestra$cabin_2_fitted_configuration)
+muestra$cabin_2_saleable <- normalizar(muestra$cabin_2_saleable)
+muestra$cabin_2_pax_boarded <- normalizar(muestra$cabin_2_pax_boarded)
+muestra$cabin_2_rpk <- normalizar(muestra$cabin_2_rpk)
+muestra$cabin_2_ask <- normalizar(muestra$cabin_2_ask)
+muestra$total_rpk <- normalizar(muestra$total_rpk)
+muestra$total_ask <- normalizar(muestra$total_ask)
+muestra$load_factor <- normalizar(muestra$load_factor)
+muestra$total_pax <- normalizar(muestra$total_pax)
+muestra$total_no_shows <- normalizar(muestra$total_no_shows)
+muestra$total_cabin_crew <- normalizar(muestra$total_cabin_crew)
+muestra$total_technical_crew <- normalizar(muestra$total_technical_crew)
+muestra$total_baggage_weight <- normalizar(muestra$total_baggage_weight)
+muestra$number_of_baggage_pieces <- normalizar(muestra$number_of_baggage_pieces)
+
+
 str(muestra)
 
+model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+cabin_2_saleable,
+             data = muestra)
+
+summary(model1)
+
+model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
+               cabin_2_saleable+cabin_2_rpk+cabin_2_fitted_configuration+
+               cabin_2_pax_boarded+cabin_2_ask+total_rpk+total_ask+load_factor+total_pax+
+               total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
+               number_of_baggage_pieces, 
+             na.action = na.omit, data = muestra)
+
+summary(model1)
 
 
+## Aplicando a todo el conjunto de datos
+dfAux <- vuelosDeparted
+
+dfAux$distance <- normalizar(dfAux$distance)
+dfAux$sched_blocktime <- normalizar(dfAux$sched_blocktime)
+dfAux$act_blocktime <- normalizar(dfAux$act_blocktime)
+dfAux$cabin_1_fitted_configuration <- normalizar(dfAux$cabin_1_fitted_configuration)
+dfAux$distance <- normalizar(dfAux$distance)
+dfAux$sched_blocktime <- normalizar(dfAux$sched_blocktime)
+dfAux$act_blocktime <- normalizar(dfAux$act_blocktime)
+dfAux$cabin_1_fitted_configuration <- normalizar(dfAux$cabin_1_fitted_configuration)
+dfAux$cabin_1_saleable <- normalizar(dfAux$cabin_1_saleable)
+dfAux$cabin_1_pax_boarded <- normalizar(dfAux$cabin_1_pax_boarded)
+dfAux$cabin_1_rpk <- normalizar(dfAux$cabin_1_rpk)
+dfAux$cabin_1_ask <- normalizar(dfAux$cabin_1_ask)
+dfAux$cabin_2_fitted_configuration <- normalizar(dfAux$cabin_2_fitted_configuration)
+dfAux$cabin_2_saleable <- normalizar(dfAux$cabin_2_saleable)
+dfAux$cabin_2_pax_boarded <- normalizar(dfAux$cabin_2_pax_boarded)
+dfAux$cabin_2_rpk <- normalizar(dfAux$cabin_2_rpk)
+dfAux$cabin_2_ask <- normalizar(dfAux$cabin_2_ask)
+dfAux$total_rpk <- normalizar(dfAux$total_rpk)
+dfAux$total_ask <- normalizar(dfAux$total_ask)
+dfAux$load_factor <- normalizar(dfAux$load_factor)
+dfAux$total_pax <- normalizar(dfAux$total_pax)
+dfAux$total_no_shows <- normalizar(dfAux$total_no_shows)
+dfAux$total_cabin_crew <- normalizar(dfAux$total_cabin_crew)
+dfAux$total_technical_crew <- normalizar(dfAux$total_technical_crew)
+dfAux$total_baggage_weight <- normalizar(dfAux$total_baggage_weight)
+dfAux$number_of_baggage_pieces <- normalizar(dfAux$number_of_baggage_pieces)
+
+
+str(dfAux)
+
+model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
+               cabin_2_saleable+cabin_2_rpk+cabin_2_fitted_configuration+
+               cabin_2_pax_boarded+cabin_2_ask+total_rpk+total_ask+load_factor+total_pax+
+               total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
+               number_of_baggage_pieces, 
+             na.action = na.omit, data = dfAux)
+
+summary(model1)
 
 
