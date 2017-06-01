@@ -1172,7 +1172,7 @@ mediasRetrasos <- function(numVuelos, muestra){
 
 # 1. Obtener la muestra y coger las columnas interesantes
 indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
-muestra <- vuelosDeparted[ indices, ]
+muestra <- vuelosDeparted [ indices, ]
 
 ### trampa
 #table(vuelosDeparted$flight_number)
@@ -1189,14 +1189,23 @@ numerosVuelo
 
 # 3. llamada a la funcion
 d <- mediasRetrasos(numerosVuelo,dfmuestra)
-d
+str(d)
 
 
 
-####################################################################33
+####################################################################
 
 
 barplot(d$retrasoMedio)
+
+muchosvuelos <- d[d$numeroVuelos>200,]
+str(muchosvuelos)
+
+barplot(muchosvuelos$retrasoMedio)
+
+
+####################################################################
+
 
 warnings()
 length(d)
