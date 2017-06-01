@@ -1,8 +1,8 @@
 #####  TFM
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
-setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 #setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
@@ -945,6 +945,13 @@ write.csv('vuelosDeparted.csv',x = vuelosDeparted)
 
 
 
+
+
+
+
+
+
+
 #########  GRAFICAS DEL RETRASO EN FUNCION DE VARIABLES
 
 library(ggplot2)
@@ -1015,7 +1022,6 @@ indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
 muestra <- vuelosDeparted[ indices, ]
 
 str(muestra)
-summary(muestra$horaLlegada)
 
 
 
@@ -1029,7 +1035,7 @@ muestra$cabin_2_ask <- NULL
 
 ## Regresion lineal
 
-
+## funcion que normaliza un vector (hay que mejorarlo)
 normalizar <- function(vec){
   maximo <- max(vec)
   minimo <- min(vec)
@@ -1080,11 +1086,14 @@ muestra$number_of_baggage_pieces <- normalizar(muestra$number_of_baggage_pieces)
 
 str(muestra)
 
-model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
-               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+cabin_2_saleable,
+model1 <- lm(arrival_delay ~ flight_number,
              data = muestra)
 
 summary(model1)
+
+barplot(vuelosDeparted$arrival_delay)
+
+
 
 model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
                cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
@@ -1128,7 +1137,70 @@ dfAux$total_baggage_weight <- normalizar(dfAux$total_baggage_weight)
 dfAux$number_of_baggage_pieces <- normalizar(dfAux$number_of_baggage_pieces)
 
 
-str(dfAux)
+
+
+################################################
+
+## funcion que calcula el retraso medio de los codigos de vuelo indicados en la variable de entrada numVuelos e informa
+## de la cantidad de vuelos que ha realizado un avion.
+## Devuelve es un dataframe que almacena el codigo del avion, su retraso para cada vuelo realizado (puede repetirse) y 
+## el numero de vuelos que ha realizado
+mediasRetrasos <- function(numVuelos, muestra){
+  vectorCodigos <- vector()
+  vectorRetrasos <- vector()
+  vectorNumeroVuelos <- vector()
+  
+  ## bucle for por cada codigo de vuelo
+  for(i in 1:length(numVuelos)){
+    
+    vuelos <- muestra[muestra[,2]==numVuelos[i],]
+    retrasoMedio <- 0
+    
+    if(length(vuelos[,1])>0){
+      retrasoMedio <- mean(vuelos[,1])
+    }
+    
+    vectorCodigos[i] = as.character(numVuelos[i])
+    vectorRetrasos[i] = as.numeric(retrasoMedio)    
+    vectorNumeroVuelos[i] <- length(vuelos[,1])
+    
+  }
+  df <- as.data.frame(list(vectorCodigos,vectorRetrasos,vectorNumeroVuelos), col.names = c("codigo","retrasoMedio","numeroVuelos"))
+  return(df)
+}
+
+
+# 1. Obtener la muestra y coger las columnas interesantes
+indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
+muestra <- vuelosDeparted[ indices, ]
+
+### trampa
+#table(vuelosDeparted$flight_number)
+#dfmuestra <- vuelosDeparted[vuelosDeparted$flight_number=="9851",]
+#dfmuestra
+#dfmuestra <- subset(dfmuestra, select = c("arrival_delay","flight_number"))
+###
+dfmuestra <- subset(muestra, select = c("arrival_delay","flight_number"))
+dfmuestra
+
+# 2. obtenemos los codigos de vuelo de la muestra
+numerosVuelo <- unique(dfmuestra$flight_number)
+numerosVuelo
+
+# 3. llamada a la funcion
+d <- mediasRetrasos(numerosVuelo,dfmuestra)
+d
+
+
+
+####################################################################33
+
+
+barplot(d$retrasoMedio)
+
+warnings()
+length(d)
+
 
 model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
                cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
