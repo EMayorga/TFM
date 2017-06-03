@@ -175,7 +175,8 @@ vuelosDeparted$flight_date <- NULL
 #str(vuelosDeparted$board_lat)
 #summary(vuelosDeparted$board_lat)
 
-### Esta variable no contiene NAs y se almacena como numeric, de momento la dejamos asi
+### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
+vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 
 
 ### 4.5 board_lon
@@ -185,8 +186,8 @@ vuelosDeparted$flight_date <- NULL
 #str(vuelosDeparted$board_lon)
 #summary(vuelosDeparted$board_lon)
 
-### Esta variable no contiene NAs y se almacena como numeric, de momento la dejamos asi
-
+### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
+vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
 
 
 ### 4.6 board_country_code ( y off_country_code )
@@ -295,7 +296,8 @@ vuelosDeparted$departure_date <- NULL
 #str(vuelosDeparted$off_lat)
 #summary(vuelosDeparted$off_lat)
 
-### Variable que no contiene NAs y almacenada como tipo numeric. Por ahora no se hacen cambios
+### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor
+vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
 
 
 ### 4.10 off_lon
@@ -305,8 +307,8 @@ vuelosDeparted$departure_date <- NULL
 #str(vuelosDeparted$off_lon)
 #summary(vuelosDeparted$off_lon)
 
-### Variable que no contiene NAs y almacenada como tipo numeric. Por ahora no se hacen cambios
-
+### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor
+vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ### 4.11 distance
 ## (COMPLETADA)
@@ -1038,19 +1040,19 @@ asignarGrupoCodigoAvion <- function(dfRetrasos){
   vectorRetrasos <- dfRetrasos[,2]
   for (i in 1:length(vectorRetrasos)){
     if(vectorRetrasos[i] > 0 & vectorRetrasos[i] <= 5){
-      vectorSalida[i] = 'A'
+      vectorSalida[i] = 1
     }
     if (vectorRetrasos[i] > 5 & vectorRetrasos[i] <= 10){
-      vectorSalida[i] = 'B'
+      vectorSalida[i] = 2
     }
     if (vectorRetrasos[i] > 10){
-      vectorSalida[i] = 'C'
+      vectorSalida[i] = 3
     }
     if (vectorRetrasos[i] <= 0 & vectorRetrasos[i] >=(-5)){
-      vectorSalida[i] = 'D'
+      vectorSalida[i] = 4
     }
     if (vectorRetrasos[i] <(-5)){
-      vectorSalida[i] = 'E'
+      vectorSalida[i] = 5
     }
   }
   return(as.factor(vectorSalida))
@@ -1096,7 +1098,33 @@ str(vuelosDeparted$flightNumberCode)
 
 
 
-##escribimos el dataframe resultante para reusarlo en la siguiente fase
+## 7. Normalizar dataframe
+## funcion que normaliza un dataframe
+normalizar <- function(df){
+  
+  ## df <- dataframe a normalizar
+  for (i in 1:length(df)){
+    columna <- vector()
+    if(is.numeric(df[,i])){
+      vectorDatos <- df[,i]
+      maximo <- max(vectorDatos)
+      minimo <- min(vectorDatos)
+      for (j in 1:length(vectorDatos)){
+        columna[j] = (vectorDatos[j]-minimo)/(maximo - minimo)
+      }
+      df[,i] = columna
+    }
+  }
+  
+  return(df)
+  
+}
+
+vuelosDeparted2 <- normalizar(vuelosDeparted)
+
+
+
+## escribimos el dataframe resultante para reusarlo en la siguiente fase
 write.csv('vuelosDeparted.csv',x = vuelosDeparted)
 ###
 
@@ -1177,311 +1205,25 @@ table(vuelosDeparted$horaLlegada)
 #########  APLICACION DE MODELOS
 # http://www.revistaseden.org/files/14-cap%2014.pdf
 
-indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
-muestra <- vuelosDeparted[ indices, ]
+indices <- sample( 1:nrow( vuelosDeparted2 ), 10000 )
+muestra <- vuelosDeparted2[ indices, ]
 
 str(muestra)
 
-
-
-muestra$cabin_1_code <- NULL
-muestra$est_blocktime <- NULL
-muestra$cabin_2_fitted_configuration <- NULL
-muestra$cabin_2_pax_boarded <- NULL
-muestra$cabin_2_saleable <- NULL
-muestra$cabin_2_rpk <- NULL
-muestra$cabin_2_ask <- NULL
-
-## Regresion lineal
-
-## funcion que normaliza un vector (hay que mejorarlo) PENDIENTE
-normalizar <- function(vec){
-  maximo <- max(vec)
-  minimo <- min(vec)
-  vectorSalida <- vector()
-  
-  for(i in 1:length(vec)){
-    if(is.na(vectorSalida[i])==FALSE){
-      vectorSalida[i] <- (vec[i]-minimo)/(maximo - minimo)
-    }
-    else{
-      vectorSalida[i] <- vec[i]
-    }
-  }
-  
-  return(vectorSalida)
-  
-}
-
-
-
-muestra$distance <- normalizar(muestra$distance)
-muestra$sched_blocktime <- normalizar(muestra$sched_blocktime)
-muestra$act_blocktime <- normalizar(muestra$act_blocktime)
-muestra$cabin_1_fitted_configuration <- normalizar(muestra$cabin_1_fitted_configuration)
-muestra$distance <- normalizar(muestra$distance)
-muestra$sched_blocktime <- normalizar(muestra$sched_blocktime)
-muestra$act_blocktime <- normalizar(muestra$act_blocktime)
-muestra$cabin_1_fitted_configuration <- normalizar(muestra$cabin_1_fitted_configuration)
-muestra$cabin_1_saleable <- normalizar(muestra$cabin_1_saleable)
-muestra$cabin_1_pax_boarded <- normalizar(muestra$cabin_1_pax_boarded)
-muestra$cabin_1_rpk <- normalizar(muestra$cabin_1_rpk)
-muestra$cabin_1_ask <- normalizar(muestra$cabin_1_ask)
-muestra$cabin_2_fitted_configuration <- normalizar(muestra$cabin_2_fitted_configuration)
-muestra$cabin_2_saleable <- normalizar(muestra$cabin_2_saleable)
-muestra$cabin_2_pax_boarded <- normalizar(muestra$cabin_2_pax_boarded)
-muestra$cabin_2_rpk <- normalizar(muestra$cabin_2_rpk)
-muestra$cabin_2_ask <- normalizar(muestra$cabin_2_ask)
-muestra$total_rpk <- normalizar(muestra$total_rpk)
-muestra$total_ask <- normalizar(muestra$total_ask)
-muestra$load_factor <- normalizar(muestra$load_factor)
-muestra$total_pax <- normalizar(muestra$total_pax)
-muestra$total_no_shows <- normalizar(muestra$total_no_shows)
-muestra$total_cabin_crew <- normalizar(muestra$total_cabin_crew)
-muestra$total_technical_crew <- normalizar(muestra$total_technical_crew)
-muestra$total_baggage_weight <- normalizar(muestra$total_baggage_weight)
-muestra$number_of_baggage_pieces <- normalizar(muestra$number_of_baggage_pieces)
-
-
-str(muestra)
-
-model1 <- lm(arrival_delay ~ flight_number,
-             data = muestra)
-
-summary(model1)
-
-barplot(vuelosDeparted$arrival_delay)
-
-
-
-model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
-               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
-               cabin_2_saleable+cabin_2_rpk+cabin_2_fitted_configuration+
-               cabin_2_pax_boarded+cabin_2_ask+total_rpk+total_ask+load_factor+total_pax+
-               total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
-               number_of_baggage_pieces, 
-             na.action = na.omit, data = muestra)
-
-summary(model1)
-
-
-## Aplicando a todo el conjunto de datos
-dfAux <- vuelosDeparted
-
-dfAux$distance <- normalizar(dfAux$distance)
-dfAux$sched_blocktime <- normalizar(dfAux$sched_blocktime)
-dfAux$act_blocktime <- normalizar(dfAux$act_blocktime)
-dfAux$cabin_1_fitted_configuration <- normalizar(dfAux$cabin_1_fitted_configuration)
-dfAux$distance <- normalizar(dfAux$distance)
-dfAux$sched_blocktime <- normalizar(dfAux$sched_blocktime)
-dfAux$act_blocktime <- normalizar(dfAux$act_blocktime)
-dfAux$cabin_1_fitted_configuration <- normalizar(dfAux$cabin_1_fitted_configuration)
-dfAux$cabin_1_saleable <- normalizar(dfAux$cabin_1_saleable)
-dfAux$cabin_1_pax_boarded <- normalizar(dfAux$cabin_1_pax_boarded)
-dfAux$cabin_1_rpk <- normalizar(dfAux$cabin_1_rpk)
-dfAux$cabin_1_ask <- normalizar(dfAux$cabin_1_ask)
-dfAux$cabin_2_fitted_configuration <- normalizar(dfAux$cabin_2_fitted_configuration)
-dfAux$cabin_2_saleable <- normalizar(dfAux$cabin_2_saleable)
-dfAux$cabin_2_pax_boarded <- normalizar(dfAux$cabin_2_pax_boarded)
-dfAux$cabin_2_rpk <- normalizar(dfAux$cabin_2_rpk)
-dfAux$cabin_2_ask <- normalizar(dfAux$cabin_2_ask)
-dfAux$total_rpk <- normalizar(dfAux$total_rpk)
-dfAux$total_ask <- normalizar(dfAux$total_ask)
-dfAux$load_factor <- normalizar(dfAux$load_factor)
-dfAux$total_pax <- normalizar(dfAux$total_pax)
-dfAux$total_no_shows <- normalizar(dfAux$total_no_shows)
-dfAux$total_cabin_crew <- normalizar(dfAux$total_cabin_crew)
-dfAux$total_technical_crew <- normalizar(dfAux$total_technical_crew)
-dfAux$total_baggage_weight <- normalizar(dfAux$total_baggage_weight)
-dfAux$number_of_baggage_pieces <- normalizar(dfAux$number_of_baggage_pieces)
-
-
-
-
-################################################
-
-## funcion que calcula el retraso medio de los codigos de vuelo indicados en la variable de entrada numVuelos e informa
-## de la cantidad de vuelos que ha realizado un avion.
-## Devuelve es un dataframe que almacena el codigo del avion, su retraso para cada vuelo realizado (puede repetirse) y 
-## el numero de vuelos que ha realizado
-mediasRetrasos <- function(numVuelos, muestra){
-  vectorCodigos <- vector()
-  vectorRetrasos <- vector()
-  vectorNumeroVuelos <- vector()
-  
-  ## bucle for por cada codigo de vuelo
-  for(i in 1:length(numVuelos)){
-    
-    vuelos <- muestra[muestra[,2]==numVuelos[i],]
-    retrasoMedio <- 0
-    
-    if(length(vuelos[,1])>0){
-      retrasoMedio <- mean(vuelos[,1])
-    }
-    
-    vectorCodigos[i] = as.character(numVuelos[i])
-    vectorRetrasos[i] = as.numeric(retrasoMedio)    
-    vectorNumeroVuelos[i] <- length(vuelos[,1])
-    
-  }
-  df <- as.data.frame(list(vectorCodigos,vectorRetrasos,vectorNumeroVuelos), col.names = c("codigo","retrasoMedio","numeroVuelos"))
-  return(df)
-}
-
-
-### 1. Utilizando el dataframe completo
-df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
-numerosVuelo <- unique(df$flight_number)
-mediaRetrasosVuelo <- mediasRetrasos(numerosVuelo,df)
-
-## 2. Comprobamos si existen numeros de vuelo que no tienen registros
-str(numerosVuelo)   # 1045 numeros de vuelo
-length(mediaRetrasosVuelo$retrasoMedio)    # 1022 numeros de vuelo
-## Existen 23 numeros de vuelo sin registros de vuelo
-
-
-### 4. Analisis de los retrasos medios
-summary(mediaRetrasosVuelo$retrasoMedio)
-barplot(mediaRetrasosVuelo$retrasoMedio)
-boxplot(mediaRetrasosVuelo$retrasoMedio)  ## con boxplot podemos observar que los retrasos por encima del 20 y por 
-                                          ## debajo del -18 son considerados atipicos
-
-
-### 4.1. Retrasos Positivos
-retrasoPos <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>0,]
-summary(retrasoPos$retrasoMedio)
-length(retrasoPos$retrasoMedio)  # 521 aviones con retraso medio superior a 0
-barplot(retrasoPos$retrasoMedio)
-boxplot(retrasoPos$retrasoMedio)  ## Podemos deducir que los retrasos por encima de 20 minutos
-## son considerados atipicos, asi como que la mayoria de los aviones tienen un retraso medio de entre 2 y 9 minutos
-
-### 4.1.1. Retrasos entre 0 y 5 minutos (incluido)
-retrasoEntre0y5min <- retrasoPos[retrasoPos$retrasoMedio>0 & retrasoPos$retrasoMedio<=5,]
-summary(retrasoEntre0y5min)
-length(retrasoEntre0y5min$retrasoMedio) ## 261 aviones
-
-### 4.1.2. Retraso superior a 5 minutos e inferior o igual a 10
-retrasoEntre5y10min <- retrasoPos[retrasoPos$retrasoMedio>5 & retrasoPos$retrasoMedio<=10,]
-summary(retrasoEntre5y10min)
-length(retrasoEntre5y10min$retrasoMedio) ## 142 aviones
-
-### 4.1.3. Retraso mayor de 10 minutos
-retrasoMayor10min <- retrasoPos[retrasoPos$retrasoMedio>10,]
-summary(retrasoMayor10min)
-length(retrasoMayor10min$retrasoMedio)  ## 118 aviones tienen un retraso medio superior a 10 min
-
-##### Para los retrasos positivos podemos establecer 3 grupos.
-# Grupo A: Aviones con un retraso medio superior a 0 minutos e inferior o igual a 5 minutos
-# Grupo B: Aviones con un retraso medio superior a 5 minutos e inferior o igual a 10 minutos
-# Gripo C: Aviones con un retraso medio superior a 10 minutos
-
-
-### 4.2. Retrasos Negativos (llegadas antes de tiempo)
-retrasoNeg <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio<=0,]
-summary(retrasoNeg$retrasoMedio)
-length(retrasoNeg$retrasoMedio)  # 501 aviones con retraso medio igual o inferior a 0
-boxplot(retrasoNeg$retrasoMedio)  ## Podemos deducir que la mayoria de los aviones tiene un retraso comprendido entre
-# -1 y -7 minutos
-
-### 4.2.1. Retrasos comprendidos entre -1 y - 5(incluido)
-retrasoNegEntre1y5 <- retrasoNeg[retrasoNeg$retrasoMedio<=(0) & retrasoNeg$retrasoMedio>=(-5),]
-summary(retrasoNegEntre1y5)
-length(retrasoNegEntre1y5$retrasoMedio) # 299 aviones
-
-### 4.2.2. Retrasos comprendidos entre -6 y -7 (incluidos ambos)
-retrasoNegEntre6y7 <- retrasoNeg[retrasoNeg$retrasoMedio<(-5),]
-summary(retrasoNegEntre6y7)
-length(retrasoNegEntre6y7$retrasoMedio) # 202 aviones
-
-##### Para los retrasos negativos se pueden establecer 2 grupos
-# Grupo D: Aviones con un retraso negativo entre 0 y -5 (incluido)
-# Grupo E: Aviones con un retraso negativo superior a -5 (de -5 hasta -35)
-
-
-### 5. Funcion que determina el grupo al que pertenece cada avion teniendo en cuenta su numero de vuelo y su retraso medio
-asignarGrupoCodigoAvion <- function(dfRetrasos){
-  vectorSalida <- vector()
-  vectorRetrasos <- dfRetrasos[,2]
-  for (i in 1:length(vectorRetrasos)){
-    if(vectorRetrasos[i] > 0 & vectorRetrasos[i] <= 5){
-      vectorSalida[i] = 'A'
-    }
-    if (vectorRetrasos[i] > 5 & vectorRetrasos[i] <= 10){
-      vectorSalida[i] = 'B'
-    }
-    if (vectorRetrasos[i] > 10){
-      vectorSalida[i] = 'C'
-    }
-    if (vectorRetrasos[i] <= 0 & vectorRetrasos[i] >=(-5)){
-      vectorSalida[i] = 'D'
-    }
-    if (vectorRetrasos[i] <(-5)){
-      vectorSalida[i] = 'E'
-    }
-  }
-  return(as.factor(vectorSalida))
-}
-
-mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoCodigoAvion(mediaRetrasosVuelo)
-## Comprobamos que se han indicado correctamente los grupos
-head(mediaRetrasosVuelo)
-summary(mediaRetrasosVuelo)
-## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
-
-### 6. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
-asignarGruposPorNumeroVuelo <- function(codigosVuelo, dfCodigosGrupos){
-  ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
-  ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
-  ## La funcion devuelve un vector indicando el grupo al que pertenece cada valor del vector CodigosVuelo
-  
-  vectorSalida <- vector()
-  codigosVuelo <- as.character(codigosVuelo)
-  vectorCodigos <- as.character(dfCodigosGrupos[,1])
-  vectorGrupos <- dfCodigosGrupos[,2]
-  
-  for (i in 1:length(codigosVuelo)){
-    for(j in 1:length(vectorCodigos)){
-      if (codigosVuelo[i] == vectorCodigos[j]){
-        vectorSalida[i] = vectorGrupos[j]
-      }
-    }
-  }
-  return(as.factor(vectorSalida))
-}
-
-dfCodigoGrupo <- mediaRetrasosVuelo
-dfCodigoGrupo$retrasoMedio <- NULL
-dfCodigoGrupo$numeroVuelos <- NULL
-
-vuelosDeparted$flightNumberCode <- asignarGruposPorNumeroVuelo(vuelosDeparted$flight_number,dfCodigoGrupo)
-summary(vuelosDeparted$flightNumberCode)
-str(vuelosDeparted$flightNumberCode)
-
-####################################################################
-
-
-
-
-muchosvuelos <- d[d$numeroVuelos>200,]
-str(muchosvuelos)
-
-barplot(muchosvuelos$retrasoMedio)
-
+head(vuelosDeparted2)
 
 ####################################################################
 
 
 warnings()
 length(d)
-
+dfAux <- vuelosDeparted
 
 model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
-               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+
-               cabin_2_saleable+cabin_2_rpk+cabin_2_fitted_configuration+
-               cabin_2_pax_boarded+cabin_2_ask+total_rpk+total_ask+load_factor+total_pax+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+total_rpk+total_ask+load_factor+total_pax+
                total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
-               number_of_baggage_pieces, 
-             na.action = na.omit, data = dfAux)
+               number_of_baggage_pieces+flightNumberCode, 
+             na.action = na.omit, data = muestra)
 
 summary(model1)
 
