@@ -927,15 +927,174 @@ vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
 
 
 
-## diahora <- subset(vuelosDeparted, select = c("actual_time_of_departure","mesSalida","diaSalida","horaSalida",
-##                                             "diaSemanaSalida", "actual_time_of_arrival","mesLlegada","diaLlegada",
-##                                             "horaLlegada","diaSemanaLlegada"))
-
-#summary(vuelosDeparted)
-#str(vuelosDeparted)
 
 
-#tail(vuelosDeparted, 1)
+## 6. Variables de tipo FACTOR
+
+## 6.1. Flight_Number
+################################################
+
+## 6.1.1. funcion que calcula el retraso medio de los codigos de vuelo indicados en la variable de entrada numVuelos e informa
+## de la cantidad de vuelos que ha realizado un avion.
+## Devuelve es un dataframe que almacena el codigo del avion, su retraso para cada vuelo realizado (puede repetirse) y 
+## el numero de vuelos que ha realizado
+mediasRetrasos <- function(numVuelos, muestra){
+  vectorCodigos <- vector()
+  vectorRetrasos <- vector()
+  vectorNumeroVuelos <- vector()
+  
+  ## bucle for por cada codigo de vuelo
+  for(i in 1:length(numVuelos)){
+    
+    vuelos <- muestra[muestra[,2]==numVuelos[i],]
+    retrasoMedio <- 0
+    
+    if(length(vuelos[,1])>0){
+      retrasoMedio <- mean(vuelos[,1])
+    }
+    
+    vectorCodigos[i] = as.character(numVuelos[i])
+    vectorRetrasos[i] = as.numeric(retrasoMedio)    
+    vectorNumeroVuelos[i] <- length(vuelos[,1])
+    
+  }
+  df <- as.data.frame(list(vectorCodigos,vectorRetrasos,vectorNumeroVuelos), col.names = c("codigo","retrasoMedio","numeroVuelos"))
+  return(df)
+}
+
+
+### 6.1.2. Calcular el retraso medio de los aviones del dataframe
+df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
+numerosVuelo <- unique(df$flight_number)
+mediaRetrasosVuelo <- mediasRetrasos(numerosVuelo,df)
+
+## 6.1.3.  Comprobamos si existen numeros de vuelo que no tienen registros
+str(numerosVuelo)   # 1045 numeros de vuelo
+length(mediaRetrasosVuelo$retrasoMedio)    # 1022 numeros de vuelo
+## Existen 23 numeros de vuelo sin registros de vuelo
+
+
+### 6.1.4. Analisis de los retrasos medios
+summary(mediaRetrasosVuelo$retrasoMedio)
+barplot(mediaRetrasosVuelo$retrasoMedio)
+boxplot(mediaRetrasosVuelo$retrasoMedio)  ## con boxplot podemos observar que los retrasos por encima del 20 y por 
+## debajo del -18 son considerados atipicos
+
+
+### 6.1.4.1. Retrasos Positivos
+retrasoPos <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>0,]
+summary(retrasoPos$retrasoMedio)
+length(retrasoPos$retrasoMedio)  # 521 aviones con retraso medio superior a 0
+barplot(retrasoPos$retrasoMedio)
+boxplot(retrasoPos$retrasoMedio)  ## Podemos deducir que los retrasos por encima de 20 minutos
+## son considerados atipicos, asi como que la mayoria de los aviones tienen un retraso medio de entre 2 y 9 minutos
+
+### 6.1.4.1.1. Retrasos entre 0 y 5 minutos (incluido)
+retrasoEntre0y5min <- retrasoPos[retrasoPos$retrasoMedio>0 & retrasoPos$retrasoMedio<=5,]
+summary(retrasoEntre0y5min)
+length(retrasoEntre0y5min$retrasoMedio) ## 261 aviones
+
+### 6.1.4.1.2. Retraso superior a 5 minutos e inferior o igual a 10
+retrasoEntre5y10min <- retrasoPos[retrasoPos$retrasoMedio>5 & retrasoPos$retrasoMedio<=10,]
+summary(retrasoEntre5y10min)
+length(retrasoEntre5y10min$retrasoMedio) ## 142 aviones
+
+### 6.1.4.1.3. Retraso mayor de 10 minutos
+retrasoMayor10min <- retrasoPos[retrasoPos$retrasoMedio>10,]
+summary(retrasoMayor10min)
+length(retrasoMayor10min$retrasoMedio)  ## 118 aviones tienen un retraso medio superior a 10 min
+
+##### Para los retrasos positivos podemos establecer 3 grupos.
+# Grupo A: Aviones con un retraso medio superior a 0 minutos e inferior o igual a 5 minutos
+# Grupo B: Aviones con un retraso medio superior a 5 minutos e inferior o igual a 10 minutos
+# Gripo C: Aviones con un retraso medio superior a 10 minutos
+
+
+### 6.1.4.2. Retrasos Negativos (llegadas antes de tiempo)
+retrasoNeg <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio<=0,]
+summary(retrasoNeg$retrasoMedio)
+length(retrasoNeg$retrasoMedio)  # 501 aviones con retraso medio igual o inferior a 0
+boxplot(retrasoNeg$retrasoMedio)  ## Podemos deducir que la mayoria de los aviones tiene un retraso comprendido entre
+# -1 y -7 minutos
+
+### 6.1.4.2.1. Retrasos comprendidos entre -1 y - 5(incluido)
+retrasoNegEntre1y5 <- retrasoNeg[retrasoNeg$retrasoMedio<=(0) & retrasoNeg$retrasoMedio>=(-5),]
+summary(retrasoNegEntre1y5)
+length(retrasoNegEntre1y5$retrasoMedio) # 299 aviones
+
+### 6.1.4.2.2. Retrasos comprendidos entre -6 y -7 (incluidos ambos)
+retrasoNegEntre6y7 <- retrasoNeg[retrasoNeg$retrasoMedio<(-5),]
+summary(retrasoNegEntre6y7)
+length(retrasoNegEntre6y7$retrasoMedio) # 202 aviones
+
+##### Para los retrasos negativos se pueden establecer 2 grupos
+# Grupo D: Aviones con un retraso negativo entre 0 y -5 (incluido)
+# Grupo E: Aviones con un retraso negativo superior a -5 (de -5 hasta -35)
+
+
+### 6.5. Funcion que determina el grupo al que pertenece cada avion teniendo en cuenta su numero de vuelo y su retraso medio
+asignarGrupoCodigoAvion <- function(dfRetrasos){
+  vectorSalida <- vector()
+  vectorRetrasos <- dfRetrasos[,2]
+  for (i in 1:length(vectorRetrasos)){
+    if(vectorRetrasos[i] > 0 & vectorRetrasos[i] <= 5){
+      vectorSalida[i] = 'A'
+    }
+    if (vectorRetrasos[i] > 5 & vectorRetrasos[i] <= 10){
+      vectorSalida[i] = 'B'
+    }
+    if (vectorRetrasos[i] > 10){
+      vectorSalida[i] = 'C'
+    }
+    if (vectorRetrasos[i] <= 0 & vectorRetrasos[i] >=(-5)){
+      vectorSalida[i] = 'D'
+    }
+    if (vectorRetrasos[i] <(-5)){
+      vectorSalida[i] = 'E'
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoCodigoAvion(mediaRetrasosVuelo)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaRetrasosVuelo)
+summary(mediaRetrasosVuelo)
+## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
+
+### 6.6. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+asignarGruposPorNumeroVuelo <- function(codigosVuelo, dfCodigosGrupos){
+  ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
+  ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
+  ## La funcion devuelve un vector indicando el grupo al que pertenece cada valor del vector CodigosVuelo
+  
+  vectorSalida <- vector()
+  codigosVuelo <- as.character(codigosVuelo)
+  vectorCodigos <- as.character(dfCodigosGrupos[,1])
+  vectorGrupos <- dfCodigosGrupos[,2]
+  
+  for (i in 1:length(codigosVuelo)){
+    for(j in 1:length(vectorCodigos)){
+      if (codigosVuelo[i] == vectorCodigos[j]){
+        vectorSalida[i] = vectorGrupos[j]
+      }
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+dfCodigoGrupo <- mediaRetrasosVuelo
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+## 6.7. Añadir el nuevo vector al dataframe de vuelos
+vuelosDeparted$flightNumberCode <- asignarGruposPorNumeroVuelo(vuelosDeparted$flight_number,dfCodigoGrupo)
+summary(vuelosDeparted$flightNumberCode)
+str(vuelosDeparted$flightNumberCode)
+
+####################################################################
+
+
 
 ##escribimos el dataframe resultante para reusarlo en la siguiente fase
 write.csv('vuelosDeparted.csv',x = vuelosDeparted)
@@ -1035,7 +1194,7 @@ muestra$cabin_2_ask <- NULL
 
 ## Regresion lineal
 
-## funcion que normaliza un vector (hay que mejorarlo)
+## funcion que normaliza un vector (hay que mejorarlo) PENDIENTE
 normalizar <- function(vec){
   maximo <- max(vec)
   minimo <- min(vec)
@@ -1170,33 +1329,138 @@ mediasRetrasos <- function(numVuelos, muestra){
 }
 
 
-# 1. Obtener la muestra y coger las columnas interesantes
-indices <- sample( 1:nrow( vuelosDeparted ), 1000 )
-muestra <- vuelosDeparted [ indices, ]
+### 1. Utilizando el dataframe completo
+df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
+numerosVuelo <- unique(df$flight_number)
+mediaRetrasosVuelo <- mediasRetrasos(numerosVuelo,df)
 
-### trampa
-#table(vuelosDeparted$flight_number)
-#dfmuestra <- vuelosDeparted[vuelosDeparted$flight_number=="9851",]
-#dfmuestra
-#dfmuestra <- subset(dfmuestra, select = c("arrival_delay","flight_number"))
-###
-dfmuestra <- subset(muestra, select = c("arrival_delay","flight_number"))
-dfmuestra
-
-# 2. obtenemos los codigos de vuelo de la muestra
-numerosVuelo <- unique(dfmuestra$flight_number)
-numerosVuelo
-
-# 3. llamada a la funcion
-d <- mediasRetrasos(numerosVuelo,dfmuestra)
-str(d)
+## 2. Comprobamos si existen numeros de vuelo que no tienen registros
+str(numerosVuelo)   # 1045 numeros de vuelo
+length(mediaRetrasosVuelo$retrasoMedio)    # 1022 numeros de vuelo
+## Existen 23 numeros de vuelo sin registros de vuelo
 
 
+### 4. Analisis de los retrasos medios
+summary(mediaRetrasosVuelo$retrasoMedio)
+barplot(mediaRetrasosVuelo$retrasoMedio)
+boxplot(mediaRetrasosVuelo$retrasoMedio)  ## con boxplot podemos observar que los retrasos por encima del 20 y por 
+                                          ## debajo del -18 son considerados atipicos
+
+
+### 4.1. Retrasos Positivos
+retrasoPos <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>0,]
+summary(retrasoPos$retrasoMedio)
+length(retrasoPos$retrasoMedio)  # 521 aviones con retraso medio superior a 0
+barplot(retrasoPos$retrasoMedio)
+boxplot(retrasoPos$retrasoMedio)  ## Podemos deducir que los retrasos por encima de 20 minutos
+## son considerados atipicos, asi como que la mayoria de los aviones tienen un retraso medio de entre 2 y 9 minutos
+
+### 4.1.1. Retrasos entre 0 y 5 minutos (incluido)
+retrasoEntre0y5min <- retrasoPos[retrasoPos$retrasoMedio>0 & retrasoPos$retrasoMedio<=5,]
+summary(retrasoEntre0y5min)
+length(retrasoEntre0y5min$retrasoMedio) ## 261 aviones
+
+### 4.1.2. Retraso superior a 5 minutos e inferior o igual a 10
+retrasoEntre5y10min <- retrasoPos[retrasoPos$retrasoMedio>5 & retrasoPos$retrasoMedio<=10,]
+summary(retrasoEntre5y10min)
+length(retrasoEntre5y10min$retrasoMedio) ## 142 aviones
+
+### 4.1.3. Retraso mayor de 10 minutos
+retrasoMayor10min <- retrasoPos[retrasoPos$retrasoMedio>10,]
+summary(retrasoMayor10min)
+length(retrasoMayor10min$retrasoMedio)  ## 118 aviones tienen un retraso medio superior a 10 min
+
+##### Para los retrasos positivos podemos establecer 3 grupos.
+# Grupo A: Aviones con un retraso medio superior a 0 minutos e inferior o igual a 5 minutos
+# Grupo B: Aviones con un retraso medio superior a 5 minutos e inferior o igual a 10 minutos
+# Gripo C: Aviones con un retraso medio superior a 10 minutos
+
+
+### 4.2. Retrasos Negativos (llegadas antes de tiempo)
+retrasoNeg <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio<=0,]
+summary(retrasoNeg$retrasoMedio)
+length(retrasoNeg$retrasoMedio)  # 501 aviones con retraso medio igual o inferior a 0
+boxplot(retrasoNeg$retrasoMedio)  ## Podemos deducir que la mayoria de los aviones tiene un retraso comprendido entre
+# -1 y -7 minutos
+
+### 4.2.1. Retrasos comprendidos entre -1 y - 5(incluido)
+retrasoNegEntre1y5 <- retrasoNeg[retrasoNeg$retrasoMedio<=(0) & retrasoNeg$retrasoMedio>=(-5),]
+summary(retrasoNegEntre1y5)
+length(retrasoNegEntre1y5$retrasoMedio) # 299 aviones
+
+### 4.2.2. Retrasos comprendidos entre -6 y -7 (incluidos ambos)
+retrasoNegEntre6y7 <- retrasoNeg[retrasoNeg$retrasoMedio<(-5),]
+summary(retrasoNegEntre6y7)
+length(retrasoNegEntre6y7$retrasoMedio) # 202 aviones
+
+##### Para los retrasos negativos se pueden establecer 2 grupos
+# Grupo D: Aviones con un retraso negativo entre 0 y -5 (incluido)
+# Grupo E: Aviones con un retraso negativo superior a -5 (de -5 hasta -35)
+
+
+### 5. Funcion que determina el grupo al que pertenece cada avion teniendo en cuenta su numero de vuelo y su retraso medio
+asignarGrupoCodigoAvion <- function(dfRetrasos){
+  vectorSalida <- vector()
+  vectorRetrasos <- dfRetrasos[,2]
+  for (i in 1:length(vectorRetrasos)){
+    if(vectorRetrasos[i] > 0 & vectorRetrasos[i] <= 5){
+      vectorSalida[i] = 'A'
+    }
+    if (vectorRetrasos[i] > 5 & vectorRetrasos[i] <= 10){
+      vectorSalida[i] = 'B'
+    }
+    if (vectorRetrasos[i] > 10){
+      vectorSalida[i] = 'C'
+    }
+    if (vectorRetrasos[i] <= 0 & vectorRetrasos[i] >=(-5)){
+      vectorSalida[i] = 'D'
+    }
+    if (vectorRetrasos[i] <(-5)){
+      vectorSalida[i] = 'E'
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoCodigoAvion(mediaRetrasosVuelo)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaRetrasosVuelo)
+summary(mediaRetrasosVuelo)
+## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
+
+### 6. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+asignarGruposPorNumeroVuelo <- function(codigosVuelo, dfCodigosGrupos){
+  ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
+  ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
+  ## La funcion devuelve un vector indicando el grupo al que pertenece cada valor del vector CodigosVuelo
+  
+  vectorSalida <- vector()
+  codigosVuelo <- as.character(codigosVuelo)
+  vectorCodigos <- as.character(dfCodigosGrupos[,1])
+  vectorGrupos <- dfCodigosGrupos[,2]
+  
+  for (i in 1:length(codigosVuelo)){
+    for(j in 1:length(vectorCodigos)){
+      if (codigosVuelo[i] == vectorCodigos[j]){
+        vectorSalida[i] = vectorGrupos[j]
+      }
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+dfCodigoGrupo <- mediaRetrasosVuelo
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$flightNumberCode <- asignarGruposPorNumeroVuelo(vuelosDeparted$flight_number,dfCodigoGrupo)
+summary(vuelosDeparted$flightNumberCode)
+str(vuelosDeparted$flightNumberCode)
 
 ####################################################################
 
 
-barplot(d$retrasoMedio)
+
 
 muchosvuelos <- d[d$numeroVuelos>200,]
 str(muchosvuelos)
