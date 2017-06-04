@@ -1099,7 +1099,7 @@ str(vuelosDeparted$flightNumberCode)
 
 
 ## 7. Normalizar dataframe
-## funcion que normaliza un dataframe
+## funcion que normaliza un dataframe (hay que mejorarle en los casos donde existen NAs)
 normalizar <- function(df){
   
   ## df <- dataframe a normalizar
@@ -1122,6 +1122,30 @@ normalizar <- function(df){
 
 vuelosDeparted2 <- normalizar(vuelosDeparted)
 
+str(vuelosDeparted2)
+vuelosDeparted2$est_blocktime <- NULL
+vuelosDeparted2$flight_number <- NULL
+summary(vuelosDeparted2$general_status_code)
+vuelosDeparted2$general_status_code <- NULL
+vuelosDeparted2$scheduled_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_departure <- NULL
+vuelosDeparted2$scheduled_time_of_arrival <- NULL
+vuelosDeparted2$actual_time_of_arrival <- NULL
+
+
+#########################################     PUNTOS PENDIENTES   ###########################################
+
+1. ¿Board_point y off_point son necesarios? -> Ya estan incluidos en la variable "routing"
+2. Al igual que en la variable routing, ¿se podria hacer lo mismo con boar_lat - off_lat, board_lon - off_lon y 
+   board_country_code - off_country_code?
+3. Despues de aclarar los puntos anteriores se deben hacer grupos para el resto de variables de tipo factor en funcion
+   de los retrasos medios
+4. Almacenar la tabla de normalizacion (necesitamos los maximos y minimos de cada columna para realizar los test)
+5. Mejorar la funcion de normalizacion (falla cuando hay NAs en el vector a normalizar)
+7. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el año 
+   del vuelo.
+
+#############################################################################################################
 
 
 ## escribimos el dataframe resultante para reusarlo en la siguiente fase
@@ -1205,7 +1229,7 @@ table(vuelosDeparted$horaLlegada)
 #########  APLICACION DE MODELOS
 # http://www.revistaseden.org/files/14-cap%2014.pdf
 
-indices <- sample( 1:nrow( vuelosDeparted2 ), 10000 )
+indices <- sample( 1:nrow( vuelosDeparted2 ), 150000 )
 muestra <- vuelosDeparted2[ indices, ]
 
 str(muestra)
@@ -1219,7 +1243,7 @@ warnings()
 length(d)
 dfAux <- vuelosDeparted
 
-model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitted_configuration+
+model1 <- lm(arrival_delay ~ distance+act_blocktime+cabin_1_fitted_configuration+
                cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+total_rpk+total_ask+load_factor+total_pax+
                total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
                number_of_baggage_pieces+flightNumberCode, 
@@ -1228,3 +1252,4 @@ model1 <- lm(arrival_delay ~ distance+sched_blocktime+act_blocktime+cabin_1_fitt
 summary(model1)
 
 
+head(vuelosDeparted[vuelosDeparted$flight_number==7854,])
