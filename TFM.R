@@ -1034,7 +1034,7 @@ length(retrasoNegEntre6y7$retrasoMedio) # 202 aviones
 # Grupo E: Aviones con un retraso negativo superior a -5 (de -5 hasta -35)
 
 
-### 6.5. Funcion que determina el grupo al que pertenece cada avion teniendo en cuenta su numero de vuelo y su retraso medio
+### 6.1.2. Funcion que determina el grupo al que pertenece cada avion teniendo en cuenta su numero de vuelo y su retraso medio
 asignarGrupoCodigoAvion <- function(dfRetrasos){
   vectorSalida <- vector()
   vectorRetrasos <- dfRetrasos[,2]
@@ -1064,7 +1064,7 @@ head(mediaRetrasosVuelo)
 summary(mediaRetrasosVuelo)
 ## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
 
-### 6.6. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+### 6.1.3. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
 asignarGruposPorNumeroVuelo <- function(codigosVuelo, dfCodigosGrupos){
   ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
   ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
@@ -1089,16 +1089,270 @@ dfCodigoGrupo <- mediaRetrasosVuelo
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
-## 6.7. Añadir el nuevo vector al dataframe de vuelos
-vuelosDeparted$flightNumberCode <- asignarGruposPorNumeroVuelo(vuelosDeparted$flight_number,dfCodigoGrupo)
-summary(vuelosDeparted$flightNumberCode)
-str(vuelosDeparted$flightNumberCode)
+## 6.1.4 Añadir el nuevo vector al dataframe de vuelos
+vuelosDeparted$flightNumberGroup <- asignarGruposPorNumeroVuelo(vuelosDeparted$flight_number,dfCodigoGrupo)
+summary(vuelosDeparted$flightNumberGroup)
+str(vuelosDeparted$flightNumberGroup)
 
 ####################################################################
 
 
 
-## 7. Normalizar dataframe
+## 6.2. Variable board_point
+## 6.2.1. Calculamos el retraso medio
+df <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
+variables <- unique(df$board_point)
+mediaPuntoEmbarque <- mediasRetrasos(variables,df)
+boxplot(mediaPuntoEmbarque$retrasoMedio)
+barplot(mediaPuntoEmbarque$retrasoMedio)
+summary(mediaPuntoEmbarque$retrasoMedio)
+str(mediaPuntoEmbarque)
+
+## 6.2.2. Segmentamos la variable en funcion de los cuartiles obtenidos
+## 6.2.2.1. retraso medio menoor o igual a -4,7
+bpNegMenor4 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio<=(-4.77),]
+str(bpNegMenor4)
+
+## 6.2.2.2. retraso medio entre -4,7 y -1.69
+bpNegEntre4y1 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-4.77) & mediaPuntoEmbarque$retrasoMedio<=(-1.69),]
+str(bpNegEntre4y1)
+
+## 6.2.2.3. retraso medio entre -1.69 y 5.59
+bpEntre1y5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-1.69) & mediaPuntoEmbarque$retrasoMedio<=5.59,]
+str(bpEntre1y5)
+
+## 6.2.2.4 retraso medio superior a 5.59
+bpSup5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>5.59,]
+str(bpSup5)
+
+## Se determinan 4 grupos en base a los retrasos medios para la variable board_point, que son:
+## retraso medio inferior o igual a -4.77       -> Grupo 1
+## retraso medio entre -4.77 y -1.69 (incluido) -> Grupo 2
+## retraso medio entre -1.69 y 5.59  (incluido) -> Grupo 3
+## retraos medio superior a 5.59                -> Grupo 4
+
+
+## Funcion para asignar grupos a la variable board_point
+asignarGrupoBoardPoint <- function(dfRetrasos){
+  vectorSalida <- vector()
+  vectorRetrasos <- dfRetrasos[,2]
+  for (i in 1:length(vectorRetrasos)){
+    if(vectorRetrasos[i] <= (-4.47)){
+      vectorSalida[i] = 1
+    }
+    if (vectorRetrasos[i] > (-4.47) & vectorRetrasos[i] <= (-1.69)){
+      vectorSalida[i] = 2
+    }
+    if (vectorRetrasos[i] > (-1.69) & vectorRetrasos[i] <= 5.59){
+      vectorSalida[i] = 3
+    }
+    if (vectorRetrasos[i] > 5.59 ){
+      vectorSalida[i] = 4
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+
+mediaPuntoEmbarque$fligthNumberGroup <- asignarGrupoBoardPoint(mediaPuntoEmbarque)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaPuntoEmbarque)
+summary(mediaPuntoEmbarque)
+## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
+
+### 6.2.3. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+asignarGruposBoardPoint <- function(codigosVuelo, dfCodigosGrupos){
+  ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
+  ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
+  ## La funcion devuelve un vector indicando el grupo al que pertenece cada valor del vector CodigosVuelo
+  
+  vectorSalida <- vector()
+  codigosVuelo <- as.character(codigosVuelo)
+  vectorCodigos <- as.character(dfCodigosGrupos[,1])
+  vectorGrupos <- dfCodigosGrupos[,2]
+  
+  for (i in 1:length(codigosVuelo)){
+    for(j in 1:length(vectorCodigos)){
+      if (codigosVuelo[i] == vectorCodigos[j]){
+        vectorSalida[i] = vectorGrupos[j]
+      }
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+dfCodigoGrupo <- mediaPuntoEmbarque
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+## 6.2.4 Añadir el nuevo vector al dataframe de vuelos
+vuelosDeparted$boardPointGroup <- asignarGruposBoardPoint(vuelosDeparted$board_point ,dfCodigoGrupo)
+summary(vuelosDeparted$boardPointGroup)
+str(vuelosDeparted$boardPointGroup)
+
+## 6.2.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
+vuelosDeparted2$board_point <- NULL
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$boardPointGroup)
+
+###################################################################### 
+
+## 6.3 Board_lat
+## 6.4 Board_lon
+## 6.5 Board_country_code
+## 6.6 off_point
+## 6.7 off_lat
+## 6.8 off_lon
+## 6.9 off_country_code
+## 6.10 aircraft_type
+## 6.11 aircraft_registration_number
+## 6.12 routing
+## 6.13 mesSalida
+## 6.14 anyoSalida
+## 6.15 diaSalida
+## 6.16 horaSalida
+## 6.17 mesLlegada
+## 6.18 anyoLlegada
+## 6.19 diaLlegada
+## 6.20 horaLlegada
+## 6.21 diaSemanaSalida
+## 6.22 disSemanaLlegada
+
+
+
+
+
+
+
+
+
+#####################################################################################################
+########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
+vuelosDeparted2 <- vuelosDeparted
+str(vuelosDeparted)
+
+## Eliminamos la variable flight_number del dataframe resultante
+vuelosDeparted2$flight_number <- NULL
+## Eliminamos la variable board_point del dataframe resultante
+vuelosDeparted2$board_point <- NULL
+## Eliminamos la variable general_status_code, ya que siempre sera Departed
+vuelosDeparted2$general_status_code <- NULL
+## Eliminamos las fechas, ya que tenemos las fechas divididas en dias, mes y hora
+vuelosDeparted2$scheduled_time_of_arrival <- NULL
+vuelosDeparted2$scheduled_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_arrival <- NULL
+
+## Eliminamos la variable cabin_1_code, ya que solo tiene el valor 1
+vuelosDeparted2$cabin_1_code <- NULL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 7. Tabla de normalizacion de cada variable
+obtenerTablaNormalizacion <- function(df){
+
+  nombresdf <- colnames(df)
+  nombres <- vector()
+  maximos <- vector()
+  minimos <- vector()
+  
+  for (i in 1:length(df)){
+    nombres[i] <- nombresdf[i]
+    if(is.numeric(df[,i])){
+      vectorDatos <- df[,i]
+      
+      maximos[i] <- max(vectorDatos, na.rm = TRUE)
+      minimos[i] <- min(vectorDatos, na.rm = TRUE)
+    }
+    else{
+      maximos[i] <- 0
+      minimos[i] <- 0
+    }
+    
+  }
+  maximos <- as.factor(maximos)
+  minimos <- as.factor(minimos)
+  
+  dfaux <- as.data.frame(list(nombres,maximos,minimos), col.names = c("Columna","Maximo","Minimo"))
+  return(dfaux)
+  
+}
+
+vuelosDeparted2 <- head(vuelosDeparted, 1000)
+
+tablaNormalizacion <- obtenerTablaNormalizacion(vuelosDeparted2)
+tablaNormalizacion
+
+
+## 8. Normalizar dataframe
 ## funcion que normaliza un dataframe (hay que mejorarle en los casos donde existen NAs)
 normalizar <- function(df){
   
@@ -1107,10 +1361,14 @@ normalizar <- function(df){
     columna <- vector()
     if(is.numeric(df[,i])){
       vectorDatos <- df[,i]
-      maximo <- max(vectorDatos)
-      minimo <- min(vectorDatos)
+      maximo <- max(vectorDatos, na.rm = TRUE)
+      minimo <- min(vectorDatos, na.rm = TRUE)
       for (j in 1:length(vectorDatos)){
-        columna[j] = (vectorDatos[j]-minimo)/(maximo - minimo)
+        if(is.na(vectorDatos[j])){
+          columna[j] = minimo
+        }else{
+          columna[j] = (vectorDatos[j]-minimo)/(maximo - minimo)
+        }
       }
       df[,i] = columna
     }
@@ -1121,6 +1379,14 @@ normalizar <- function(df){
 }
 
 vuelosDeparted2 <- normalizar(vuelosDeparted)
+
+
+
+
+
+
+
+
 
 str(vuelosDeparted2)
 vuelosDeparted2$est_blocktime <- NULL
@@ -1135,14 +1401,11 @@ vuelosDeparted2$actual_time_of_arrival <- NULL
 
 #########################################     PUNTOS PENDIENTES   ###########################################
 
-1. ¿Board_point y off_point son necesarios? -> Ya estan incluidos en la variable "routing"
-2. Al igual que en la variable routing, ¿se podria hacer lo mismo con boar_lat - off_lat, board_lon - off_lon y 
-   board_country_code - off_country_code?
-3. Despues de aclarar los puntos anteriores se deben hacer grupos para el resto de variables de tipo factor en funcion
-   de los retrasos medios
-4. Almacenar la tabla de normalizacion (necesitamos los maximos y minimos de cada columna para realizar los test)
-5. Mejorar la funcion de normalizacion (falla cuando hay NAs en el vector a normalizar)
-7. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el año 
+
+1. Se deben hacer grupos para el resto de variables de tipo factor en funcion de los retrasos medios
+2. Almacenar la tabla de normalizacion (necesitamos los maximos y minimos de cada columna para realizar los test)
+3. Mejorar la funcion de normalizacion (falla cuando hay NAs en el vector a normalizar)
+4. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el año 
    del vuelo.
 
 #############################################################################################################
@@ -1153,15 +1416,77 @@ write.csv('vuelosDeparted.csv',x = vuelosDeparted)
 ###
 
 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+## board_point, board_lat, board_lon, board_country_code
+   ###### board_point
+str(vuelosDeparted)
+uniqueBP <- unique(vuelosDeparted$board_point)
+dfBP <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
+dfBoardPoint <- mediasRetrasos(uniqueBP, dfBP)
+barplot(dfBoardPoint$retrasoMedio)
+
+    ##### board_lat
+uniqueBL <- unique(vuelosDeparted$board_lat)
+dfBL <- subset(vuelosDeparted, select = c("arrival_delay","board_lat"))
+dfBoardLat <- mediasRetrasos(uniqueBL, dfBL)
+barplot(dfBoardLat$retrasoMedio)
+
+    ##### board_lon
+uniqueBLn <- unique(vuelosDeparted$board_lon)
+dfBLn <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
+dfBoardLon <- mediasRetrasos(uniqueBLn, dfBLn)
+barplot(dfBoardLon$retrasoMedio)
+
+    ##### board_country_code
+uniqueBCC <- unique(vuelosDeparted$board_country_code)
+dfBCC <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
+dfBoardCC <- mediasRetrasos(uniqueBCC, dfBCC)
+barplot(dfBoardCC$retrasoMedio)
+#### Board_country_code aporta informacion diferente a las tres variables anteriores.
+#### Board_point, board_lat y board_lon se pueden tratar como una unica variable, por lo tanto estudiaremos unicamente 
+#### board_point
+vuelosDeparted$board_lat <- NULL
+vuelosDeparted$board_lon <- NULL
 
 
+    ##### off_country_code
+uniqueOCC <- unique(vuelosDeparted$off_country_code)
+dfOCC <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
+dfOffCC <- mediasRetrasos(uniqueOCC, dfOCC)
+barplot(dfOffCC$retrasoMedio)
 
+### board_country_code y off_country_code se trataran por separado
 
+###### off_point
+str(vuelosDeparted)
+uniqueOP <- unique(vuelosDeparted$off_point)
+dfOP <- subset(vuelosDeparted, select = c("arrival_delay","off_point"))
+dfOffPoint <- mediasRetrasos(uniqueOP, dfOP)
+barplot(dfOffPoint$retrasoMedio)
 
+##### off_lat
+uniqueOL <- unique(vuelosDeparted$off_lat)
+dfOL <- subset(vuelosDeparted, select = c("arrival_delay","off_lat"))
+dfOffLat <- mediasRetrasos(uniqueOL, dfOL)
+barplot(dfOffLat$retrasoMedio)
+str(dfOffLat)
 
+##### off_lon
+uniqueOLn <- unique(vuelosDeparted$off_lon)
+dfOLn <- subset(vuelosDeparted, select = c("arrival_delay","off_lon"))
+dfOffLon <- mediasRetrasos(uniqueOLn, dfOLn)
+barplot(dfOffLon$retrasoMedio)
+str(dfOffLon)
 
-
-
+#### Al igual que anteriormente, off_point, off_lat y off_lon se trataran como una unica variable
 
 #########  GRAFICAS DEL RETRASO EN FUNCION DE VARIABLES
 
