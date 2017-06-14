@@ -1117,26 +1117,26 @@ str(mediaPuntoEmbarque)
 
 ## 6.2.2. Segmentamos la variable en funcion de los cuartiles obtenidos
 ## 6.2.2.1. retraso medio menoor o igual a -4,7
-bpNegMenor4 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio<=(-4.77),]
+bpNegMenor4 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio<=(-4.775),]
 str(bpNegMenor4)
 
 ## 6.2.2.2. retraso medio entre -4,7 y -1.69
-bpNegEntre4y1 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-4.77) & mediaPuntoEmbarque$retrasoMedio<=(-1.69),]
+bpNegEntre4y1 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-4.775) & mediaPuntoEmbarque$retrasoMedio<=(-1.695),]
 str(bpNegEntre4y1)
 
 ## 6.2.2.3. retraso medio entre -1.69 y 5.59
-bpEntre1y5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-1.69) & mediaPuntoEmbarque$retrasoMedio<=5.59,]
+bpEntre1y5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-1.695) & mediaPuntoEmbarque$retrasoMedio<=5.593,]
 str(bpEntre1y5)
 
 ## 6.2.2.4 retraso medio superior a 5.59
-bpSup5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>5.59,]
+bpSup5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>5.593,]
 str(bpSup5)
 
 ## Se determinan 4 grupos en base a los retrasos medios para la variable board_point, que son:
-## retraso medio inferior o igual a -4.77       -> Grupo 1
-## retraso medio entre -4.77 y -1.69 (incluido) -> Grupo 2
-## retraso medio entre -1.69 y 5.59  (incluido) -> Grupo 3
-## retraos medio superior a 5.59                -> Grupo 4
+## retraso medio inferior o igual a -4.775        -> Grupo 1
+## retraso medio entre -4.775 y -1.695 (incluido) -> Grupo 2
+## retraso medio entre -1.695 y 5.593  (incluido) -> Grupo 3
+## retraos medio superior a 5.593                 -> Grupo 4
 
 
 ## Funcion para asignar grupos a la variable board_point
@@ -1144,16 +1144,16 @@ asignarGrupoBoardPoint <- function(dfRetrasos){
   vectorSalida <- vector()
   vectorRetrasos <- dfRetrasos[,2]
   for (i in 1:length(vectorRetrasos)){
-    if(vectorRetrasos[i] <= (-4.47)){
+    if(vectorRetrasos[i] <= (-4.775)){
       vectorSalida[i] = 1
     }
-    if (vectorRetrasos[i] > (-4.47) & vectorRetrasos[i] <= (-1.69)){
+    if (vectorRetrasos[i] > (-4.775) & vectorRetrasos[i] <= (-1.695)){
       vectorSalida[i] = 2
     }
-    if (vectorRetrasos[i] > (-1.69) & vectorRetrasos[i] <= 5.59){
+    if (vectorRetrasos[i] > (-1.695) & vectorRetrasos[i] <= 5.593){
       vectorSalida[i] = 3
     }
-    if (vectorRetrasos[i] > 5.59 ){
+    if (vectorRetrasos[i] > 5.593 ){
       vectorSalida[i] = 4
     }
   }
@@ -1184,9 +1184,11 @@ vuelosDeparted2$board_point <- NULL
 str(vuelosDeparted2)
 summary(vuelosDeparted2$boardPointGroup)
 
+head(vuelosDeparted)
+
 ###################################################################### 
 
-## 6.3 Board_lat (PENDIENTE)
+## 6.3 Board_lat (COMPLETADA)
 ## 6.3.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_lat"))
 variables <- unique(df$board_lat)
@@ -1265,6 +1267,12 @@ str(vuelosDeparted$boardLatGroup)
 ## 6.3.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
 vuelosDeparted2$board_lat <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$boardLatGroup==1,]
+vuelosDeparted2[vuelosDeparted2$board_lat == 48.71395,]
 
 str(vuelosDeparted2)
 summary(vuelosDeparted2$boardLatGroup)
