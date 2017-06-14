@@ -1217,7 +1217,7 @@ summary(mediaLatEmbarque$retrasoMedio)
 str(mediaLatEmbarque)
 
 ## 6.3.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.3.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.3.3. Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la latitud de embarque
 ## 6.3.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.3.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1234,8 +1234,8 @@ barplot(mediaBoardLon$retrasoMedio, names.arg=mediaBoardLon$codigo)
 summary(mediaBoardLon$retrasoMedio)
 str(mediaBoardLon)
 
-## 6.4.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.4.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.4.2 Segmentamos la variable en grupos en base a su retraso medio
+## 6.4.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la longitud de embarque
 ## 6.4.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.4.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1253,8 +1253,8 @@ barplot(mediaBoardCC$retrasoMedio, names.arg=mediaBoardCC$codigo)
 summary(mediaBoardCC$retrasoMedio)
 str(mediaBoardCC)
 
-## 6.5.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.5.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.5.2 Segmentamos la variable en grupos en base a su retraso medio
+## 6.5.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al codigo del pais de embarque
 ## 6.5.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.5.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1273,7 +1273,7 @@ summary(mediaOffPoint$retrasoMedio)
 str(mediaOffPoint)
 
 ## 6.6.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.6.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.6.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al punto de llegada
 ## 6.6.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.6.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1292,7 +1292,7 @@ summary(mediaOffLat$retrasoMedio)
 str(mediaOffLat)
 
 ## 6.7.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.7.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.7.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la latitud de llegada
 ## 6.7.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.7.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1311,7 +1311,7 @@ summary(mediaOffLon$retrasoMedio)
 str(mediaOffLon)
 
 ## 6.8.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.8.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.8.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la longitud de llegada
 ## 6.8.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.8.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1330,7 +1330,7 @@ summary(mediaOffCC$retrasoMedio)
 str(mediaOffCC)
 
 ## 6.9.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.9.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.9.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al codigo de pais de llegada
 ## 6.9.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.9.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1349,7 +1349,7 @@ summary(mediaTipoAvion$retrasoMedio)
 str(mediaTipoAvion)
 
 ## 6.10.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.10.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.10.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al tipo de avion
 ## 6.10.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.10.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1368,7 +1368,7 @@ summary(mediaNumRegAvion$retrasoMedio)
 str(mediaNumRegAvion)
 
 ## 6.11.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.11.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.11.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al numero de registro del avion
 ## 6.11.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.11.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1387,7 +1387,7 @@ summary(mediaRutas$retrasoMedio)
 str(mediaRutas)
 
 ## 6.12.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.12.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.12.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la ruta
 ## 6.12.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.12.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1406,7 +1406,7 @@ summary(mediaMesSalida$retrasoMedio)
 str(mediaMesSalida)
 
 ## 6.13.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.13.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.13.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al mes de salida
 ## 6.13.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.13.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1431,7 +1431,7 @@ summary(mediaDiaSalida$retrasoMedio)
 str(mediaDiaSalida)
 
 ## 6.15.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.15.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.15.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al dia de salida
 ## 6.15.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.15.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1450,7 +1450,7 @@ summary(mediaHoraSalida$retrasoMedio)
 str(mediaHoraSalida)
 
 ## 6.16.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.16.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.16.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la hora de salida
 ## 6.16.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.16.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1469,7 +1469,7 @@ summary(mediaMesLlegada$retrasoMedio)
 str(mediaMesLlegada)
 
 ## 6.17.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.17.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.17.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al mes de llegada
 ## 6.17.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.17.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1494,7 +1494,7 @@ summary(mediaDiaLlegada$retrasoMedio)
 str(mediaDiaLlegada)
 
 ## 6.19.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.19.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.19.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al dia de llegada
 ## 6.19.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.19.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1513,7 +1513,7 @@ summary(mediaHoraLlegada$retrasoMedio)
 str(mediaHoraLlegada)
 
 ## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.20.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.20.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base a la hora de llegada
 ## 6.20.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.20.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1532,7 +1532,7 @@ summary(mediaDiaSemSalida$retrasoMedio)
 str(mediaDiaSemSalida)
 
 ## 6.21.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.21.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.21.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al dia de la semana de salida
 ## 6.21.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.21.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
@@ -1551,7 +1551,7 @@ summary(mediaDiaSemLlegada$retrasoMedio)
 str(mediaDiaSemLlegada)
 
 ## 6.22.2. Segmentamos la variable en grupos en base a su retraso medio
-## 6.22.3. Funcion para a帶dir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.22.3 Funcion para a帶dir al dataframe una columna con los grupos obtenidos en base al dia de la semana de llegada
 ## 6.22.4 A簽adir el nuevo vector al dataframe de vuelos
 ## 6.22.5 A簽adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
