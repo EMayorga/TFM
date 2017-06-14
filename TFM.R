@@ -1281,7 +1281,7 @@ summary(vuelosDeparted2$boardLatGroup)
 ###################################################################### 
 
 
-## 6.4 Board_lon (PENDIENTE)
+## 6.4 Board_lon (COMPLETADA)
 ## 6.4.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
 variables <- unique(df$board_lon)
@@ -1292,15 +1292,85 @@ summary(mediaBoardLon$retrasoMedio)
 str(mediaBoardLon)
 
 ## 6.4.2 Segmentamos la variable en grupos en base a su retraso medio
+## 6.4.2.1 retraso medio inferior o igual a -4.775
+BLinferior4 <- mediaBoardLon[mediaBoardLon$retrasoMedio<=(-4.775),]
+str(BLinferior4)
+
+## 6.4.2.2 retraso medio entre -4.775 y -1.695 (incluido)
+BLentre4y1 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-4.775) & mediaBoardLon$retrasoMedio<=(-1.695),]
+str(BLentre4y1)
+
+## 6.4.2.3 retraso medio entre -1.695 y 5.593 (incluido)
+BLentre1y5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-1.695) & mediaBoardLon$retrasoMedio<=5.593,]
+str(BLentre1y5)
+
+## 6.4.2.4 retraso medio superior a 5.593
+BLSup5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>5.593,]
+str(BLSup5)
+
+## En base a los cuartiles se obtienen 4 grupos
+## retraso medio inferior o igual a -4.775        -> 1
+## retraso medio entre -4.775 y -1.695 (incluido) -> 2
+## retraso medio entre -1.695 y 5.593 (incluido)  -> 3
+## retraso medio superior a 5.593                 -> 4
+
 ## 6.4.3 Funcion para a�adir al dataframe una columna con los grupos obtenidos en base a la longitud de embarque
+asignarGrupoBoardLon <- function(dfRetrasos){
+  vectorSalida <- vector()
+  vectorRetrasos <- dfRetrasos[,2]
+  for (i in 1:length(vectorRetrasos)){
+    if(vectorRetrasos[i] <= (-4.775)){
+      vectorSalida[i] = 1
+    }
+    if (vectorRetrasos[i] > (-4.775) & vectorRetrasos[i] <= (-1.695)){
+      vectorSalida[i] = 2
+    }
+    if (vectorRetrasos[i] > (-1.695) & vectorRetrasos[i] <= 5.593){
+      vectorSalida[i] = 3
+    }
+    if (vectorRetrasos[i] > 5.593 ){
+      vectorSalida[i] = 4
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+mediaBoardLon$boardLonGroup <- asignarGrupoBoardLon(mediaBoardLon)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaBoardLon)
+summary(mediaBoardLon)
+
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaBoardLon
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+
 ## 6.4.4 Añadir el nuevo vector al dataframe de vuelos
+vuelosDeparted$boardLonGroup <- asignarGrupos(vuelosDeparted$board_lon ,dfCodigoGrupo)
+summary(vuelosDeparted$boardLonGroup)
+str(vuelosDeparted$boardLonGroup)
+
+
 ## 6.4.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
+vuelosDeparted2$board_lon <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$boardLonGroup==1,]
+vuelosDeparted2[vuelosDeparted2$board_lon == 7.62571,]
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$boardLonGroup)
+
 
 
 ###################################################################### 
 
 
-## 6.5 Board_country_code (PENDIENTE)
+## 6.5 Board_country_code (COMPLETADA)
 ## 6.5.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
 variables <- unique(df$board_country_code)
@@ -1311,10 +1381,77 @@ summary(mediaBoardCC$retrasoMedio)
 str(mediaBoardCC)
 
 ## 6.5.2 Segmentamos la variable en grupos en base a su retraso medio
-## 6.5.3 Funcion para a�adir al dataframe una columna con los grupos obtenidos en base al codigo del pais de embarque
-## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.5.2.1 retraso medio inferior o igual a -4.38
+BCCmenor4 <- mediaBoardCC[mediaBoardCC$retrasoMedio<=(-4.38),]
+str(BCCmenor4)
 
+## 6.5.2.2 retraso medio entre -4.38 y -1.74 (incluido)
+BCCentre4y1 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-4.38) &mediaBoardCC$retrasoMedio<=(-1.74),]
+str(BCCentre4y1)
+
+## 6.5.2.3 retraso medio entre -1.74 y 4.036 (incluido)
+BCCentre1y4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-1.74) &mediaBoardCC$retrasoMedio<=4.036,]
+str(BCCentre1y4)
+
+## 6.5.2.4 retraso medio superior a 4.036
+BCCsup4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>4.036,]
+str(BCCsup4)
+
+## En base a los cuartiles obtenemos 4 grupos
+## retraso inferior o igual a -4.38         -> 1 
+## retraso entre -4.38 y -1.74 (incluido)   -> 2
+## retraso entre -1.74 y 4.036 (incluido)   -> 3
+## retraso superior a 4.036                 -> 4
+
+
+## 6.5.3 Funcion para a�adir al dataframe una columna con los grupos obtenidos en base al codigo del pais de embarque
+asignarGrupoBCC <- function(dfRetrasos){
+  vectorSalida <- vector()
+  vectorRetrasos <- dfRetrasos[,2]
+  for (i in 1:length(vectorRetrasos)){
+    if(vectorRetrasos[i] <= (-4.38)){
+      vectorSalida[i] = 1
+    }
+    if (vectorRetrasos[i] > (-4.38) & vectorRetrasos[i] <= (-1.74)){
+      vectorSalida[i] = 2
+    }
+    if (vectorRetrasos[i] > (-1.74) & vectorRetrasos[i] <= 4.036){
+      vectorSalida[i] = 3
+    }
+    if (vectorRetrasos[i] > 4.036 ){
+      vectorSalida[i] = 4
+    }
+  }
+  return(as.factor(vectorSalida))
+}
+
+mediaBoardCC$boardCountryCodeGroup <- asignarGrupoBCC(mediaBoardCC)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaBoardCC)
+summary(mediaBoardCC)
+
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaBoardCC
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
+vuelosDeparted$boardCountryCodeGroup <- asignarGrupos(vuelosDeparted$board_country_code ,dfCodigoGrupo)
+summary(vuelosDeparted$boardCountryCodeGroup)
+str(vuelosDeparted$boardCountryCodeGroup)
+
+## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
+vuelosDeparted2$board_country_code <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$boardCountryCodeGroup==3,]
+head(vuelosDeparted2[vuelosDeparted2$board_country_code == "MC",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$boardCountryCodeGroup)
 
 ###################################################################### 
 
