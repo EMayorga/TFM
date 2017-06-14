@@ -1402,10 +1402,10 @@ OPsup4 <- mediaOffPoint[mediaOffPoint$retrasoMedio > 4.796,]
 str(OPsup4)
 
 ## En base al retraso medio, los cuatro grupos quedan de la siguiente forma:
-## retraso medio inferior o igual a -2.794
-## retraso medio entre -2.794 y 1.180 (incluido)
-## retraso medio entre 1.180 y 4.796 (incluido)
-## retraso medio superior a 4.796
+## retraso medio inferior o igual a -2.794          -> 1
+## retraso medio entre -2.794 y 1.180 (incluido)    -> 2
+## retraso medio entre 1.180 y 4.796 (incluido)     -> 3
+## retraso medio superior a 4.796                   -> 4
 
 
 ## 6.6.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al punto de llegada
@@ -1475,10 +1475,10 @@ OLsuperior4 <- mediaOffLat[mediaOffLat$retrasoMedio > 4.796,]
 str(OLsuperior4)
 
 ## Los grupos en funcion de los cuartiles quedarian de la siguiente forma:
-## retraso medio inferior o igual a -2.794
-## retraso medio entre -2.794 y 1.18 (incluido)
-## retraso medio entre 1.18 y 4.796 (incluido)
-## retraso medio superior a 4.796
+## retraso medio inferior o igual a -2.794        -> 1
+## retraso medio entre -2.794 y 1.18 (incluido)   -> 2
+## retraso medio entre 1.18 y 4.796 (incluido)    -> 3
+## retraso medio superior a 4.796                 -> 4
 
 
 ## 6.7.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la latitud de llegada
@@ -1549,10 +1549,10 @@ OLsup4 <- mediaOffLon[mediaOffLon$retrasoMedio > 4.635,]
 str(OLsup4)
 
 ## Los grupos en funcion de los cuartiles quedan de la siguiente forma:
-## retraso medio inferior o igual a -2.799
-## retraso medio entre -2.799 y 1.175 (incluido)
-## retraso medio entre 1.175 y 4.635 (incluido)
-## retraso medio superior a 4.635
+## retraso medio inferior o igual a -2.799        -> 1
+## retraso medio entre -2.799 y 1.175 (incluido)  -> 2
+## retraso medio entre 1.175 y 4.635 (incluido)   -> 3
+## retraso medio superior a 4.635                 -> 4
 
 
 ## 6.8.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la longitud de llegada
@@ -1623,10 +1623,10 @@ OCCsup3 <- mediaOffCC[mediaOffCC$retrasoMedio > 3,]
 str(OCCsup3)
 
 ## los grupos en funcion de los cuartiles quedarian de la siguiente forma:
-## retraso medio inferior a -1.636
-## retraso medio entre -1.636 y 0.6818
-## retraso medio entre 0.6818 y 3 (incluido)
-## retraso medio superior a 3
+## retraso medio inferior a -1.636              -> 1
+## retraso medio entre -1.636 y 0.6818          -> 2
+## retraso medio entre 0.6818 y 3 (incluido)    -> 3
+## retraso medio superior a 3                   -> 4
 
 
 ## 6.9.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al codigo de pais de llegada
@@ -1744,7 +1744,7 @@ summary(vuelosDeparted2$aircraftTypeGroup)
 ###################################################################### 
 
 
-## 6.11 aircraft_registration_number (PENDIENTE)
+## 6.11 aircraft_registration_number (COMPLETADA)
 ## 6.11.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_registration_number"))
 variables <- unique(df$aircraft_registration_number)
@@ -1755,20 +1755,72 @@ summary(mediaNumRegAvion$retrasoMedio)
 str(mediaNumRegAvion)
 
 ## 6.11.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -1.7670
+ARNinf1 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio <= (-1.7670),]
+str(ARNinf1)
+
+## retraso medio entre -1.7670 y -0.7803 (incluido)
+ARNentre1y0 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-1.7670) & mediaNumRegAvion$retrasoMedio <= (-0.7803),]
+str(ARNentre1y0)
+
+## retraso medio entre -0.7803 y 2.2510 (incluido)
+ARNentre0y2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-0.7803) & mediaNumRegAvion$retrasoMedio <= 2.2510,]
+str(ARNentre0y2)
+
+## retraso medio superior a 2.2510
+ARNsup2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > 2.2510,]
+str(ARNsup2)
+
+
+## los grupos de los retrasos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a -1.7670           -> 1
+## retraso medio entre -1.7670 y -0.7803 (incluido)   -> 2
+## retraso medio entre -0.7803 y 2.2510 (incluido)    -> 3
+## retraso medio superior a 2.2510                    -> 4
+
 
 ## 6.11.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al numero de registro del avion
+cuartil1 <- quantile(mediaNumRegAvion$retrasoMedio,.25)
+mediana <- quantile(mediaNumRegAvion$retrasoMedio,.50)
+cuartil2 <- quantile(mediaNumRegAvion$retrasoMedio,.75)
+
+mediaNumRegAvion$aircraftRegNumberGroup <- asignarGrupoPorCuartiles(mediaNumRegAvion, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaNumRegAvion)
+summary(mediaNumRegAvion)
+
+
 ## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaNumRegAvion
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$aircraftRegNumberGroup <- asignarGruposDF(vuelosDeparted$aircraft_registration_number ,dfCodigoGrupo)
+summary(vuelosDeparted$aircraftRegNumberGroup)
+str(vuelosDeparted$aircraftRegNumberGroup)
+
+
 ## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
+vuelosDeparted2$aircraft_registration_number <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$aircraftRegNumberGroup==3,]
+head(vuelosDeparted2[vuelosDeparted2$aircraft_registration_number == "XFGAT",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$aircraftRegNumberGroup)
+
+
 
 
 ###################################################################### 
 
 
-## 6.12 routing (PENDIENTE)
+## 6.12 routing (COMPLETADA)
 ## 6.12.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","routing"))
 variables <- unique(df$routing)
@@ -1779,14 +1831,63 @@ summary(mediaRutas$retrasoMedio)
 str(mediaRutas)
 
 ## 6.12.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -3.4450
+Rinf3 <- mediaRutas[mediaRutas$retrasoMedio <= (-3.4450),]
+str(Rinf3)
+
+## retraso medio entre -3.4450 y 0.7857 (incluido)
+Rentre3y0 <- mediaRutas[mediaRutas$retrasoMedio > (-3.4450) & mediaRutas$retrasoMedio <= 0.7857,]
+str(Rentre3y0)
+
+## retraso medio entre 0.7857 y 5.4970 (incluido)
+Rentre0y5 <- mediaRutas[mediaRutas$retrasoMedio > 0.7857 & mediaRutas$retrasoMedio <= 5.4970,]
+str(Rentre0y5)
+
+## retraso medio superior a 5.4970
+Rsup5 <- mediaRutas[mediaRutas$retrasoMedio > 5.4970,]
+str(Rsup5)
+
+## los grupos en base a los cuartiles quedan de la siguiente forma
+## retraso medio inferior o igual a -3.4450           -> 1
+## retraso medio entre -3.4450 y 0.7857 (incluido)    -> 2
+## retraso medio entre 0.7857 y 5.4970 (incluido)     -> 3
+## retraso medio superior a 5.4970                    -> 4
+
 
 ## 6.12.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la ruta
+cuartil1 <- quantile(mediaRutas$retrasoMedio,.25)
+mediana <- quantile(mediaRutas$retrasoMedio,.50)
+cuartil2 <- quantile(mediaRutas$retrasoMedio,.75)
+
+mediaRutas$routingGroup <- asignarGrupoPorCuartiles(mediaRutas, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaRutas)
+summary(mediaRutas)
+
+
 ## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaRutas
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$routingGroup <- asignarGruposDF(vuelosDeparted$routing ,dfCodigoGrupo)
+summary(vuelosDeparted$routingGroup)
+str(vuelosDeparted$routingGroup)
+
+
 ## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
+vuelosDeparted2$routing <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$routingGroup==3,]
+head(vuelosDeparted2[vuelosDeparted2$routing == "LEU-PNA",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$routingGroup)
 
 
 ###################################################################### 
