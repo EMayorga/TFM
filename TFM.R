@@ -1595,7 +1595,7 @@ summary(vuelosDeparted2$offLonGroup)
 ###################################################################### 
 
 
-## 6.9 off_country_code (PENDIENTE)
+## 6.9 off_country_code (COMPLETADA)
 ## 6.9.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
 variables <- unique(df$off_country_code)
@@ -1606,15 +1606,70 @@ summary(mediaOffCC$retrasoMedio)
 str(mediaOffCC)
 
 ## 6.9.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.9.2.1 retraso medio inferior o igual a -1.636
+OCCinf1 <- mediaOffCC[mediaOffCC$retrasoMedio <= (-1.636),]
+str(OCCinf1)
+
+## 6.9.2.2 retraso medio entre -1.636 y 0.6818 (incluido)
+OCCentre1y0 <- mediaOffCC[mediaOffCC$retrasoMedio > (-1.636) & mediaOffCC$retrasoMedio <= 0.6818,]
+str(OCCentre1y0)
+
+## 6.9.2.3 retraso medio entre 0.6818 y 3 (incluido)
+OCCentre0y3 <- mediaOffCC[mediaOffCC$retrasoMedio > 0.6818 & mediaOffCC$retrasoMedio <= 3,]
+str(OCCentre0y3)
+
+## 6.9.2.4 retraso medio superior a 3
+OCCsup3 <- mediaOffCC[mediaOffCC$retrasoMedio > 3,]
+str(OCCsup3)
+
+## los grupos en funcion de los cuartiles quedarian de la siguiente forma:
+## retraso medio inferior a -1.636
+## retraso medio entre -1.636 y 0.6818
+## retraso medio entre 0.6818 y 3 (incluido)
+## retraso medio superior a 3
+
+
 ## 6.9.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al codigo de pais de llegada
+cuartil1 <- quantile(mediaOffCC$retrasoMedio,.25)
+mediana <- quantile(mediaOffCC$retrasoMedio,.50)
+cuartil2 <- quantile(mediaOffCC$retrasoMedio,.75)
+
+mediaOffCC$offCountryCodeGroup <- asignarGrupoPorCuartiles(mediaOffCC, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaOffCC)
+summary(mediaOffCC)
+
+
 ## 6.9.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaOffCC
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$offCountryCodeGroup <- asignarGruposDF(vuelosDeparted$off_country_code ,dfCodigoGrupo)
+summary(vuelosDeparted$offCountryCodeGroup)
+str(vuelosDeparted$offCountryCodeGroup)
+
+
 ## 6.9.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
+vuelosDeparted2$off_country_code <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$offCountryCodeGroup==3,]
+head(vuelosDeparted2[vuelosDeparted2$off_country_code == "DK",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$offCountryCodeGroup)
+
 
 
 ###################################################################### 
 
 
-## 6.10 aircraft_type (PENDIENTE)
+## 6.10 aircraft_type (COMPLETADA)
 ## 6.10.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_type"))
 variables <- unique(df$aircraft_type)
@@ -1625,9 +1680,65 @@ summary(mediaTipoAvion$retrasoMedio)
 str(mediaTipoAvion)
 
 ## 6.10.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.10.2.1 retraso medio inferior o igual a -1.106
+ATinf1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio <= (-1.106),]
+str(ATinf1)
+
+## 6.10.2.2 retraso medio entre -1.106 y 1.103 (incluido)
+ATentre1y1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > (-1.106) & mediaTipoAvion$retrasoMedio <= 1.103,]
+str(ATentre1y1)
+
+## 6.10.2.3 retraso medio entre 1.103 y 3.331 (incluido)
+ATentre1y3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 1.103 & mediaTipoAvion$retrasoMedio <= 3.331,]
+str(ATentre1y3)
+
+## 6.10.2.4 retraso medio superior a 3.331
+ATsup3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 3.331,]
+str(ATsup3)
+
+## los retrasos medios en funcion a los cuartiles quedarian de la siguente forma:
+## retraso medio inferior o igual a -1.106          -> 1
+## retraso medio entre -1.106 y 1.103 (incluido)    -> 2
+## retraso medio entre 1.103 y 3.331 (incluido)     -> 3
+## retraso medio superior a 3.331                   -> 4
+
+
 ## 6.10.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al tipo de avion
+cuartil1 <- quantile(mediaTipoAvion$retrasoMedio,.25)
+mediana <- quantile(mediaTipoAvion$retrasoMedio,.50)
+cuartil2 <- quantile(mediaTipoAvion$retrasoMedio,.75)
+
+mediaTipoAvion$aircraftTypeGroup <- asignarGrupoPorCuartiles(mediaTipoAvion, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaTipoAvion)
+summary(mediaTipoAvion)
+
+
 ## 6.10.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaTipoAvion
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$aircraftTypeGroup <- asignarGruposDF(vuelosDeparted$aircraft_type ,dfCodigoGrupo)
+summary(vuelosDeparted$aircraftTypeGroup)
+str(vuelosDeparted$aircraftTypeGroup)
+
+
+
 ## 6.10.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
+vuelosDeparted2$aircraft_type <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$aircraftTypeGroup==3,]
+head(vuelosDeparted2[vuelosDeparted2$aircraft_type == "AT7",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$aircraftTypeGroup)
+
 
 
 ###################################################################### 
@@ -1644,6 +1755,11 @@ summary(mediaNumRegAvion$retrasoMedio)
 str(mediaNumRegAvion)
 
 ## 6.11.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.11.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al numero de registro del avion
 ## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1663,6 +1779,11 @@ summary(mediaRutas$retrasoMedio)
 str(mediaRutas)
 
 ## 6.12.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.12.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la ruta
 ## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1682,6 +1803,11 @@ summary(mediaMesSalida$retrasoMedio)
 str(mediaMesSalida)
 
 ## 6.13.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.13.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al mes de salida
 ## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1707,6 +1833,11 @@ summary(mediaDiaSalida$retrasoMedio)
 str(mediaDiaSalida)
 
 ## 6.15.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.15.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de salida
 ## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1726,6 +1857,11 @@ summary(mediaHoraSalida$retrasoMedio)
 str(mediaHoraSalida)
 
 ## 6.16.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.16.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la hora de salida
 ## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1745,6 +1881,11 @@ summary(mediaMesLlegada$retrasoMedio)
 str(mediaMesLlegada)
 
 ## 6.17.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.17.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al mes de llegada
 ## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1770,6 +1911,11 @@ summary(mediaDiaLlegada$retrasoMedio)
 str(mediaDiaLlegada)
 
 ## 6.19.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.19.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de llegada
 ## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1789,6 +1935,11 @@ summary(mediaHoraLlegada$retrasoMedio)
 str(mediaHoraLlegada)
 
 ## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.20.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la hora de llegada
 ## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1808,6 +1959,11 @@ summary(mediaDiaSemSalida$retrasoMedio)
 str(mediaDiaSemSalida)
 
 ## 6.21.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.21.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de salida
 ## 6.21.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.21.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1827,6 +1983,11 @@ summary(mediaDiaSemLlegada$retrasoMedio)
 str(mediaDiaSemLlegada)
 
 ## 6.22.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.22.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de llegada
 ## 6.22.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.22.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
