@@ -1,8 +1,8 @@
 #####  TFM
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
-#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 #setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
@@ -932,6 +932,8 @@ vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
 
 
 ## 6. Variables de tipo FACTOR
+vuelosDeparted2 <- vuelosDeparted
+
 
 ## 6.1. Flight_Number
 ################################################
@@ -1094,6 +1096,11 @@ vuelosDeparted$flightNumberGroup <- asignarGruposPorNumeroVuelo(vuelosDeparted$f
 summary(vuelosDeparted$flightNumberGroup)
 str(vuelosDeparted$flightNumberGroup)
 
+## 6.1.5 Eliminar la variable analizada del dataframe resultante
+vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
+vuelosDeparted2$flight_number <- NULL
+
+
 ####################################################################
 
 
@@ -1160,7 +1167,7 @@ head(mediaPuntoEmbarque)
 summary(mediaPuntoEmbarque)
 ## En total, la suma de los aviones en cada grupo de la columna fligthNumberGroup da un resultado de 1022 aviones. OK
 
-### 6.2.3. Añadir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+### 6.2.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
 asignarGruposBoardPoint <- function(codigosVuelo, dfCodigosGrupos){
   ## codigosVuelo -> vector del dataframe total con los codigos de vuelo
   ## dfCodigosGrupos -> df con los codigos de vuelo y su retraso
@@ -1199,29 +1206,357 @@ summary(vuelosDeparted2$boardPointGroup)
 
 ###################################################################### 
 
-## 6.3 Board_lat
-## 6.4 Board_lon
-## 6.5 Board_country_code
-## 6.6 off_point
-## 6.7 off_lat
-## 6.8 off_lon
-## 6.9 off_country_code
-## 6.10 aircraft_type
-## 6.11 aircraft_registration_number
-## 6.12 routing
-## 6.13 mesSalida
-## 6.14 anyoSalida
-## 6.15 diaSalida
-## 6.16 horaSalida
-## 6.17 mesLlegada
-## 6.18 anyoLlegada
-## 6.19 diaLlegada
-## 6.20 horaLlegada
-## 6.21 diaSemanaSalida
-## 6.22 disSemanaLlegada
+## 6.3 Board_lat (PENDIENTE)
+## 6.3.1. Calculamos el retraso medio
+df <- subset(vuelosDeparted, select = c("arrival_delay","board_lat"))
+variables <- unique(df$board_lat)
+mediaLatEmbarque <- mediasRetrasos(variables,df)
+boxplot(mediaLatEmbarque$retrasoMedio)
+barplot(mediaLatEmbarque$retrasoMedio)
+summary(mediaLatEmbarque$retrasoMedio)
+str(mediaLatEmbarque)
+
+## 6.3.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.3.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.3.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.3.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+###################################################################### 
 
 
+## 6.4 Board_lon (PENDIENTE)
+## 6.4.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
+variables <- unique(df$board_lon)
+mediaBoardLon <- mediasRetrasos(variables,df)
+boxplot(mediaBoardLon$retrasoMedio)
+barplot(mediaBoardLon$retrasoMedio, names.arg=mediaBoardLon$codigo)
+summary(mediaBoardLon$retrasoMedio)
+str(mediaBoardLon)
 
+## 6.4.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.4.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.4.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.4.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.5 Board_country_code (PENDIENTE)
+## 6.5.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
+variables <- unique(df$board_country_code)
+mediaBoardCC <- mediasRetrasos(variables,df)
+boxplot(mediaBoardCC$retrasoMedio)
+barplot(mediaBoardCC$retrasoMedio, names.arg=mediaBoardCC$codigo)
+summary(mediaBoardCC$retrasoMedio)
+str(mediaBoardCC)
+
+## 6.5.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.5.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.6 off_point (PENDIENTE)
+## 6.6.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","off_point"))
+variables <- unique(df$off_point)
+mediaOffPoint <- mediasRetrasos(variables,df)
+boxplot(mediaOffPoint$retrasoMedio)
+barplot(mediaOffPoint$retrasoMedio, names.arg=mediaOffPoint$codigo)
+summary(mediaOffPoint$retrasoMedio)
+str(mediaOffPoint)
+
+## 6.6.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.6.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.6.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.6.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.7 off_lat (PENDIENTE)
+## 6.7.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","off_lat"))
+variables <- unique(df$off_lat)
+mediaOffLat <- mediasRetrasos(variables,df)
+boxplot(mediaOffLat$retrasoMedio)
+barplot(mediaOffLat$retrasoMedio, names.arg=mediaOffLat$codigo)
+summary(mediaOffLat$retrasoMedio)
+str(mediaOffLat)
+
+## 6.7.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.7.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.7.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.7.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.8 off_lon (PENDIENTE)
+## 6.8.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","off_lon"))
+variables <- unique(df$off_lon)
+mediaOffLon <- mediasRetrasos(variables,df)
+boxplot(mediaOffLon$retrasoMedio)
+barplot(mediaOffLon$retrasoMedio, names.arg=mediaOffLon$codigo)
+summary(mediaOffLon$retrasoMedio)
+str(mediaOffLon)
+
+## 6.8.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.8.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.8.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.8.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.9 off_country_code (PENDIENTE)
+## 6.9.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
+variables <- unique(df$off_country_code)
+mediaOffCC <- mediasRetrasos(variables,df)
+boxplot(mediaOffCC$retrasoMedio)
+barplot(mediaOffCC$retrasoMedio, names.arg=mediaOffCC$codigo)
+summary(mediaOffCC$retrasoMedio)
+str(mediaOffCC)
+
+## 6.9.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.9.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.9.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.9.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.10 aircraft_type (PENDIENTE)
+## 6.10.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_type"))
+variables <- unique(df$aircraft_type)
+mediaTipoAvion <- mediasRetrasos(variables,df)
+boxplot(mediaTipoAvion$retrasoMedio)
+barplot(mediaTipoAvion$retrasoMedio, names.arg=mediaTipoAvion$codigo)
+summary(mediaTipoAvion$retrasoMedio)
+str(mediaTipoAvion)
+
+## 6.10.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.10.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.10.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.10.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.11 aircraft_registration_number (PENDIENTE)
+## 6.11.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_registration_number"))
+variables <- unique(df$aircraft_registration_number)
+mediaNumRegAvion <- mediasRetrasos(variables,df)
+boxplot(mediaNumRegAvion$retrasoMedio)
+barplot(mediaNumRegAvion$retrasoMedio, names.arg=mediaNumRegAvion$codigo)
+summary(mediaNumRegAvion$retrasoMedio)
+str(mediaNumRegAvion)
+
+## 6.11.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.11.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.12 routing (PENDIENTE)
+## 6.12.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","routing"))
+variables <- unique(df$routing)
+mediaRutas <- mediasRetrasos(variables,df)
+boxplot(mediaRutas$retrasoMedio)
+barplot(mediaRutas$retrasoMedio, names.arg=mediaRutas$codigo)
+summary(mediaRutas$retrasoMedio)
+str(mediaRutas)
+
+## 6.12.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.12.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.13 mesSalida (PENDIENTE)
+## 6.13.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","mesSalida"))
+variables <- unique(df$mesSalida)
+mediaMesSalida <- mediasRetrasos(variables,df)
+boxplot(mediaMesSalida$retrasoMedio)
+barplot(mediaMesSalida$retrasoMedio, names.arg=mediaMesSalida$codigo)
+summary(mediaMesSalida$retrasoMedio)
+str(mediaMesSalida)
+
+## 6.13.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.13.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.14 anyoSalida (PENDIENTE)
+
+
+###################################################################### 
+
+
+## 6.15 diaSalida (PENDIENTE)
+## 6.15.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","diaSalida"))
+variables <- unique(df$diaSalida)
+mediaDiaSalida <- mediasRetrasos(variables,df)
+boxplot(mediaDiaSalida$retrasoMedio)
+barplot(mediaDiaSalida$retrasoMedio, names.arg=mediaDiaSalida$codigo)
+summary(mediaDiaSalida$retrasoMedio)
+str(mediaDiaSalida)
+
+## 6.15.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.15.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.16 horaSalida (PENDIENTE)
+## 6.16.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","horaSalida"))
+variables <- unique(df$horaSalida)
+mediaHoraSalida <- mediasRetrasos(variables,df)
+boxplot(mediaHoraSalida$retrasoMedio)
+barplot(mediaHoraSalida$retrasoMedio, names.arg=mediaHoraSalida$codigo)
+summary(mediaHoraSalida$retrasoMedio)
+str(mediaHoraSalida)
+
+## 6.16.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.16.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.17 mesLlegada (PENDIENTE)
+## 6.17.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","mesLlegada"))
+variables <- unique(df$mesLlegada)
+mediaMesLlegada <- mediasRetrasos(variables,df)
+boxplot(mediaMesLlegada$retrasoMedio)
+barplot(mediaMesLlegada$retrasoMedio, names.arg=mediaMesLlegada$codigo)
+summary(mediaMesLlegada$retrasoMedio)
+str(mediaMesLlegada)
+
+## 6.17.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.17.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.18 anyoLlegada (PENDIENTE)
+
+
+###################################################################### 
+
+
+## 6.19 diaLlegada (PENDIENTE)
+## 6.19.1. Calculamos el retraso medio.
+df <- subset(vuelosDeparted, select = c("arrival_delay","diaLlegada"))
+variables <- unique(df$diaLlegada)
+mediaDiaLlegada <- mediasRetrasos(variables,df)
+boxplot(mediaDiaLlegada$retrasoMedio)
+barplot(mediaDiaLlegada$retrasoMedio, names.arg=mediaDiaLlegada$codigo)
+summary(mediaDiaLlegada$retrasoMedio)
+str(mediaDiaLlegada)
+
+## 6.19.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.19.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.20 horaLlegada (PENDIENTE)
+## 6.20.1. Calculamos el retraso medio. 
+df <- subset(vuelosDeparted, select = c("arrival_delay","horaLlegada"))
+variables <- unique(df$horaLlegada)
+mediaHoraLlegada <- mediasRetrasos(variables,df)
+boxplot(mediaHoraLlegada$retrasoMedio)
+barplot(mediaHoraLlegada$retrasoMedio)
+summary(mediaHoraLlegada$retrasoMedio)
+str(mediaHoraLlegada)
+
+## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.20.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.21 diaSemanaSalida (PENDIENTE)
+## 6.22.1. Calculamos el retraso medio
+df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
+variables <- unique(df$diaSemanaSalida)
+mediaDiaSemSalida <- mediasRetrasos(variables,df)
+boxplot(mediaDiaSemSalida$retrasoMedio)
+barplot(mediaDiaSemSalida$retrasoMedio, names.arg=mediaDiaSemSalida$codigo)
+summary(mediaDiaSemSalida$retrasoMedio)
+str(mediaDiaSemSalida)
+
+## 6.21.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.21.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.21.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.21.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
+
+
+## 6.22 disSemanaLlegada (PENDIENTE)
+## 6.22.1. Calculamos el retraso medio
+df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaLlegada"))
+variables <- unique(df$diaSemanaLlegada)
+mediaDiaSemLlegada <- mediasRetrasos(variables,df)
+boxplot(mediaDiaSemLlegada$retrasoMedio)
+barplot(mediaDiaSemLlegada$retrasoMedio, names.arg=mediaDiaSemLlegada$codigo)
+summary(mediaDiaSemLlegada$retrasoMedio)
+str(mediaDiaSemLlegada)
+
+## 6.22.2. Segmentamos la variable en grupos en base a su retraso medio
+## 6.22.3. Funcion para a�adir al dataframe de vuelos una columna con los grupos a los que pertenece cada avion
+## 6.22.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.22.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+
+
+###################################################################### 
 
 
 
@@ -1230,11 +1565,8 @@ summary(vuelosDeparted2$boardPointGroup)
 
 #####################################################################################################
 ########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
-vuelosDeparted2 <- vuelosDeparted
-str(vuelosDeparted)
 
-## Eliminamos la variable flight_number del dataframe resultante
-vuelosDeparted2$flight_number <- NULL
+
 ## Eliminamos la variable board_point del dataframe resultante
 vuelosDeparted2$board_point <- NULL
 ## Eliminamos la variable general_status_code, ya que siempre sera Departed
