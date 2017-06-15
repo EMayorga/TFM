@@ -1,8 +1,8 @@
 #####  TFM
 
 ## En esta ruta est? el script que nos ha enviado Israel por correo 
-#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 #setwd("~/GitHub/TFM") ##RUTA SERGIO
 
 
@@ -1893,7 +1893,7 @@ summary(vuelosDeparted2$routingGroup)
 ###################################################################### 
 
 
-## 6.13 mesSalida (PENDIENTE)
+## 6.13 mesSalida (COMPLETADA)
 ## 6.13.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","mesSalida"))
 variables <- unique(df$mesSalida)
@@ -1904,26 +1904,76 @@ summary(mediaMesSalida$retrasoMedio)
 str(mediaMesSalida)
 
 ## 6.13.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -1.495
+MSalInf <- mediaMesSalida[mediaMesSalida$retrasoMedio <= (-1.495),]
+str(MSalInf)
+
+## retraso medio entre -1.495 y -1.054 (incluido)
+MsalEntre1y1 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.495) & mediaMesSalida$retrasoMedio <= (-1.054),]
+str(MsalEntre1y1)
+
+## retraso medio entre -1.054 y 0.000851 (incluido)
+MsalEntre1y0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.054) & mediaMesSalida$retrasoMedio <= 0.000851,]
+str(MsalEntre1y0)
+
+## retraso medio superior a 0.000851 
+MsalSup0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > 0.000851,]
+str(MsalSup0)
+
+
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a -1.495            -> 1
+## retraso medio entre -1.495 y -1.054 (incluido)     -> 2
+## retraso medio entre -1.054 y 0.000851 (incluido)   -> 3
+## retraso medio superior a 0.000851                  -> 4
 
 ## 6.13.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al mes de salida
+cuartil1 <- quantile(mediaMesSalida$retrasoMedio,.25)
+mediana <- quantile(mediaMesSalida$retrasoMedio,.50)
+cuartil2 <- quantile(mediaMesSalida$retrasoMedio,.75)
+
+mediaMesSalida$mesSalidaGroup <- asignarGrupoPorCuartiles(mediaMesSalida, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaMesSalida)
+summary(mediaMesSalida)
+
+
 ## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaMesSalida
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$mesSalidaGroup <- asignarGruposDF(vuelosDeparted$mesSalida ,dfCodigoGrupo)
+summary(vuelosDeparted$mesSalidaGroup)
+str(vuelosDeparted$mesSalidaGroup)
+
+
 ## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
+vuelosDeparted2$mesSalida <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$mesSalidaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$mesSalida == "6",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$mesSalidaGroup)
 
 
 ###################################################################### 
 
 
-## 6.14 anyoSalida (PENDIENTE)
-
+## 6.14 anyoSalida (COMPLETADA)
+## No se analiza ya que solo tiene los valores 2015, 2016 y 2017
 
 ###################################################################### 
 
 
-## 6.15 diaSalida (PENDIENTE)
+## 6.15 diaSalida (COMPLETADA)
 ## 6.15.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSalida"))
 variables <- unique(df$diaSalida)
@@ -1934,15 +1984,63 @@ summary(mediaDiaSalida$retrasoMedio)
 str(mediaDiaSalida)
 
 ## 6.15.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -0.8889
+dSalInf0 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio <= (-0.8889),]
+str(dSalInf0)
+
+## retraso medio entre -0.8889 y -0.2294 (incluido)
+dSalEntre08y02 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.8889) & mediaDiaSalida$retrasoMedio <= (-0.2294),]
+str(dSalEntre08y02)
+
+## retraso medio entre -0.2294 y 0.3652 (incluido)
+dSalEntre02y03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.2294) & mediaDiaSalida$retrasoMedio <= 0.3652,]
+str(dSalEntre02y03)
+
+## retraso medio superior a 0.3652
+dSalSup03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > 0.3652,]
+str(dSalSup03)
+
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a -0.8889           -> 1
+## retraso medio entre -0.8889 y -0.2294 (incluido)   -> 2
+## retraso medio entre -0.2294 y 0.3652 (incluido)    -> 3
+## retraso medio superior a 0.3652                    -> 4
 
 ## 6.15.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de salida
-## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+cuartil1 <- quantile(mediaDiaSalida$retrasoMedio,.25)
+mediana <- quantile(mediaDiaSalida$retrasoMedio,.50)
+cuartil2 <- quantile(mediaDiaSalida$retrasoMedio,.75)
 
+mediaDiaSalida$diaSalidaGroup <- asignarGrupoPorCuartiles(mediaDiaSalida, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaDiaSalida)
+summary(mediaDiaSalida)
+
+
+## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaDiaSalida
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$diaSalidaGroup <- asignarGruposDF(vuelosDeparted$diaSalida ,dfCodigoGrupo)
+summary(vuelosDeparted$diaSalidaGroup)
+str(vuelosDeparted$diaSalidaGroup)
+
+
+## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
+vuelosDeparted2$diaSalida <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$diaSalidaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$diaSalida == "11",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$diaSalidaGroup)
 
 ###################################################################### 
 
@@ -1963,6 +2061,12 @@ str(mediaHoraSalida)
 ## retraso medio entre y (incluido)
 ## retraso medio superior a 
 
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.16.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la hora de salida
 ## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -1971,7 +2075,7 @@ str(mediaHoraSalida)
 ###################################################################### 
 
 
-## 6.17 mesLlegada (PENDIENTE)
+## 6.17 mesLlegada (COMPLETADA)
 ## 6.17.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","mesLlegada"))
 variables <- unique(df$mesLlegada)
@@ -1982,20 +2086,70 @@ summary(mediaMesLlegada$retrasoMedio)
 str(mediaMesLlegada)
 
 ## 6.17.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -1.489
+MLlegInf1 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio <= (-1.489),]
+str(MLlegInf1)
+
+## retraso medio entre -1.489 y -1.071 (incluido)
+MLlegEntre14y10 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.489) & mediaMesLlegada$retrasoMedio <= (-1.071),]
+str(MLlegEntre14y10)
+
+## retraso medio entre -1.071 y -0.01465 (incluido)
+MLlegEntre10y00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.071) & mediaMesLlegada$retrasoMedio <= (-0.01465),]
+str(MLlegEntre10y00)
+
+## retraso medio superior a -0.01465
+MLlegSup00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-0.01465),]
+str(MLlegSup00)
+
+
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a -1.489            -> 1
+## retraso medio entre -1.489 y -1.071 (incluido)     -> 2
+## retraso medio entre -1.071 y -0.01465 (incluido)   -> 3
+## retraso medio superior a -0.01465                  -> 4
 
 ## 6.17.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al mes de llegada
-## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+cuartil1 <- quantile(mediaMesLlegada$retrasoMedio,.25)
+mediana <- quantile(mediaMesLlegada$retrasoMedio,.50)
+cuartil2 <- quantile(mediaMesLlegada$retrasoMedio,.75)
 
+mediaMesLlegada$mesLlegadaGroup <- asignarGrupoPorCuartiles(mediaMesLlegada, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaMesLlegada)
+summary(mediaMesLlegada)
+
+
+## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaMesLlegada
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$mesLlegadaGroup <- asignarGruposDF(vuelosDeparted$mesLlegada ,dfCodigoGrupo)
+summary(vuelosDeparted$mesLlegadaGroup)
+str(vuelosDeparted$mesLlegadaGroup)
+
+
+## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
+vuelosDeparted2$mesLlegada <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$mesLlegadaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$mesLlegada == "6",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$mesLlegadaGroup)
 
 ###################################################################### 
 
 
-## 6.18 anyoLlegada (PENDIENTE)
+## 6.18 anyoLlegada (COMPLETADA)
+## No se hace analisis ya que solo tiene los valores 2015, 2016 y 2017
 
 
 ###################################################################### 
@@ -2012,15 +2166,62 @@ summary(mediaDiaLlegada$retrasoMedio)
 str(mediaDiaLlegada)
 
 ## 6.19.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -0.8248
+diaLlegInf08 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio <= (-0.8248),]
+str(diaLlegInf08)
+
+## retraso medio entre -0.8248 y -0.2593 (incluido)
+diaLlegEntr08y02 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.8248) & mediaDiaLlegada$retrasoMedio <= (-0.2593),]
+str(diaLlegEntr08y02)
+
+## retraso medio entre -0.2583 y 0.3672 (incluido)
+diaLlegEntr02y03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.2593) & mediaDiaLlegada$retrasoMedio <= 0.3672,]
+str(diaLlegEntr02y03)
+
+## retraso medio superior a 0.3672
+diaLlegSup03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > 0.3672,]
+str(diaLlegSup03)
+
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a -0.8248           -> 1
+## retraso medio entre -0.8248 y -0.2593 (incluido)   -> 2
+## retraso medio entre -0.2583 y 0.3672 (incluido)    -> 3
+## retraso medio superior a 0.3672                    -> 4
 
 ## 6.19.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de llegada
-## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+cuartil1 <- quantile(mediaDiaLlegada$retrasoMedio,.25)
+mediana <- quantile(mediaDiaLlegada$retrasoMedio,.50)
+cuartil2 <- quantile(mediaDiaLlegada$retrasoMedio,.75)
 
+mediaDiaLlegada$diaLlegadaGroup <- asignarGrupoPorCuartiles(mediaDiaLlegada, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaDiaLlegada)
+summary(mediaDiaLlegada)
+
+## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaDiaLlegada
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$diaLlegadaGroup <- asignarGruposDF(vuelosDeparted$diaLlegada ,dfCodigoGrupo)
+summary(vuelosDeparted$diaLlegadaGroup)
+str(vuelosDeparted$diaLlegadaGroup)
+
+
+## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
+vuelosDeparted2$diaLlegada <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$diaLlegadaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$diaLlegada == "9",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$diaLlegadaGroup)
 
 ###################################################################### 
 
@@ -2036,6 +2237,12 @@ summary(mediaHoraLlegada$retrasoMedio)
 str(mediaHoraLlegada)
 
 ## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
 ## retraso medio inferior o igual a 
 ## retraso medio entre y (incluido)
 ## retraso medio entre y (incluido)
@@ -2065,6 +2272,12 @@ str(mediaDiaSemSalida)
 ## retraso medio entre y (incluido)
 ## retraso medio superior a 
 
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.21.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de salida
 ## 6.21.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.21.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -2089,6 +2302,12 @@ str(mediaDiaSemLlegada)
 ## retraso medio entre y (incluido)
 ## retraso medio superior a 
 
+## los grupos en funcion de los cuartiles quedan de la siguiente forma:
+## retraso medio inferior o igual a 
+## retraso medio entre y (incluido)
+## retraso medio entre y (incluido)
+## retraso medio superior a 
+
 ## 6.22.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de llegada
 ## 6.22.4 Añadir el nuevo vector al dataframe de vuelos
 ## 6.22.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
@@ -2103,6 +2322,17 @@ str(mediaDiaSemLlegada)
 
 #####################################################################################################
 ########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
+
+## COMPROBAR CORRELACION ENTRE VARIABLES
+tabla1 <- table(vuelosDeparted$board_point, vuelosDeparted$off_point)
+plot(tabla1, col = c("red", "blue"), main = "dia semana Llegada vs. dia semana Salida")
+chisq.test(tabla1)
+## En base al valor de P-value determinamos que hay dependencia entre estas dos variables.
+## Si p-value es menor que 0.05 determinamos que hay dependencia
+## si p-value es mayor que 0.05 determinamos que no hay dependencia
+
+
+
 
 
 ## Eliminamos la variable board_point del dataframe resultante
