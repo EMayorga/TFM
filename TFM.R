@@ -2155,7 +2155,7 @@ summary(vuelosDeparted2$mesLlegadaGroup)
 ###################################################################### 
 
 
-## 6.19 diaLlegada (PENDIENTE)
+## 6.19 diaLlegada (COMPLETADA)
 ## 6.19.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaLlegada"))
 variables <- unique(df$diaLlegada)
@@ -2256,7 +2256,7 @@ str(mediaHoraLlegada)
 ###################################################################### 
 
 
-## 6.21 diaSemanaSalida (PENDIENTE)
+## 6.21 diaSemanaSalida (COMPLETADA)
 ## 6.22.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
 variables <- unique(df$diaSemanaSalida)
@@ -2266,27 +2266,11 @@ barplot(mediaDiaSemSalida$retrasoMedio, names.arg=mediaDiaSemSalida$codigo)
 summary(mediaDiaSemSalida$retrasoMedio)
 str(mediaDiaSemSalida)
 
-## 6.21.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
-
-## los grupos en funcion de los cuartiles quedan de la siguiente forma:
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
-
-## 6.21.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de salida
-## 6.21.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.21.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
-
 
 ###################################################################### 
 
 
-## 6.22 disSemanaLlegada (PENDIENTE)
+## 6.22 disSemanaLlegada (COMPLETADA)
 ## 6.22.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaLlegada"))
 variables <- unique(df$diaSemanaLlegada)
@@ -2295,22 +2279,6 @@ boxplot(mediaDiaSemLlegada$retrasoMedio)
 barplot(mediaDiaSemLlegada$retrasoMedio, names.arg=mediaDiaSemLlegada$codigo)
 summary(mediaDiaSemLlegada$retrasoMedio)
 str(mediaDiaSemLlegada)
-
-## 6.22.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
-
-## los grupos en funcion de los cuartiles quedan de la siguiente forma:
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
-
-## 6.22.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base al dia de la semana de llegada
-## 6.22.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.22.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 
 
 ###################################################################### 
