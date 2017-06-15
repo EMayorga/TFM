@@ -900,7 +900,25 @@ vuelosDeparted$anyoSalida <- as.factor(vuelosDeparted$anyoSalida)
 vuelosDeparted$diaSalida <- as.integer(day(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$diaSalida <- as.factor(vuelosDeparted$diaSalida)
 ## 5.3. Hora de salida del vuelo
-vuelosDeparted$horaSalida <- format(vuelosDeparted$actual_time_of_departure,'%H:%M:%S')
+
+## Funcion para determinar la hora de salida o llegada de un vuelo
+obtenerHora <- function(vectorHoras){
+  horas <- hour(vectorHoras)
+  minutos <- minute(vectorHoras)
+  res <- vector()
+  
+  for(i in 1:length(horas)){
+    if (minutos[i] >= 30){
+      res[i] = paste(paste(horas[i],"30", sep = ":"),paste(horas[i],"59", sep = ":"),sep = " - ")
+    }else{
+      res[i] = paste(paste(horas[i],"00", sep = ":"),paste(horas[i],"29", sep = ":"),sep = " - ")
+    }
+  }
+  
+  return(res)
+}
+
+vuelosDeparted$horaSalida <- obtenerHora(vuelosDeparted$actual_time_of_departure)
 vuelosDeparted$horaSalida <- as.factor(vuelosDeparted$horaSalida)
 
 
@@ -914,12 +932,8 @@ vuelosDeparted$anyoLlegada <- as.factor(vuelosDeparted$anyoLlegada)
 vuelosDeparted$diaLlegada <- as.integer(day(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$diaLlegada <- as.factor(vuelosDeparted$diaLlegada)
 ## 5.6 Hora de llegada del vuelo
-vuelosDeparted$horaLlegada <- format(vuelosDeparted$actual_time_of_arrival, "%H:%M:%S")
+vuelosDeparted$horaLlegada <- obtenerHora(vuelosDeparted$actual_time_of_arrival)
 vuelosDeparted$horaLlegada <- as.factor(vuelosDeparted$horaLlegada)
-
-
-
-
 ## 5.7. Dia de la semana para la salida de los vuelos
 vuelosDeparted$diaSemanaSalida <- weekdays(as.Date(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$diaSemanaSalida <- as.factor(vuelosDeparted$diaSemanaSalida)
