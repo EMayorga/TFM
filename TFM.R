@@ -2070,21 +2070,64 @@ summary(mediaHoraSalida$retrasoMedio)
 str(mediaHoraSalida)
 
 ## 6.16.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -2.106
+HSalInf2 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio <= (-2.106),]
+str(HSalInf2)
+
+## retraso medio entre -2.106 y -0.6474 (incluido)
+HSalEntre2y0 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-2.106) & mediaHoraSalida$retrasoMedio <= (-0.6474),]
+str(HSalEntre2y0)
+
+## retraso medio entre -0.6474 y 1.7820 (incluido)
+HSalEntre0y1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-0.6474) & mediaHoraSalida$retrasoMedio <= 1.7820,]
+str(HSalEntre0y1)
+
+## retraso medio superior a 1.7820
+HSalSup1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > 1.7820,]
+str(HSalSup1)
+
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -2.106            -> 1
+## retraso medio entre -2.106 y -0.6474 (incluido)    -> 2
+## retraso medio entre -0.6474 y 1.7820 (incluido)    -> 3
+## retraso medio superior a 1.7820                    -> 4
 
 ## 6.16.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la hora de salida
-## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+cuartil1 <- quantile(mediaHoraSalida$retrasoMedio,.25)
+mediana <- quantile(mediaHoraSalida$retrasoMedio,.50)
+cuartil2 <- quantile(mediaHoraSalida$retrasoMedio,.75)
 
+mediaHoraSalida$horaSalidaGroup <- asignarGrupoPorCuartiles(mediaHoraSalida, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaHoraSalida)
+summary(mediaHoraSalida)
+
+
+## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaHoraSalida
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$horaSalidaGroup <- asignarGruposDF(vuelosDeparted$horaSalida ,dfCodigoGrupo)
+summary(vuelosDeparted$horaSalidaGroup)
+str(vuelosDeparted$horaSalidaGroup)
+
+
+## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
+vuelosDeparted2$horaSalida <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$horaSalidaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$horaSalida == "2:30 - 2:59",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$horaSalidaGroup)
 
 ###################################################################### 
 
@@ -2240,7 +2283,7 @@ summary(vuelosDeparted2$diaLlegadaGroup)
 ###################################################################### 
 
 
-## 6.20 horaLlegada (PENDIENTE)
+## 6.20 horaLlegada (COMPLETADA)
 ## 6.20.1. Calculamos el retraso medio. 
 df <- subset(vuelosDeparted, select = c("arrival_delay","horaLlegada"))
 variables <- unique(df$horaLlegada)
@@ -2251,21 +2294,63 @@ summary(mediaHoraLlegada$retrasoMedio)
 str(mediaHoraLlegada)
 
 ## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -2.528
+HLlinf2 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio <= (-2.528),]
+str(HLlinf2)
+
+## retraso medio entre -2.528 y -0.002247 (incluido)
+HLlEntre2y0 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-2.528) & mediaHoraLlegada$retrasoMedio <= (-0.002247),]
+str(HLlEntre2y0)
+
+## retraso medio entre -0.002247 y 1.881 (incluido)
+HLlEntre0y1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-0.002247) & mediaHoraLlegada$retrasoMedio <= 1.881,]
+str(HLlEntre0y1)
+
+## retraso medio superior a 1.881
+HLlSup1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > 1.881,]
+str(HLlSup1)
+
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
-## retraso medio inferior o igual a 
-## retraso medio entre y (incluido)
-## retraso medio entre y (incluido)
-## retraso medio superior a 
+## retraso medio inferior o igual a -2.528              -> 1
+## retraso medio entre -2.528 y -0.002247 (incluido)    -> 2
+## retraso medio entre -0.002247 y 1.881 (incluido)     -> 3
+## retraso medio superior a 1.881                       -> 4
 
 ## 6.20.3 Funcion para a?adir al dataframe una columna con los grupos obtenidos en base a la hora de llegada
-## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
-## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+cuartil1 <- quantile(mediaHoraLlegada$retrasoMedio,.25)
+mediana <- quantile(mediaHoraLlegada$retrasoMedio,.50)
+cuartil2 <- quantile(mediaHoraLlegada$retrasoMedio,.75)
 
+mediaHoraLlegada$horaLlegadaGroup <- asignarGrupoPorCuartiles(mediaHoraLlegada, cuartil1, mediana, cuartil2)
+## Comprobamos que se han indicado correctamente los grupos
+head(mediaHoraLlegada)
+summary(mediaHoraLlegada)
+
+## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
+## asignar el grupo a los datos del dataframe
+dfCodigoGrupo <- mediaHoraLlegada
+dfCodigoGrupo$retrasoMedio <- NULL
+dfCodigoGrupo$numeroVuelos <- NULL
+
+vuelosDeparted$horaLlegadaGroup <- asignarGruposDF(vuelosDeparted$horaLlegada ,dfCodigoGrupo)
+summary(vuelosDeparted$horaLlegadaGroup)
+str(vuelosDeparted$horaLlegadaGroup)
+
+
+## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
+vuelosDeparted2$horaLlegada <- NULL
+
+## Comprobacion de asignacion de grupo
+dfCodigoGrupo
+head(vuelosDeparted2)
+dfCodigoGrupo[dfCodigoGrupo$horaLlegadaGroup==3,]
+head(vuelosDeparted2)
+head(vuelosDeparted2[vuelosDeparted2$horaLlegada == "18:00 - 18:29",],4)
+
+str(vuelosDeparted2)
+summary(vuelosDeparted2$horaLlegadaGroup)
 
 ###################################################################### 
 
