@@ -33,11 +33,11 @@ vuelos$cabin_4_ask <- NULL
 #summary(vuelos)
 
 ## Nos centraremos en la variable "general_status_code" .
-vuelosCancelled <- vuelos[vuelos$general_status_code=="Cancelled",]   ## 1601 registros
+#vuelosCancelled <- vuelos[vuelos$general_status_code=="Cancelled",]   ## 1601 registros
 vuelosDeparted <- vuelos[vuelos$general_status_code=="Departed",]     ## 220247 registros
-vuelosLocked <- vuelos[vuelos$general_status_code=="Locked",]         ## 3 registros
-vuelosOpen <- vuelos[vuelos$general_status_code=="Open",]             ## 154 registros
-vuelosSuspended <- vuelos[vuelos$general_status_code=="Suspended",]   ## 7 registros
+#vuelosLocked <- vuelos[vuelos$general_status_code=="Locked",]         ## 3 registros
+#vuelosOpen <- vuelos[vuelos$general_status_code=="Open",]             ## 154 registros
+#vuelosSuspended <- vuelos[vuelos$general_status_code=="Suspended",]   ## 7 registros
 
 ## 2.1 Analizamos cada dataframe para ver si tiene sentido incluirlo en el estudio
 ## 2.1.1 vuelosCancelled
@@ -46,12 +46,12 @@ vuelosSuspended <- vuelos[vuelos$general_status_code=="Suspended",]   ## 7 regis
 
 ## Para este caso, las horas de salida y de llegada se encuentran vacias en la mayor parte de sus datos
 library(lubridate)
-vuelosCancelled$scheduled_time_of_departure <- ymd_hms(vuelosCancelled$scheduled_time_of_departure)
-vuelosCancelled$estimated_time_of_departure <- ymd_hms(vuelosCancelled$estimated_time_of_departure)
-vuelosCancelled$actual_time_of_departure <- ymd_hms(vuelosCancelled$actual_time_of_departure)
-vuelosCancelled$scheduled_time_of_arrival <- ymd_hms(vuelosCancelled$scheduled_time_of_arrival)
-vuelosCancelled$estimated_time_of_arrival <- ymd_hms(vuelosCancelled$estimated_time_of_arrival)
-vuelosCancelled$actual_time_of_arrival <- ymd_hms(vuelosCancelled$actual_time_of_arrival)
+#vuelosCancelled$scheduled_time_of_departure <- ymd_hms(vuelosCancelled$scheduled_time_of_departure)
+#vuelosCancelled$estimated_time_of_departure <- ymd_hms(vuelosCancelled$estimated_time_of_departure)
+#vuelosCancelled$actual_time_of_departure <- ymd_hms(vuelosCancelled$actual_time_of_departure)
+#vuelosCancelled$scheduled_time_of_arrival <- ymd_hms(vuelosCancelled$scheduled_time_of_arrival)
+#vuelosCancelled$estimated_time_of_arrival <- ymd_hms(vuelosCancelled$estimated_time_of_arrival)
+#vuelosCancelled$actual_time_of_arrival <- ymd_hms(vuelosCancelled$actual_time_of_arrival)
 
 #summary(vuelosCancelled)
 
@@ -116,7 +116,7 @@ vuelosDeparted$estimated_time_of_arrival <- NULL    ## La fecha estimada de lleg
 ### Esta variable esta guardada como entero. Al ser un numero de vuelo lo transformamos a factor
 vuelosDeparted$flight_number <- as.factor(vuelosDeparted$flight_number)
 
-options(max.print=999999)  ### incrementar la salida del summary
+#options(max.print=999999)  ### incrementar la salida del summary
 #summary(vuelosDeparted$flight_number, maxsum = 1100)
 
 #str(vuelosDeparted$flight_number)
@@ -128,18 +128,18 @@ options(max.print=999999)  ### incrementar la salida del summary
 ###############################################################################################
 
 ## Comprobamos la necesidad de esta variable
-fechasVuelos <- subset(vuelosDeparted, select = c("flight_date","actual_time_of_departure","actual_time_of_arrival", "act_blocktime", "routing"))
+#fechasVuelos <- subset(vuelosDeparted, select = c("flight_date","actual_time_of_departure","actual_time_of_arrival", "act_blocktime", "routing"))
 
-fechasVuelos$fecha <- as.Date(fechasVuelos$actual_time_of_departure)
+#fechasVuelos$fecha <- as.Date(fechasVuelos$actual_time_of_departure)
 #str(fechasVuelos)
 
-fechasVuelos$flight_date <- as.Date(fechasVuelos$flight_date)
+#fechasVuelos$flight_date <- as.Date(fechasVuelos$flight_date)
 
 #head(fechasVuelos,20)
 #tail(fechasVuelos,20)
 
 ## Comprobamos si alguna fecha no coincide
-fechaIncorrecta <- fechasVuelos[fechasVuelos$flight_date!=fechasVuelos$fecha,]
+#fechaIncorrecta <- fechasVuelos[fechasVuelos$flight_date!=fechasVuelos$fecha,]
 
 #str(fechaIncorrecta)  ## Existen 432 fechas de vuelos que no coinciden con las fechas reales de salida
 #head(fechaIncorrecta)
@@ -164,7 +164,8 @@ vuelosDeparted$flight_date <- NULL
 #summary(vuelosDeparted$board_point, maxsum = 160)
 #table(vuelosDeparted$board_point)
 
-### Esta variable no contiene NAs y se almacena como factor, por lo que no la modificaremos
+### Esta variable no contiene NAs y se almacena como factor.
+### La analizaremos mas adelante
 
 
 
@@ -176,6 +177,7 @@ vuelosDeparted$flight_date <- NULL
 #summary(vuelosDeparted$board_lat)
 
 ### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
+### y la analizaremos mas adelante
 vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 
 
@@ -187,6 +189,7 @@ vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 #summary(vuelosDeparted$board_lon)
 
 ### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
+### y la analizaremos mas adelante
 vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
 
 
@@ -201,18 +204,18 @@ vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
 ### Existen NAs. Comprobamos la latitud y longitud de los NAs
 
 ### 4.6.1 Dataframe de codigos de paises de salida con sus latitudes y longitudes
-vuelosCodeLatLonBoard <- subset(vuelosDeparted, select=c("board_country_code", "board_lat", "board_lon"))
-vuelosCodeLatLonBoard <- unique(vuelosCodeLatLonBoard)
+#vuelosCodeLatLonBoard <- subset(vuelosDeparted, select=c("board_country_code", "board_lat", "board_lon"))
+#vuelosCodeLatLonBoard <- unique(vuelosCodeLatLonBoard)
 
-vuelosCodeLatLonBoard[is.na(vuelosCodeLatLonBoard$board_country_code)==TRUE,]
+#vuelosCodeLatLonBoard[is.na(vuelosCodeLatLonBoard$board_country_code)==TRUE,]
 ### se observa que los NA tienen la misma latitud y longitud, por lo que se trata de un ?nico aeropuerto
 
 
 ### 4.6.2. Comprobamos si los datos de aeropuertos de llegada guardan estas latitudes
-vuelosCodeLatLonArrive <- subset(vuelosDeparted, select = c("off_country_code","off_lat","off_lon"))
-vuelosCodeLatLonArrive <- unique(vuelosCodeLatLonArrive)
+#vuelosCodeLatLonArrive <- subset(vuelosDeparted, select = c("off_country_code","off_lat","off_lon"))
+#vuelosCodeLatLonArrive <- unique(vuelosCodeLatLonArrive)
 
-vuelosCodeLatLonArrive[is.na(vuelosCodeLatLonArrive$off_country_code)==TRUE,]
+#vuelosCodeLatLonArrive[is.na(vuelosCodeLatLonArrive$off_country_code)==TRUE,]
 ### Se observa que en los datos de llegadas tambien existen NA con los mismos valores para latitud y longitud 
 
 ### 4.6.3 Para salidas y llegadas de vuelos, si buscamos la ruta realizada en funcion de latitud y longitud 
@@ -227,8 +230,8 @@ vuelosCodeLatLonArrive[is.na(vuelosCodeLatLonArrive$off_country_code)==TRUE,]
 
 ### 4.6.4 Como el aeropuerto es de Namibia sustituiremos los NAs por NM.
 ### Comprobamos si existe el codigo de aeropuerto escogido en los aeropuertos de salida y de llegada
-vuelosCodeLatLonBoard[vuelosCodeLatLonBoard$board_country_code=="NM",]
-vuelosCodeLatLonArrive[vuelosCodeLatLonArrive$off_country_code=="NM",]
+#vuelosCodeLatLonBoard[vuelosCodeLatLonBoard$board_country_code=="NM",]
+#vuelosCodeLatLonArrive[vuelosCodeLatLonArrive$off_country_code=="NM",]
 
 ### 4.6.5 Sustituimos NAs por NM en los datos de salida y de llegada
 #summary(vuelosDeparted$board_country_code)  ## NAs -> 826 valores
@@ -243,15 +246,19 @@ vuelosDeparted$off_country_code <- replace(vuelosDeparted$off_country_code, is.n
 vuelosDeparted$off_country_code <- as.factor(vuelosDeparted$off_country_code)
 #summary(vuelosDeparted$off_country_code)  ## NM -> 812 valores
 
+## Esta variable se analizara mas adelante
 
 #summary(vuelosDeparted)
+
+
+
 
 ### 4.7 departure_date
 ## (COMPLETADA)
 ###############################################################################################
 
 ### Comprobamos la necesidad de esta variable
-departure <- subset(vuelosDeparted, select = c("departure_date","actual_time_of_departure"))
+#departure <- subset(vuelosDeparted, select = c("departure_date","actual_time_of_departure"))
 
 #head(departure,10)
 #tail(departure,10)
@@ -261,13 +268,13 @@ departure <- subset(vuelosDeparted, select = c("departure_date","actual_time_of_
 ## No existen NAs en "actual_time_of_departure"
 
 ## obtenemos las fechas de la variable actual_time_of_departure
-departure$fechaReal <- as.Date(departure$actual_time_of_departure)
+#departure$fechaReal <- as.Date(departure$actual_time_of_departure)
 
 #str(departure)
 
 ## Buscamos fechas que no coincidan
-departure$departure_date <- as.Date(departure$departure_date)
-fechaErronea <- departure[departure$departure_date!=departure$fechaReal,]
+#departure$departure_date <- as.Date(departure$departure_date)
+#fechaErronea <- departure[departure$departure_date!=departure$fechaReal,]
 
 #str(fechaErronea)
 ## Existen 385 fechas erroneas
@@ -279,6 +286,7 @@ vuelosDeparted$departure_date <- NULL
 #summary(vuelosDeparted)
 
 
+
 ### 4.8 off_point
 ## (COMPLETADA)
 ###############################################################################################
@@ -286,7 +294,9 @@ vuelosDeparted$departure_date <- NULL
 #str(vuelosDeparted$off_point)
 #table(vuelosDeparted$off_point)
 
-### Esta variable no contiene NAs y esta almacenada como tipo factor, por lo tanto no se hacen modificaciones
+### Esta variable no contiene NAs y esta almacenada como tipo factor.
+### Se analizara mas adelante
+
 
 
 ### 4.9 off_lat
@@ -296,8 +306,10 @@ vuelosDeparted$departure_date <- NULL
 #str(vuelosDeparted$off_lat)
 #summary(vuelosDeparted$off_lat)
 
-### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor
+### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor.
+### La analizaremos mas adelante
 vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
+
 
 
 ### 4.10 off_lon
@@ -307,8 +319,11 @@ vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
 #str(vuelosDeparted$off_lon)
 #summary(vuelosDeparted$off_lon)
 
-### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor
+### Variable que no contiene NAs y almacenada como tipo numeric. La convertimos a factor.
+### Esta variable se analizara mas adelante
 vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
+
+
 
 ### 4.11 distance
 ## (COMPLETADA)
@@ -327,7 +342,8 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 #str(vuelosDeparted$scheduled_time_of_departure)
 #summary(vuelosDeparted$scheduled_time_of_departure)
 
-### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que
+### se analizara mas adelante
 
 
 
@@ -338,7 +354,8 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 #str(vuelosDeparted$actual_time_of_departure)
 #summary(vuelosDeparted$actual_time_of_departure)
 
-### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que 
+### se analizara mas adelante 
 
 
 
@@ -350,7 +367,8 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 #str(vuelosDeparted$scheduled_time_of_arrival)
 #summary(vuelosDeparted$scheduled_time_of_arrival)
 
-### Esta variable no contiene NAs y ya fue transformada a Date, por lo que de momento no se modificara
+### Esta variable no contiene NAs y ya fue transformada a Date, por lo que 
+### se analizara mas adelante
 
 
 
@@ -365,26 +383,26 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 ### los NAs por algun valor determinado en funcion de otras variables existentes
 
 ## 4.15.1
-vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
+#vuelosFechaNula <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==TRUE,]
 #str(vuelosFechaNula)  ## 3770 vuelos con fecha nula
 
 ## 4.15.2 Para aquellos casos en los que la fecha actual de llegada es nula, utilizaremos la suma de la fecha programada
 ## de llegada mas el retraso de llegada para obtener una fecha real de llegada del vuelo
-vuelosDeparted2 <- vuelosDeparted
-vuelosDeparted2$actual_time_of_arrival2 <- vuelosDeparted2$scheduled_time_of_arrival+minutes(vuelosDeparted2$arrival_delay)
+#vuelosDeparted2 <- vuelosDeparted
+#vuelosDeparted2$actual_time_of_arrival2 <- vuelosDeparted2$scheduled_time_of_arrival+minutes(vuelosDeparted2$arrival_delay)
 
 ## Comprobamos que la fechas calculadas (programada + retraso de salida) coinciden con las fechas actuales que ya tenemos
-fechasIncorrectas <- vuelosDeparted2[vuelosDeparted2$actual_time_of_arrival!=vuelosDeparted2$actual_time_of_arrival2,]
+#fechasIncorrectas <- vuelosDeparted2[vuelosDeparted2$actual_time_of_arrival!=vuelosDeparted2$actual_time_of_arrival2,]
 
-fechasIncorrectas <- subset(fechasIncorrectas, 
-                            select = c("scheduled_time_of_departure", "departure_delay", "actual_time_of_departure",
-                                       "scheduled_time_of_arrival","arrival_delay","actual_time_of_arrival","actual_time_of_arrival2",
-                                       "act_blocktime"))
+#fechasIncorrectas <- subset(fechasIncorrectas, 
+#                            select = c("scheduled_time_of_departure", "departure_delay", "actual_time_of_departure",
+#                                       "scheduled_time_of_arrival","arrival_delay","actual_time_of_arrival","actual_time_of_arrival2",
+#                                       "act_blocktime"))
 
 #str(fechasIncorrectas)  ## 7669 fechas incorrectas con NAs en "actual_time_of_arrival"
 
 ## Eliminamos NAs
-fechasIncorrectas <- fechasIncorrectas[is.na(fechasIncorrectas$actual_time_of_arrival)==FALSE,]
+#fechasIncorrectas <- fechasIncorrectas[is.na(fechasIncorrectas$actual_time_of_arrival)==FALSE,]
 #str(fechasIncorrectas)  ## 3899 fechas incorrectas sin NAs en actual_time_of_arrival
 #head(fechasIncorrectas,1)
 
@@ -408,7 +426,7 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 #summary(vuelosDeparted)
 
-
+## Esta variable sera analizara mas adelante
 
 
 
@@ -456,30 +474,29 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(vuelosDeparted$act_blocktime)
 
 ## Dato almacenado como entero.
-## No existen nulos pero existen valores negativos. (Estos valores negativos no tienen sentido)
-
-negativos <- vuelosDeparted[vuelosDeparted$act_blocktime<0,]
-#head(negativos)
+## No existen valores NAs
+## Esta variable no se modifica
 
 
+## Analisis de los valores negativos en esta variable
 ## 4.19.1 almacenamos en una nueva variable la diferencia entre la fecha de llegada y la fecha de salida
-vuelosDeparted2 <- vuelosDeparted
-vuelosDeparted2$BlocktimeNEW <- as.integer(
-                    difftime(vuelosDeparted2$actual_time_of_arrival, vuelosDeparted2$actual_time_of_departure, units = "mins"))
+##vuelosDeparted2 <- vuelosDeparted
+##vuelosDeparted2$BlocktimeNEW <- as.integer(
+##                    difftime(vuelosDeparted2$actual_time_of_arrival, vuelosDeparted2$actual_time_of_departure, units = "mins"))
 
 #head(vuelosDeparted2)
 
 ## Comprobamos si hay registros donde la nueva variable calculada (BlocktimeNEW) sea diferente a act_blocktime
 #str(vuelosDeparted2)
-tiemposDiferentes <- vuelosDeparted2[vuelosDeparted2$act_blocktime!=vuelosDeparted2$BlocktimeNEW,]
+##tiemposDiferentes <- vuelosDeparted2[vuelosDeparted2$act_blocktime!=vuelosDeparted2$BlocktimeNEW,]
 
 #str(tiemposDiferentes)
 #head(tiemposDiferentes)
 
 
-fechasRetrasos <- subset(tiemposDiferentes, 
-                select = c("actual_time_of_departure","actual_time_of_arrival",
-                           "act_blocktime","BlocktimeNEW","routing"))
+##fechasRetrasos <- subset(tiemposDiferentes, 
+##                select = c("actual_time_of_departure","actual_time_of_arrival",
+##                           "act_blocktime","BlocktimeNEW","routing"))
 
 #head(fechasRetrasos,5)
 
@@ -489,10 +506,10 @@ fechasRetrasos <- subset(tiemposDiferentes,
 ## AMV-LEU      AMV +1            
 ## CNF-LEU      CNF -5
 
-fechasRetrasos$difTiempoMin <- fechasRetrasos$BlocktimeNEW - fechasRetrasos$act_blocktime
+##fechasRetrasos$difTiempoMin <- fechasRetrasos$BlocktimeNEW - fechasRetrasos$act_blocktime
 
 ### AMV-LEU
-tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
+##tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 #str(tiempoRuta)
 #head(tiempoRuta, 54)
 
@@ -522,7 +539,8 @@ tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 #str(vuelosDeparted$aircraft_type)
 #summary(vuelosDeparted$aircraft_type)
 
-## Este campo no contiene NAs y esta almacenado como tipo factor. No realizaremos cambios.
+## Este campo no contiene NAs y esta almacenado como tipo factor. 
+## Se estudiara mas adelante
 
 
 
@@ -535,7 +553,8 @@ tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 #str(vuelosDeparted$aircraft_registration_number)
 #summary(vuelosDeparted$aircraft_registration_number)
 
-## Este campo no contiene NAs y esta almacenado como tipo factor. No realizaremos cambios.
+## Este campo no contiene NAs y esta almacenado como tipo factor. 
+## Se estudiara mas adelante.
 
 
 
@@ -543,7 +562,7 @@ tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 ### 4.22 general_status_code
 ## (COMPLETADA)
 ###############################################################################################
-## Este campo se analizo en un principio.
+## Este campo ya fue analizado
 
 
 
@@ -557,6 +576,7 @@ tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 #summary(vuelosDeparted$routing, maxsum = 357)
 
 ## Este campo se almacena como factor y no contiene NAs.
+## Se estudiara mas adelante
 
 
 
@@ -581,16 +601,16 @@ tiempoRuta <- fechasRetrasos[fechasRetrasos$routing=="AMV-LEU",]
 ## Se almacena como factor. Tiene 93506 registros vacios (que no NAs) y 122971 registros con J (business)
 
 ## Comprobamos los registros vacios
-cabin2Vacio <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="",]
+#cabin2Vacio <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="",]
 #head(cabin2Vacio)
 
 ## Comprobamos si algun registro con cabin_2_code vacio tiene valores almacenados en algun campo de cabin_2
-cabin2ask <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
-cabin2saleable  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_saleable)==FALSE,]
-cabin2fitted_configuration  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_fitted_configuration)==FALSE,]
-cabin2pax_boarded  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_pax_boarded)==FALSE,]
-cabin2rpk  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_rpk)==FALSE,]
-cabin2ask  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
+#cabin2ask <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
+#cabin2saleable  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_saleable)==FALSE,]
+#cabin2fitted_configuration  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_fitted_configuration)==FALSE,]
+#cabin2pax_boarded  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_pax_boarded)==FALSE,]
+#cabin2rpk  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_rpk)==FALSE,]
+#cabin2ask  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
 
 #str(cabin2ask)
 #str(cabin2saleable)
@@ -621,7 +641,7 @@ cabin2ask  <- cabin2Vacio[is.na(cabin2Vacio$cabin_2_ask)==FALSE,]
 ## campo "cabin_2_code".
 
 ## Comprobamos los registros vacios
-cabin2Vacio <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_fitted_configuration)==TRUE,]
+#cabin2Vacio <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_fitted_configuration)==TRUE,]
 #summary(cabin2Vacio)
 
 ## Estos datos coinciden con los datos de cabin_2_code. Todo OK.
@@ -646,7 +666,7 @@ cabin2Vacio <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_fitted_configuration)
 
 
 ## Estudiamos los NAs de esta variable
-cabinNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_saleable)==TRUE,]
+#cabinNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_saleable)==TRUE,]
 
 #str(cabinNA)
 #summary(cabinNA)
@@ -655,7 +675,7 @@ cabinNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_saleable)==TRUE,]
 ## Se observa que hay 41 registros con cabin_2_code = J, que son lo que hacen la diferencia de esta variable
 ## con respecto a los NAs existentes en cabin_2_code
 
-cabinJ <- cabinNA[cabinNA$cabin_2_code=="J",]
+#cabinJ <- cabinNA[cabinNA$cabin_2_code=="J",]
 
 #str(cabinJ)
 #summary(cabinJ)
@@ -682,7 +702,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 ## Campo almacenado como entero. Existen 3540 NAs
 
 ## Comprobacion de los NAs
-cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_1_pax_boarded)==TRUE,]
+#cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_1_pax_boarded)==TRUE,]
 
 #str(cabinPaxNA)
 #summary(cabinPaxNA)
@@ -698,11 +718,11 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$cabin_1_pax_boarded)==FALS
 ## Campo almacenado como entero. Existen 89966 NAs 
 
 ## Obtenemos los NAs
-cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_pax_boarded)==TRUE,]
+#cabinPaxNA <- vuelosDeparted[is.na(vuelosDeparted$cabin_2_pax_boarded)==TRUE,]
 
 #summary(cabinPaxNA)
 ## Haciendo el summary existen 198 registros con el campo "cabin_2_code" = J
-cabinPaxNAJ <- cabinPaxNA[cabinPaxNA$cabin_2_code=="J",]
+#cabinPaxNAJ <- cabinPaxNA[cabinPaxNA$cabin_2_code=="J",]
 
 #summary(cabinPaxNAJ)
 
@@ -723,7 +743,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #str(vuelosDeparted$cabin_1_rpk)
 #summary(vuelosDeparted$cabin_1_rpk)
 
-## Campo almacenado como entero.
+## Campo almacenado como entero. No contiene NAs
 
 #str(vuelosDeparted$cabin_2_rpk)
 #summary(vuelosDeparted$cabin_2_rpk)
@@ -758,7 +778,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #str(vuelosDeparted$total_rpk)
 #summary(vuelosDeparted$total_rpk)
 
-## Campo almacenado como entero
+## Campo almacenado como entero. No contiene NAs
 
 
 
@@ -785,7 +805,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$load_factor)
 
 ## Campo almacenado como num. No existen NAs
-
 
 
 
@@ -882,24 +901,33 @@ vuelosDeparted$file_sequence_number <- NULL
 
 
 
-### RESULTADO DEL DATAFRAME QUE UTILIZAREMOS PARA A?ADIR DATOS CLIMATICOS
-#str(vuelosDeparted)   ## 212698 objetos
-#str(vuelos)           ## original -> 222012 objetos
+### RESULTADO DEL DATAFRAME TRAS LA LIMPIEZA DE SUS VARIABLES
+#str(vuelosDeparted)   ## 212698 objetos   -> nuevo
+#str(vuelos)           ## 222012 objetos   -> original
 
 
 
 
-### 5. Creacion de nuevas variables en el dataframe
+
+
+### 5. CREACION DE NUEVAS VARIABLES
+
+## Segmentamos las fechas en a�os, mes, dia y hora
 ## 5.1. Mes de salida del vuelo
 vuelosDeparted$mesSalida <- as.integer(month(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$mesSalida <- as.factor(vuelosDeparted$mesSalida)
-## 5.1.1 ano de salida del vuelo
+
+## 5.2 a�o de salida del vuelo
 vuelosDeparted$anyoSalida <- as.integer(year(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$anyoSalida <- as.factor(vuelosDeparted$anyoSalida)
-## 5.2. Dia de salida del vuelo
+
+## 5.3. Dia de salida del vuelo
 vuelosDeparted$diaSalida <- as.integer(day(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$diaSalida <- as.factor(vuelosDeparted$diaSalida)
-## 5.3. Hora de salida del vuelo
+
+## 5.4. Hora de salida del vuelo
+## Las horas las dividimos en intervalos de media hora, por ejemplo:
+## Para un vuelo que sale a las 13:34, su intervalo de salida sera 13:30 - 13:59
 
 ## Funcion para determinar la hora de salida o llegada de un vuelo
 obtenerHora <- function(vectorHoras){
@@ -922,22 +950,27 @@ vuelosDeparted$horaSalida <- obtenerHora(vuelosDeparted$actual_time_of_departure
 vuelosDeparted$horaSalida <- as.factor(vuelosDeparted$horaSalida)
 
 
-## 5.4 Mes de llegada del vuelo
+## 5.5 Mes de llegada del vuelo
 vuelosDeparted$mesLlegada <- as.integer(month(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$mesLlegada <- as.factor(vuelosDeparted$mesLlegada)
-## 5.1.1 ano de llegada del vuelo
+
+## 5.6 ano de llegada del vuelo
 vuelosDeparted$anyoLlegada <- as.integer(year(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$anyoLlegada <- as.factor(vuelosDeparted$anyoLlegada)
-## 5.5 Dia de llegada del vuelo
+
+## 5.7 Dia de llegada del vuelo
 vuelosDeparted$diaLlegada <- as.integer(day(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$diaLlegada <- as.factor(vuelosDeparted$diaLlegada)
-## 5.6 Hora de llegada del vuelo
+
+## 5.8 Hora de llegada del vuelo
 vuelosDeparted$horaLlegada <- obtenerHora(vuelosDeparted$actual_time_of_arrival)
 vuelosDeparted$horaLlegada <- as.factor(vuelosDeparted$horaLlegada)
-## 5.7. Dia de la semana para la salida de los vuelos
+
+## 5.9. Dia de la semana para la salida de los vuelos
 vuelosDeparted$diaSemanaSalida <- weekdays(as.Date(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$diaSemanaSalida <- as.factor(vuelosDeparted$diaSemanaSalida)
-## 5.8. Dia de la semana para la llegada de los vuelos
+
+## 5.10. Dia de la semana para la llegada de los vuelos
 vuelosDeparted$diaSemanaLlegada <- weekdays(as.Date(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
 
@@ -1032,27 +1065,27 @@ asignarGruposDF <- function(codigos, dfCodigosGrupos){
 df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
 variables <- unique(df$flight_number)
 mediaRetrasosVuelo <- mediasRetrasos(variables,df)
-boxplot(mediaRetrasosVuelo$retrasoMedio)
-barplot(mediaRetrasosVuelo$retrasoMedio)
-summary(mediaRetrasosVuelo$retrasoMedio)
-str(mediaRetrasosVuelo)
+#boxplot(mediaRetrasosVuelo$retrasoMedio)
+#barplot(mediaRetrasosVuelo$retrasoMedio)
+#summary(mediaRetrasosVuelo$retrasoMedio)
+#str(mediaRetrasosVuelo)
 
 ## 6.1.2. Segmentamos la variable en funcion de los cuartiles obtenidos
 ## 6.1.2.1 retraso medio menor o igual a -3.794
-FNmenor3 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio<=(-3.794),]
-str(FNmenor3)
+#FNmenor3 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio<=(-3.794),]
+#str(FNmenor3)
 
 ## 6.1.2.2 retraso medio entre -3.794 y 0.2435 (incluido)
-FNentre3y0 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>(-3.794) & mediaRetrasosVuelo$retrasoMedio <= 0.2435,]
-str(FNentre3y0)
+#FNentre3y0 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>(-3.794) & mediaRetrasosVuelo$retrasoMedio <= 0.2435,]
+#str(FNentre3y0)
 
 ## 6.1.2.3 retraso medio entre 0.2435 y 5.133 (incluido)
-FNentre0y5 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>0.2435 & mediaRetrasosVuelo$retrasoMedio <= 5.133,]
-str(FNentre0y5)
+#FNentre0y5 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>0.2435 & mediaRetrasosVuelo$retrasoMedio <= 5.133,]
+#str(FNentre0y5)
 
 ## 6.1.2.4 retraso medio superior a 5.133
-FNsup5 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>5.133,]
-str(FNsup5)
+#FNsup5 <- mediaRetrasosVuelo[mediaRetrasosVuelo$retrasoMedio>5.133,]
+#str(FNsup5)
 
 ## Los grupos formados en base al retraso medio son los siguientes:
 ## retraso inferior o igual a -3.794          -> 1
@@ -1068,9 +1101,9 @@ cuartil2 <- quantile(mediaRetrasosVuelo$retrasoMedio,.75)
 
 mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoPorCuartiles(mediaRetrasosVuelo, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaRetrasosVuelo)
-summary(mediaRetrasosVuelo)
-table(mediaRetrasosVuelo$fligthNumberGroup)
+#head(mediaRetrasosVuelo)
+#summary(mediaRetrasosVuelo)
+#table(mediaRetrasosVuelo$fligthNumberGroup)
 
 
 ## 6.1.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1079,20 +1112,20 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$flightNumberGroup <- asignarGruposDF(vuelosDeparted$flight_number,dfCodigoGrupo)
-summary(vuelosDeparted$flightNumberGroup)
-str(vuelosDeparted$flightNumberGroup)
+#summary(vuelosDeparted$flightNumberGroup)
+#str(vuelosDeparted$flightNumberGroup)
 
 
 ## 6.1.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
-vuelosDeparted2$flight_number <- NULL
+############  vuelosDeparted2$flight_number <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$fligthNumberGroup==3,]
-vuelosDeparted2[vuelosDeparted2$flight_number == 232,]
-table(vuelosDeparted2$flightNumberGroup)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$fligthNumberGroup==3,]
+#vuelosDeparted2[vuelosDeparted2$flight_number == 232,]
+#table(vuelosDeparted2$flightNumberGroup)
 
 
 ####################################################################
@@ -1104,27 +1137,27 @@ table(vuelosDeparted2$flightNumberGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
 variables <- unique(df$board_point)
 mediaPuntoEmbarque <- mediasRetrasos(variables,df)
-boxplot(mediaPuntoEmbarque$retrasoMedio)
-barplot(mediaPuntoEmbarque$retrasoMedio)
-summary(mediaPuntoEmbarque$retrasoMedio)
-str(mediaPuntoEmbarque)
+#boxplot(mediaPuntoEmbarque$retrasoMedio)
+#barplot(mediaPuntoEmbarque$retrasoMedio)
+#summary(mediaPuntoEmbarque$retrasoMedio)
+#str(mediaPuntoEmbarque)
 
 ## 6.2.2. Segmentamos la variable en funcion de los cuartiles obtenidos
 ## 6.2.2.1. retraso medio menoor o igual a -4,775
-bpNegMenor4 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio<=(-4.775),]
-str(bpNegMenor4)
+#bpNegMenor4 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio<=(-4.775),]
+#str(bpNegMenor4)
 
 ## 6.2.2.2. retraso medio entre -4,775 y -1.695
-bpNegEntre4y1 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-4.775) & mediaPuntoEmbarque$retrasoMedio<=(-1.695),]
-str(bpNegEntre4y1)
+#bpNegEntre4y1 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-4.775) & mediaPuntoEmbarque$retrasoMedio<=(-1.695),]
+#str(bpNegEntre4y1)
 
 ## 6.2.2.3. retraso medio entre -1.695 y 5.593
-bpEntre1y5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-1.695) & mediaPuntoEmbarque$retrasoMedio<=5.593,]
-str(bpEntre1y5)
+#bpEntre1y5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>(-1.695) & mediaPuntoEmbarque$retrasoMedio<=5.593,]
+#str(bpEntre1y5)
 
 ## 6.2.2.4 retraso medio superior a 5.593
-bpSup5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>5.593,]
-str(bpSup5)
+#bpSup5 <- mediaPuntoEmbarque[mediaPuntoEmbarque$retrasoMedio>5.593,]
+#str(bpSup5)
 
 ## Se determinan 4 grupos en base a los retrasos medios para la variable board_point, que son:
 ## retraso medio inferior o igual a -4.775        -> Grupo 1
@@ -1141,10 +1174,10 @@ cuartil2 <- quantile(mediaPuntoEmbarque$retrasoMedio,.75)
 
 mediaPuntoEmbarque$boardPointGroup <- asignarGrupoPorCuartiles(mediaPuntoEmbarque, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaPuntoEmbarque)
-summary(mediaPuntoEmbarque)
-str(mediaPuntoEmbarque)
-table(mediaPuntoEmbarque$boardPointGroup)
+#head(mediaPuntoEmbarque)
+#summary(mediaPuntoEmbarque)
+#str(mediaPuntoEmbarque)
+#table(mediaPuntoEmbarque$boardPointGroup)
 
 
 ## 6.2.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1153,17 +1186,17 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$boardPointGroup <- asignarGruposDF(vuelosDeparted$board_point ,dfCodigoGrupo)
-summary(vuelosDeparted$boardPointGroup)
-str(vuelosDeparted$boardPointGroup)
+#summary(vuelosDeparted$boardPointGroup)
+#str(vuelosDeparted$boardPointGroup)
 
 ## 6.2.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
-vuelosDeparted2$board_point <- NULL
+##############vuelosDeparted2$board_point <- NULL
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$boardPointGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$boardPointGroup)
 
-head(vuelosDeparted)
+#head(vuelosDeparted)
 
 ###################################################################### 
 
@@ -1174,31 +1207,31 @@ head(vuelosDeparted)
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_lat"))
 variables <- unique(df$board_lat)
 mediaLatEmbarque <- mediasRetrasos(variables,df)
-boxplot(mediaLatEmbarque$retrasoMedio)
-barplot(mediaLatEmbarque$retrasoMedio)
-summary(mediaLatEmbarque$retrasoMedio)
-str(mediaLatEmbarque)
+#boxplot(mediaLatEmbarque$retrasoMedio)
+#barplot(mediaLatEmbarque$retrasoMedio)
+#summary(mediaLatEmbarque$retrasoMedio)
+#str(mediaLatEmbarque)
 
 ## 6.3.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.3.2.1 Retraso menor o igual a -4.775
-blNegMenor4 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio<=(-4.775),]
-summary(blNegMenor4)
-str(blNegMenor4)
+#blatNegMenor4 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio<=(-4.775),]
+#summary(blatNegMenor4)
+#str(blNegMenor4)
 
 ## 6.3.2.2 Retraso entre -4.775 y -1.695 (incluido)
-blNegEntre4y1 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>(-4.775) & mediaLatEmbarque$retrasoMedio<=(-1.695),]
-summary(blNegEntre4y1)
-str(blNegEntre4y1)
+#blatNegEntre4y1 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>(-4.775) & mediaLatEmbarque$retrasoMedio<=(-1.695),]
+#summary(blatNegEntre4y1)
+#str(blatNegEntre4y1)
 
 ## 6.3.2.3 Retraso entre -1.695 y 5.593 (incluido)
-blEntre1y5 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>(-1.695) & mediaLatEmbarque$retrasoMedio<=5.593,]
-summary(blEntre1y5)
-str(blEntre1y5)
+#blatEntre1y5 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>(-1.695) & mediaLatEmbarque$retrasoMedio<=5.593,]
+#summary(blatEntre1y5)
+#str(blatEntre1y5)
 
 ## 6.3.2.4 Retraso superior a 5.593
-blsuperior5 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>5.593,]
-summary(blsuperior5)
-str(blsuperior5)
+#blatsuperior5 <- mediaLatEmbarque[mediaLatEmbarque$retrasoMedio>5.593,]
+#summary(blatsuperior5)
+#str(blatsuperior5)
 
 ## En base a esta segmentacion se determinan los siguientes grupos:
 ## Retraso medio inferior o igual a -4.775         -> 1 
@@ -1215,8 +1248,8 @@ cuartil2 <- quantile(mediaLatEmbarque$retrasoMedio,.75)
 
 mediaLatEmbarque$boardLatGroup <- asignarGrupoPorCuartiles(mediaLatEmbarque, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaLatEmbarque)
-summary(mediaLatEmbarque)
+#head(mediaLatEmbarque)
+#summary(mediaLatEmbarque)
 
 ## 6.3.4 Añadir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaLatEmbarque
@@ -1224,21 +1257,21 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$boardLatGroup <- asignarGruposDF(vuelosDeparted$board_lat ,dfCodigoGrupo)
-summary(vuelosDeparted$boardLatGroup)
-str(vuelosDeparted$boardLatGroup)
+#summary(vuelosDeparted$boardLatGroup)
+#str(vuelosDeparted$boardLatGroup)
 
 ## 6.3.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
-vuelosDeparted2$board_lat <- NULL
+################vuelosDeparted2$board_lat <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$boardLatGroup==2,]
-vuelosDeparted2[vuelosDeparted2$board_lat == 64.9,]
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$boardLatGroup==2,]
+#vuelosDeparted2[vuelosDeparted2$board_lat == 64.9,]
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$boardLatGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$boardLatGroup)
 
 
 ###################################################################### 
@@ -1250,27 +1283,27 @@ summary(vuelosDeparted2$boardLatGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
 variables <- unique(df$board_lon)
 mediaBoardLon <- mediasRetrasos(variables,df)
-boxplot(mediaBoardLon$retrasoMedio)
-barplot(mediaBoardLon$retrasoMedio, names.arg=mediaBoardLon$codigo)
-summary(mediaBoardLon$retrasoMedio)
-str(mediaBoardLon)
+#boxplot(mediaBoardLon$retrasoMedio)
+#barplot(mediaBoardLon$retrasoMedio, names.arg=mediaBoardLon$codigo)
+#summary(mediaBoardLon$retrasoMedio)
+#str(mediaBoardLon)
 
 ## 6.4.2 Segmentamos la variable en grupos en base a su retraso medio
 ## 6.4.2.1 retraso medio inferior o igual a -4.775
-BLinferior4 <- mediaBoardLon[mediaBoardLon$retrasoMedio<=(-4.775),]
-str(BLinferior4)
+#BLinferior4 <- mediaBoardLon[mediaBoardLon$retrasoMedio<=(-4.775),]
+#str(BLinferior4)
 
 ## 6.4.2.2 retraso medio entre -4.775 y -1.695 (incluido)
-BLentre4y1 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-4.775) & mediaBoardLon$retrasoMedio<=(-1.695),]
-str(BLentre4y1)
+#BLentre4y1 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-4.775) & mediaBoardLon$retrasoMedio<=(-1.695),]
+#str(BLentre4y1)
 
 ## 6.4.2.3 retraso medio entre -1.695 y 5.593 (incluido)
-BLentre1y5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-1.695) & mediaBoardLon$retrasoMedio<=5.593,]
-str(BLentre1y5)
+#BLentre1y5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>(-1.695) & mediaBoardLon$retrasoMedio<=5.593,]
+#str(BLentre1y5)
 
 ## 6.4.2.4 retraso medio superior a 5.593
-BLSup5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>5.593,]
-str(BLSup5)
+#BLSup5 <- mediaBoardLon[mediaBoardLon$retrasoMedio>5.593,]
+#str(BLSup5)
 
 ## En base a los cuartiles se obtienen 4 grupos
 ## retraso medio inferior o igual a -4.775        -> 1
@@ -1285,8 +1318,8 @@ cuartil2 <- quantile(mediaBoardLon$retrasoMedio,.75)
 
 mediaBoardLon$boardLonGroup <- asignarGrupoPorCuartiles(mediaBoardLon, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaBoardLon)
-summary(mediaBoardLon)
+#head(mediaBoardLon)
+#summary(mediaBoardLon)
 
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaBoardLon
@@ -1296,22 +1329,22 @@ dfCodigoGrupo$numeroVuelos <- NULL
 
 ## 6.4.4 Añadir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardLonGroup <- asignarGruposDF(vuelosDeparted$board_lon ,dfCodigoGrupo)
-summary(vuelosDeparted$boardLonGroup)
-str(vuelosDeparted$boardLonGroup)
+#summary(vuelosDeparted$boardLonGroup)
+#str(vuelosDeparted$boardLonGroup)
 
 
 ## 6.4.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
-vuelosDeparted2$board_lon <- NULL
+################vuelosDeparted2$board_lon <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$boardLonGroup==1,]
-vuelosDeparted2[vuelosDeparted2$board_lon == (-95.34212),]
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$boardLonGroup==1,]
+#vuelosDeparted2[vuelosDeparted2$board_lon == (-95.34212),]
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$boardLonGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$boardLonGroup)
 
 
 
@@ -1323,27 +1356,27 @@ summary(vuelosDeparted2$boardLonGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
 variables <- unique(df$board_country_code)
 mediaBoardCC <- mediasRetrasos(variables,df)
-boxplot(mediaBoardCC$retrasoMedio)
-barplot(mediaBoardCC$retrasoMedio, names.arg=mediaBoardCC$codigo)
-summary(mediaBoardCC$retrasoMedio)
-str(mediaBoardCC)
+#boxplot(mediaBoardCC$retrasoMedio)
+#barplot(mediaBoardCC$retrasoMedio, names.arg=mediaBoardCC$codigo)
+#summary(mediaBoardCC$retrasoMedio)
+#str(mediaBoardCC)
 
 ## 6.5.2 Segmentamos la variable en grupos en base a su retraso medio
 ## 6.5.2.1 retraso medio inferior o igual a -4.38
-BCCmenor4 <- mediaBoardCC[mediaBoardCC$retrasoMedio<=(-4.38),]
-str(BCCmenor4)
+#BCCmenor4 <- mediaBoardCC[mediaBoardCC$retrasoMedio<=(-4.38),]
+#str(BCCmenor4)
 
 ## 6.5.2.2 retraso medio entre -4.38 y -1.74 (incluido)
-BCCentre4y1 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-4.38) &mediaBoardCC$retrasoMedio<=(-1.74),]
-str(BCCentre4y1)
+#BCCentre4y1 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-4.38) &mediaBoardCC$retrasoMedio<=(-1.74),]
+#str(BCCentre4y1)
 
 ## 6.5.2.3 retraso medio entre -1.74 y 4.036 (incluido)
-BCCentre1y4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-1.74) &mediaBoardCC$retrasoMedio<=4.036,]
-str(BCCentre1y4)
+#BCCentre1y4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>(-1.74) &mediaBoardCC$retrasoMedio<=4.036,]
+#str(BCCentre1y4)
 
 ## 6.5.2.4 retraso medio superior a 4.036
-BCCsup4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>4.036,]
-str(BCCsup4)
+#BCCsup4 <- mediaBoardCC[mediaBoardCC$retrasoMedio>4.036,]
+#str(BCCsup4)
 
 ## En base a los cuartiles obtenemos 4 grupos
 ## retraso inferior o igual a -4.38         -> 1 
@@ -1359,8 +1392,8 @@ cuartil2 <- quantile(mediaBoardCC$retrasoMedio,.75)
 
 mediaBoardCC$boardCountryCodeGroup <- asignarGrupoPorCuartiles(mediaBoardCC, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaBoardCC)
-summary(mediaBoardCC)
+#head(mediaBoardCC)
+#summary(mediaBoardCC)
 
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaBoardCC
@@ -1369,21 +1402,21 @@ dfCodigoGrupo$numeroVuelos <- NULL
 
 ## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardCountryCodeGroup <- asignarGruposDF(vuelosDeparted$board_country_code ,dfCodigoGrupo)
-summary(vuelosDeparted$boardCountryCodeGroup)
-str(vuelosDeparted$boardCountryCodeGroup)
+#summary(vuelosDeparted$boardCountryCodeGroup)
+#str(vuelosDeparted$boardCountryCodeGroup)
 
 ## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
-vuelosDeparted2$board_country_code <- NULL
+##################vuelosDeparted2$board_country_code <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$boardCountryCodeGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$board_country_code == "MC",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$boardCountryCodeGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$board_country_code == "MC",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$boardCountryCodeGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$boardCountryCodeGroup)
 
 ###################################################################### 
 
@@ -1393,27 +1426,27 @@ summary(vuelosDeparted2$boardCountryCodeGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_point"))
 variables <- unique(df$off_point)
 mediaOffPoint <- mediasRetrasos(variables,df)
-boxplot(mediaOffPoint$retrasoMedio)
-barplot(mediaOffPoint$retrasoMedio, names.arg=mediaOffPoint$codigo)
-summary(mediaOffPoint$retrasoMedio)
-str(mediaOffPoint)
+#boxplot(mediaOffPoint$retrasoMedio)
+#barplot(mediaOffPoint$retrasoMedio, names.arg=mediaOffPoint$codigo)
+#summary(mediaOffPoint$retrasoMedio)
+#str(mediaOffPoint)
 
 ## 6.6.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.6.2.1 retraso medio menor o igual a -2.794
-OPmenor2 <- mediaOffPoint[mediaOffPoint$retrasoMedio <=(-2.794),]
-str(OPmenor2)
+#OPmenor2 <- mediaOffPoint[mediaOffPoint$retrasoMedio <=(-2.794),]
+#str(OPmenor2)
 
 ## 6.6.2.2 retraso medio entre -2.794 y 1.180 (incluido)
-OPentre2y1 <- mediaOffPoint[mediaOffPoint$retrasoMedio >(-2.794) & mediaOffPoint$retrasoMedio <= 1.180,]
-str(OPentre2y1)
+#OPentre2y1 <- mediaOffPoint[mediaOffPoint$retrasoMedio >(-2.794) & mediaOffPoint$retrasoMedio <= 1.180,]
+#str(OPentre2y1)
 
 ## 6.6.2.3 retraso medio entre 1.180 y 4.769 (incluido)
-OPentre1y4 <- mediaOffPoint[mediaOffPoint$retrasoMedio > 1.180 & mediaOffPoint$retrasoMedio <= 4.769,]
-str(OPentre1y4)
+#OPentre1y4 <- mediaOffPoint[mediaOffPoint$retrasoMedio > 1.180 & mediaOffPoint$retrasoMedio <= 4.769,]
+#str(OPentre1y4)
 
 ## 6.6.2.4 retraso medio superior a 4.796
-OPsup4 <- mediaOffPoint[mediaOffPoint$retrasoMedio > 4.796,]
-str(OPsup4)
+#OPsup4 <- mediaOffPoint[mediaOffPoint$retrasoMedio > 4.796,]
+#str(OPsup4)
 
 ## En base al retraso medio, los cuatro grupos quedan de la siguiente forma:
 ## retraso medio inferior o igual a -2.794          -> 1
@@ -1429,8 +1462,8 @@ cuartil2 <- quantile(mediaOffPoint$retrasoMedio,.75)
 
 mediaOffPoint$offPointGroup <- asignarGrupoPorCuartiles(mediaOffPoint, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaOffPoint)
-summary(mediaOffPoint)
+#head(mediaOffPoint)
+#summary(mediaOffPoint)
 
 
 ## 6.6.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1440,22 +1473,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$offPointGroup <- asignarGruposDF(vuelosDeparted$off_point ,dfCodigoGrupo)
-summary(vuelosDeparted$offPointGroup)
-str(vuelosDeparted$offPointGroup)
+#summary(vuelosDeparted$offPointGroup)
+#str(vuelosDeparted$offPointGroup)
 
 
 ## 6.6.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offPointGroup <- vuelosDeparted$offPointGroup
-vuelosDeparted2$off_point <- NULL
+################vuelosDeparted2$off_point <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$offPointGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$off_point == "GRW",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$offPointGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$off_point == "GRW",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$offPointGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$offPointGroup)
 
 
 ###################################################################### 
@@ -1466,27 +1499,27 @@ summary(vuelosDeparted2$offPointGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_lat"))
 variables <- unique(df$off_lat)
 mediaOffLat <- mediasRetrasos(variables,df)
-boxplot(mediaOffLat$retrasoMedio)
-barplot(mediaOffLat$retrasoMedio, names.arg=mediaOffLat$codigo)
-summary(mediaOffLat$retrasoMedio)
-str(mediaOffLat)
+#boxplot(mediaOffLat$retrasoMedio)
+#barplot(mediaOffLat$retrasoMedio, names.arg=mediaOffLat$codigo)
+#summary(mediaOffLat$retrasoMedio)
+#str(mediaOffLat)
 
 ## 6.7.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.7.2.1 retraso medio inferior o igual a -2.794
-OLmenor2 <- mediaOffLat[mediaOffLat$retrasoMedio <= (-2.794),]
-str(OLmenor2)
+#OLmenor2 <- mediaOffLat[mediaOffLat$retrasoMedio <= (-2.794),]
+#str(OLmenor2)
 
 ## 6.7.2.2 retraso medio entre -2.794 y 1.180 (incluido)
-OLentre2y1 <- mediaOffLat[mediaOffLat$retrasoMedio > (-2.794) & mediaOffLat$retrasoMedio <= 1.18,]
-str(OLentre2y1)
+#OLentre2y1 <- mediaOffLat[mediaOffLat$retrasoMedio > (-2.794) & mediaOffLat$retrasoMedio <= 1.18,]
+#str(OLentre2y1)
 
 ## 6.7.2.3 retraso medio entre 1.180 y 4.796 (incluido)
-OLentre1y4 <- mediaOffLat[mediaOffLat$retrasoMedio > 1.18 & mediaOffLat$retrasoMedio <= 4.796,]
-str(OLentre1y4)
+#OLentre1y4 <- mediaOffLat[mediaOffLat$retrasoMedio > 1.18 & mediaOffLat$retrasoMedio <= 4.796,]
+#str(OLentre1y4)
 
 ## 6.7.2.4 retraso medio superior a 4.796
-OLsuperior4 <- mediaOffLat[mediaOffLat$retrasoMedio > 4.796,]
-str(OLsuperior4)
+#OLsuperior4 <- mediaOffLat[mediaOffLat$retrasoMedio > 4.796,]
+#str(OLsuperior4)
 
 ## Los grupos en funcion de los cuartiles quedarian de la siguiente forma:
 ## retraso medio inferior o igual a -2.794        -> 1
@@ -1502,8 +1535,8 @@ cuartil2 <- quantile(mediaOffLat$retrasoMedio,.75)
 
 mediaOffLat$offLatGroup <- asignarGrupoPorCuartiles(mediaOffLat, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaOffLat)
-summary(mediaOffLat)
+#head(mediaOffLat)
+#summary(mediaOffLat)
 
 
 ## 6.7.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1513,22 +1546,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$offLatGroup <- asignarGruposDF(vuelosDeparted$off_lat ,dfCodigoGrupo)
-summary(vuelosDeparted$offLatGroup)
-str(vuelosDeparted$offLatGroup)
+#summary(vuelosDeparted$offLatGroup)
+#str(vuelosDeparted$offLatGroup)
 
 
 ## 6.7.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLatGroup <- vuelosDeparted$offLatGroup
-vuelosDeparted2$off_lat <- NULL
+###############vuelosDeparted2$off_lat <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$offLatGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$off_lat == 39.98567,],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$offLatGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$off_lat == 39.98567,],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$offLatGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$offLatGroup)
 
 
 
@@ -1540,27 +1573,27 @@ summary(vuelosDeparted2$offLatGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_lon"))
 variables <- unique(df$off_lon)
 mediaOffLon <- mediasRetrasos(variables,df)
-boxplot(mediaOffLon$retrasoMedio)
-barplot(mediaOffLon$retrasoMedio, names.arg=mediaOffLon$codigo)
-summary(mediaOffLon$retrasoMedio)
-str(mediaOffLon)
+#boxplot(mediaOffLon$retrasoMedio)
+#barplot(mediaOffLon$retrasoMedio, names.arg=mediaOffLon$codigo)
+#summary(mediaOffLon$retrasoMedio)
+#str(mediaOffLon)
 
 ## 6.8.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.8.2.1 retraso medio inferior o igual a -2.799
-OLinf2 <- mediaOffLon[mediaOffLon$retrasoMedio <= (-2.799),]
-str(OLinf2)
+#OLinf2 <- mediaOffLon[mediaOffLon$retrasoMedio <= (-2.799),]
+#str(OLinf2)
 
 ## 6.8.2.2 retraso medio entre -2.799 y 1.175 (incluido)
-OLentre2y1 <- mediaOffLon[mediaOffLon$retrasoMedio > (-2.799) & mediaOffLon$retrasoMedio <= 1.175,]
-str(OLentre2y1)
+#OLentre2y1 <- mediaOffLon[mediaOffLon$retrasoMedio > (-2.799) & mediaOffLon$retrasoMedio <= 1.175,]
+#str(OLentre2y1)
 
 ## 6.8.2.3 retraso medio entre 1.175 y 4.635 (incluido)
-OLentre1y4 <- mediaOffLon[mediaOffLon$retrasoMedio > 1.175 & mediaOffLon$retrasoMedio <= 4.635,]
-str(OLentre1y4)
+#OLentre1y4 <- mediaOffLon[mediaOffLon$retrasoMedio > 1.175 & mediaOffLon$retrasoMedio <= 4.635,]
+#str(OLentre1y4)
 
 ## 6.8.2.4 retraso medio superior a 4.635
-OLsup4 <- mediaOffLon[mediaOffLon$retrasoMedio > 4.635,]
-str(OLsup4)
+#OLsup4 <- mediaOffLon[mediaOffLon$retrasoMedio > 4.635,]
+#str(OLsup4)
 
 ## Los grupos en funcion de los cuartiles quedan de la siguiente forma:
 ## retraso medio inferior o igual a -2.799        -> 1
@@ -1576,8 +1609,8 @@ cuartil2 <- quantile(mediaOffLon$retrasoMedio,.75)
 
 mediaOffLon$offLonGroup <- asignarGrupoPorCuartiles(mediaOffLon, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaOffLon)
-summary(mediaOffLon)
+#head(mediaOffLon)
+#summary(mediaOffLon)
 
 
 ## 6.8.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1587,22 +1620,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$offLonGroup <- asignarGruposDF(vuelosDeparted$off_lon ,dfCodigoGrupo)
-summary(vuelosDeparted$offLonGroup)
-str(vuelosDeparted$offLonGroup)
+#summary(vuelosDeparted$offLonGroup)
+#str(vuelosDeparted$offLonGroup)
 
 
 ## 6.8.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLonGroup <- vuelosDeparted$offLonGroup
-vuelosDeparted2$off_lon <- NULL
+###############vuelosDeparted2$off_lon <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$offLonGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$off_lon == 31.81222,],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$offLonGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$off_lon == 31.81222,],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$offLonGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$offLonGroup)
 
 
 
@@ -1614,27 +1647,27 @@ summary(vuelosDeparted2$offLonGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
 variables <- unique(df$off_country_code)
 mediaOffCC <- mediasRetrasos(variables,df)
-boxplot(mediaOffCC$retrasoMedio)
-barplot(mediaOffCC$retrasoMedio, names.arg=mediaOffCC$codigo)
-summary(mediaOffCC$retrasoMedio)
-str(mediaOffCC)
+#boxplot(mediaOffCC$retrasoMedio)
+#barplot(mediaOffCC$retrasoMedio, names.arg=mediaOffCC$codigo)
+#summary(mediaOffCC$retrasoMedio)
+#str(mediaOffCC)
 
 ## 6.9.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.9.2.1 retraso medio inferior o igual a -1.636
-OCCinf1 <- mediaOffCC[mediaOffCC$retrasoMedio <= (-1.636),]
-str(OCCinf1)
+#OCCinf1 <- mediaOffCC[mediaOffCC$retrasoMedio <= (-1.636),]
+#str(OCCinf1)
 
 ## 6.9.2.2 retraso medio entre -1.636 y 0.6818 (incluido)
-OCCentre1y0 <- mediaOffCC[mediaOffCC$retrasoMedio > (-1.636) & mediaOffCC$retrasoMedio <= 0.6818,]
-str(OCCentre1y0)
+#OCCentre1y0 <- mediaOffCC[mediaOffCC$retrasoMedio > (-1.636) & mediaOffCC$retrasoMedio <= 0.6818,]
+#str(OCCentre1y0)
 
 ## 6.9.2.3 retraso medio entre 0.6818 y 3 (incluido)
-OCCentre0y3 <- mediaOffCC[mediaOffCC$retrasoMedio > 0.6818 & mediaOffCC$retrasoMedio <= 3,]
-str(OCCentre0y3)
+#OCCentre0y3 <- mediaOffCC[mediaOffCC$retrasoMedio > 0.6818 & mediaOffCC$retrasoMedio <= 3,]
+#str(OCCentre0y3)
 
 ## 6.9.2.4 retraso medio superior a 3
-OCCsup3 <- mediaOffCC[mediaOffCC$retrasoMedio > 3,]
-str(OCCsup3)
+#OCCsup3 <- mediaOffCC[mediaOffCC$retrasoMedio > 3,]
+#str(OCCsup3)
 
 ## los grupos en funcion de los cuartiles quedarian de la siguiente forma:
 ## retraso medio inferior a -1.636              -> 1
@@ -1650,8 +1683,8 @@ cuartil2 <- quantile(mediaOffCC$retrasoMedio,.75)
 
 mediaOffCC$offCountryCodeGroup <- asignarGrupoPorCuartiles(mediaOffCC, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaOffCC)
-summary(mediaOffCC)
+#head(mediaOffCC)
+#summary(mediaOffCC)
 
 
 ## 6.9.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1661,22 +1694,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$offCountryCodeGroup <- asignarGruposDF(vuelosDeparted$off_country_code ,dfCodigoGrupo)
-summary(vuelosDeparted$offCountryCodeGroup)
-str(vuelosDeparted$offCountryCodeGroup)
+#summary(vuelosDeparted$offCountryCodeGroup)
+#str(vuelosDeparted$offCountryCodeGroup)
 
 
 ## 6.9.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
-vuelosDeparted2$off_country_code <- NULL
+################vuelosDeparted2$off_country_code <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$offCountryCodeGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$off_country_code == "DK",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$offCountryCodeGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$off_country_code == "DK",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$offCountryCodeGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$offCountryCodeGroup)
 
 
 
@@ -1688,27 +1721,27 @@ summary(vuelosDeparted2$offCountryCodeGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_type"))
 variables <- unique(df$aircraft_type)
 mediaTipoAvion <- mediasRetrasos(variables,df)
-boxplot(mediaTipoAvion$retrasoMedio)
-barplot(mediaTipoAvion$retrasoMedio, names.arg=mediaTipoAvion$codigo)
-summary(mediaTipoAvion$retrasoMedio)
-str(mediaTipoAvion)
+#boxplot(mediaTipoAvion$retrasoMedio)
+#barplot(mediaTipoAvion$retrasoMedio, names.arg=mediaTipoAvion$codigo)
+#summary(mediaTipoAvion$retrasoMedio)
+#str(mediaTipoAvion)
 
 ## 6.10.2. Segmentamos la variable en grupos en base a su retraso medio
 ## 6.10.2.1 retraso medio inferior o igual a -1.106
-ATinf1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio <= (-1.106),]
-str(ATinf1)
+#ATinf1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio <= (-1.106),]
+#str(ATinf1)
 
 ## 6.10.2.2 retraso medio entre -1.106 y 1.103 (incluido)
-ATentre1y1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > (-1.106) & mediaTipoAvion$retrasoMedio <= 1.103,]
-str(ATentre1y1)
+#ATentre1y1 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > (-1.106) & mediaTipoAvion$retrasoMedio <= 1.103,]
+#str(ATentre1y1)
 
 ## 6.10.2.3 retraso medio entre 1.103 y 3.331 (incluido)
-ATentre1y3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 1.103 & mediaTipoAvion$retrasoMedio <= 3.331,]
-str(ATentre1y3)
+#ATentre1y3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 1.103 & mediaTipoAvion$retrasoMedio <= 3.331,]
+#str(ATentre1y3)
 
 ## 6.10.2.4 retraso medio superior a 3.331
-ATsup3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 3.331,]
-str(ATsup3)
+#ATsup3 <- mediaTipoAvion[mediaTipoAvion$retrasoMedio > 3.331,]
+#str(ATsup3)
 
 ## los retrasos medios en funcion a los cuartiles quedarian de la siguente forma:
 ## retraso medio inferior o igual a -1.106          -> 1
@@ -1724,8 +1757,8 @@ cuartil2 <- quantile(mediaTipoAvion$retrasoMedio,.75)
 
 mediaTipoAvion$aircraftTypeGroup <- asignarGrupoPorCuartiles(mediaTipoAvion, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaTipoAvion)
-summary(mediaTipoAvion)
+#head(mediaTipoAvion)
+#summary(mediaTipoAvion)
 
 
 ## 6.10.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1735,23 +1768,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$aircraftTypeGroup <- asignarGruposDF(vuelosDeparted$aircraft_type ,dfCodigoGrupo)
-summary(vuelosDeparted$aircraftTypeGroup)
-str(vuelosDeparted$aircraftTypeGroup)
+#summary(vuelosDeparted$aircraftTypeGroup)
+#str(vuelosDeparted$aircraftTypeGroup)
 
 
 
 ## 6.10.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
-vuelosDeparted2$aircraft_type <- NULL
+################vuelosDeparted2$aircraft_type <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$aircraftTypeGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$aircraft_type == "AT7",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$aircraftTypeGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$aircraft_type == "AT7",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$aircraftTypeGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$aircraftTypeGroup)
 
 
 
@@ -1763,27 +1796,27 @@ summary(vuelosDeparted2$aircraftTypeGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_registration_number"))
 variables <- unique(df$aircraft_registration_number)
 mediaNumRegAvion <- mediasRetrasos(variables,df)
-boxplot(mediaNumRegAvion$retrasoMedio)
-barplot(mediaNumRegAvion$retrasoMedio, names.arg=mediaNumRegAvion$codigo)
-summary(mediaNumRegAvion$retrasoMedio)
-str(mediaNumRegAvion)
+#boxplot(mediaNumRegAvion$retrasoMedio)
+#barplot(mediaNumRegAvion$retrasoMedio, names.arg=mediaNumRegAvion$codigo)
+#summary(mediaNumRegAvion$retrasoMedio)
+#str(mediaNumRegAvion)
 
 ## 6.11.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -1.7670
-ARNinf1 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio <= (-1.7670),]
-str(ARNinf1)
+#ARNinf1 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio <= (-1.7670),]
+#str(ARNinf1)
 
 ## retraso medio entre -1.7670 y -0.7803 (incluido)
-ARNentre1y0 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-1.7670) & mediaNumRegAvion$retrasoMedio <= (-0.7803),]
-str(ARNentre1y0)
+#ARNentre1y0 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-1.7670) & mediaNumRegAvion$retrasoMedio <= (-0.7803),]
+#str(ARNentre1y0)
 
 ## retraso medio entre -0.7803 y 2.2510 (incluido)
-ARNentre0y2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-0.7803) & mediaNumRegAvion$retrasoMedio <= 2.2510,]
-str(ARNentre0y2)
+#ARNentre0y2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > (-0.7803) & mediaNumRegAvion$retrasoMedio <= 2.2510,]
+#str(ARNentre0y2)
 
 ## retraso medio superior a 2.2510
-ARNsup2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > 2.2510,]
-str(ARNsup2)
+#ARNsup2 <- mediaNumRegAvion[mediaNumRegAvion$retrasoMedio > 2.2510,]
+#str(ARNsup2)
 
 
 ## los grupos de los retrasos en funcion de los cuartiles quedan de la siguiente forma:
@@ -1800,8 +1833,8 @@ cuartil2 <- quantile(mediaNumRegAvion$retrasoMedio,.75)
 
 mediaNumRegAvion$aircraftRegNumberGroup <- asignarGrupoPorCuartiles(mediaNumRegAvion, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaNumRegAvion)
-summary(mediaNumRegAvion)
+#head(mediaNumRegAvion)
+#summary(mediaNumRegAvion)
 
 
 ## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1811,22 +1844,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$aircraftRegNumberGroup <- asignarGruposDF(vuelosDeparted$aircraft_registration_number ,dfCodigoGrupo)
-summary(vuelosDeparted$aircraftRegNumberGroup)
-str(vuelosDeparted$aircraftRegNumberGroup)
+#summary(vuelosDeparted$aircraftRegNumberGroup)
+#str(vuelosDeparted$aircraftRegNumberGroup)
 
 
 ## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
-vuelosDeparted2$aircraft_registration_number <- NULL
+########vuelosDeparted2$aircraft_registration_number <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$aircraftRegNumberGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$aircraft_registration_number == "XFGAT",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$aircraftRegNumberGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$aircraft_registration_number == "XFGAT",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$aircraftRegNumberGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$aircraftRegNumberGroup)
 
 
 
@@ -1839,27 +1872,27 @@ summary(vuelosDeparted2$aircraftRegNumberGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","routing"))
 variables <- unique(df$routing)
 mediaRutas <- mediasRetrasos(variables,df)
-boxplot(mediaRutas$retrasoMedio)
-barplot(mediaRutas$retrasoMedio, names.arg=mediaRutas$codigo)
-summary(mediaRutas$retrasoMedio)
-str(mediaRutas)
+#boxplot(mediaRutas$retrasoMedio)
+#barplot(mediaRutas$retrasoMedio, names.arg=mediaRutas$codigo)
+#summary(mediaRutas$retrasoMedio)
+#str(mediaRutas)
 
 ## 6.12.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -3.4450
-Rinf3 <- mediaRutas[mediaRutas$retrasoMedio <= (-3.4450),]
-str(Rinf3)
+#Rinf3 <- mediaRutas[mediaRutas$retrasoMedio <= (-3.4450),]
+#str(Rinf3)
 
 ## retraso medio entre -3.4450 y 0.7857 (incluido)
-Rentre3y0 <- mediaRutas[mediaRutas$retrasoMedio > (-3.4450) & mediaRutas$retrasoMedio <= 0.7857,]
-str(Rentre3y0)
+#Rentre3y0 <- mediaRutas[mediaRutas$retrasoMedio > (-3.4450) & mediaRutas$retrasoMedio <= 0.7857,]
+#str(Rentre3y0)
 
 ## retraso medio entre 0.7857 y 5.4970 (incluido)
-Rentre0y5 <- mediaRutas[mediaRutas$retrasoMedio > 0.7857 & mediaRutas$retrasoMedio <= 5.4970,]
-str(Rentre0y5)
+#Rentre0y5 <- mediaRutas[mediaRutas$retrasoMedio > 0.7857 & mediaRutas$retrasoMedio <= 5.4970,]
+#str(Rentre0y5)
 
 ## retraso medio superior a 5.4970
-Rsup5 <- mediaRutas[mediaRutas$retrasoMedio > 5.4970,]
-str(Rsup5)
+#Rsup5 <- mediaRutas[mediaRutas$retrasoMedio > 5.4970,]
+#str(Rsup5)
 
 ## los grupos en base a los cuartiles quedan de la siguiente forma
 ## retraso medio inferior o igual a -3.4450           -> 1
@@ -1875,8 +1908,8 @@ cuartil2 <- quantile(mediaRutas$retrasoMedio,.75)
 
 mediaRutas$routingGroup <- asignarGrupoPorCuartiles(mediaRutas, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaRutas)
-summary(mediaRutas)
+#head(mediaRutas)
+#summary(mediaRutas)
 
 
 ## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1886,22 +1919,22 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$routingGroup <- asignarGruposDF(vuelosDeparted$routing ,dfCodigoGrupo)
-summary(vuelosDeparted$routingGroup)
-str(vuelosDeparted$routingGroup)
+#summary(vuelosDeparted$routingGroup)
+#str(vuelosDeparted$routingGroup)
 
 
 ## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
-vuelosDeparted2$routing <- NULL
+##############vuelosDeparted2$routing <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$routingGroup==3,]
-head(vuelosDeparted2[vuelosDeparted2$routing == "LEU-PNA",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$routingGroup==3,]
+#head(vuelosDeparted2[vuelosDeparted2$routing == "LEU-PNA",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$routingGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$routingGroup)
 
 
 ###################################################################### 
@@ -1912,27 +1945,27 @@ summary(vuelosDeparted2$routingGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","mesSalida"))
 variables <- unique(df$mesSalida)
 mediaMesSalida <- mediasRetrasos(variables,df)
-boxplot(mediaMesSalida$retrasoMedio)
-barplot(mediaMesSalida$retrasoMedio, names.arg=mediaMesSalida$codigo)
-summary(mediaMesSalida$retrasoMedio)
-str(mediaMesSalida)
+#boxplot(mediaMesSalida$retrasoMedio)
+#barplot(mediaMesSalida$retrasoMedio, names.arg=mediaMesSalida$codigo)
+#summary(mediaMesSalida$retrasoMedio)
+#str(mediaMesSalida)
 
 ## 6.13.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -1.495
-MSalInf <- mediaMesSalida[mediaMesSalida$retrasoMedio <= (-1.495),]
-str(MSalInf)
+#MSalInf <- mediaMesSalida[mediaMesSalida$retrasoMedio <= (-1.495),]
+#str(MSalInf)
 
 ## retraso medio entre -1.495 y -1.054 (incluido)
-MsalEntre1y1 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.495) & mediaMesSalida$retrasoMedio <= (-1.054),]
-str(MsalEntre1y1)
+#MsalEntre1y1 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.495) & mediaMesSalida$retrasoMedio <= (-1.054),]
+#str(MsalEntre1y1)
 
 ## retraso medio entre -1.054 y 0.000851 (incluido)
-MsalEntre1y0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.054) & mediaMesSalida$retrasoMedio <= 0.000851,]
-str(MsalEntre1y0)
+#MsalEntre1y0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > (-1.054) & mediaMesSalida$retrasoMedio <= 0.000851,]
+#str(MsalEntre1y0)
 
 ## retraso medio superior a 0.000851 
-MsalSup0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > 0.000851,]
-str(MsalSup0)
+#MsalSup0 <- mediaMesSalida[mediaMesSalida$retrasoMedio > 0.000851,]
+#str(MsalSup0)
 
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
@@ -1948,8 +1981,8 @@ cuartil2 <- quantile(mediaMesSalida$retrasoMedio,.75)
 
 mediaMesSalida$mesSalidaGroup <- asignarGrupoPorCuartiles(mediaMesSalida, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaMesSalida)
-summary(mediaMesSalida)
+#head(mediaMesSalida)
+#summary(mediaMesSalida)
 
 
 ## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
@@ -1959,23 +1992,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$mesSalidaGroup <- asignarGruposDF(vuelosDeparted$mesSalida ,dfCodigoGrupo)
-summary(vuelosDeparted$mesSalidaGroup)
-str(vuelosDeparted$mesSalidaGroup)
+#summary(vuelosDeparted$mesSalidaGroup)
+#str(vuelosDeparted$mesSalidaGroup)
 
 
 ## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
-vuelosDeparted2$mesSalida <- NULL
+#############vuelosDeparted2$mesSalida <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$mesSalidaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$mesSalida == "6",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$mesSalidaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$mesSalida == "6",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$mesSalidaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$mesSalidaGroup)
 
 
 ###################################################################### 
@@ -1992,27 +2025,27 @@ summary(vuelosDeparted2$mesSalidaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSalida"))
 variables <- unique(df$diaSalida)
 mediaDiaSalida <- mediasRetrasos(variables,df)
-boxplot(mediaDiaSalida$retrasoMedio)
-barplot(mediaDiaSalida$retrasoMedio, names.arg=mediaDiaSalida$codigo)
-summary(mediaDiaSalida$retrasoMedio)
-str(mediaDiaSalida)
+#boxplot(mediaDiaSalida$retrasoMedio)
+#barplot(mediaDiaSalida$retrasoMedio, names.arg=mediaDiaSalida$codigo)
+#summary(mediaDiaSalida$retrasoMedio)
+#str(mediaDiaSalida)
 
 ## 6.15.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -0.8889
-dSalInf0 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio <= (-0.8889),]
-str(dSalInf0)
+#dSalInf0 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio <= (-0.8889),]
+#str(dSalInf0)
 
 ## retraso medio entre -0.8889 y -0.2294 (incluido)
-dSalEntre08y02 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.8889) & mediaDiaSalida$retrasoMedio <= (-0.2294),]
-str(dSalEntre08y02)
+#dSalEntre08y02 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.8889) & mediaDiaSalida$retrasoMedio <= (-0.2294),]
+#str(dSalEntre08y02)
 
 ## retraso medio entre -0.2294 y 0.3652 (incluido)
-dSalEntre02y03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.2294) & mediaDiaSalida$retrasoMedio <= 0.3652,]
-str(dSalEntre02y03)
+#dSalEntre02y03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > (-0.2294) & mediaDiaSalida$retrasoMedio <= 0.3652,]
+#str(dSalEntre02y03)
 
 ## retraso medio superior a 0.3652
-dSalSup03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > 0.3652,]
-str(dSalSup03)
+#dSalSup03 <- mediaDiaSalida[mediaDiaSalida$retrasoMedio > 0.3652,]
+#str(dSalSup03)
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
 ## retraso medio inferior o igual a -0.8889           -> 1
@@ -2027,8 +2060,8 @@ cuartil2 <- quantile(mediaDiaSalida$retrasoMedio,.75)
 
 mediaDiaSalida$diaSalidaGroup <- asignarGrupoPorCuartiles(mediaDiaSalida, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaDiaSalida)
-summary(mediaDiaSalida)
+#head(mediaDiaSalida)
+#summary(mediaDiaSalida)
 
 
 ## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
@@ -2038,23 +2071,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$diaSalidaGroup <- asignarGruposDF(vuelosDeparted$diaSalida ,dfCodigoGrupo)
-summary(vuelosDeparted$diaSalidaGroup)
-str(vuelosDeparted$diaSalidaGroup)
+#summary(vuelosDeparted$diaSalidaGroup)
+#str(vuelosDeparted$diaSalidaGroup)
 
 
 ## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
-vuelosDeparted2$diaSalida <- NULL
+####################vuelosDeparted2$diaSalida <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$diaSalidaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$diaSalida == "11",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$diaSalidaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$diaSalida == "11",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$diaSalidaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$diaSalidaGroup)
 
 ###################################################################### 
 
@@ -2064,27 +2097,27 @@ summary(vuelosDeparted2$diaSalidaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","horaSalida"))
 variables <- unique(df$horaSalida)
 mediaHoraSalida <- mediasRetrasos(variables,df)
-boxplot(mediaHoraSalida$retrasoMedio)
-barplot(mediaHoraSalida$retrasoMedio, names.arg=mediaHoraSalida$codigo)
-summary(mediaHoraSalida$retrasoMedio)
-str(mediaHoraSalida)
+#boxplot(mediaHoraSalida$retrasoMedio)
+#barplot(mediaHoraSalida$retrasoMedio, names.arg=mediaHoraSalida$codigo)
+#summary(mediaHoraSalida$retrasoMedio)
+#str(mediaHoraSalida)
 
 ## 6.16.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -2.106
-HSalInf2 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio <= (-2.106),]
-str(HSalInf2)
+#HSalInf2 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio <= (-2.106),]
+#str(HSalInf2)
 
 ## retraso medio entre -2.106 y -0.6474 (incluido)
-HSalEntre2y0 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-2.106) & mediaHoraSalida$retrasoMedio <= (-0.6474),]
-str(HSalEntre2y0)
+#HSalEntre2y0 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-2.106) & mediaHoraSalida$retrasoMedio <= (-0.6474),]
+#str(HSalEntre2y0)
 
 ## retraso medio entre -0.6474 y 1.7820 (incluido)
-HSalEntre0y1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-0.6474) & mediaHoraSalida$retrasoMedio <= 1.7820,]
-str(HSalEntre0y1)
+#HSalEntre0y1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > (-0.6474) & mediaHoraSalida$retrasoMedio <= 1.7820,]
+#str(HSalEntre0y1)
 
 ## retraso medio superior a 1.7820
-HSalSup1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > 1.7820,]
-str(HSalSup1)
+#HSalSup1 <- mediaHoraSalida[mediaHoraSalida$retrasoMedio > 1.7820,]
+#str(HSalSup1)
 
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
@@ -2100,8 +2133,8 @@ cuartil2 <- quantile(mediaHoraSalida$retrasoMedio,.75)
 
 mediaHoraSalida$horaSalidaGroup <- asignarGrupoPorCuartiles(mediaHoraSalida, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaHoraSalida)
-summary(mediaHoraSalida)
+#head(mediaHoraSalida)
+#summary(mediaHoraSalida)
 
 
 ## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
@@ -2111,23 +2144,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$horaSalidaGroup <- asignarGruposDF(vuelosDeparted$horaSalida ,dfCodigoGrupo)
-summary(vuelosDeparted$horaSalidaGroup)
-str(vuelosDeparted$horaSalidaGroup)
+#summary(vuelosDeparted$horaSalidaGroup)
+#str(vuelosDeparted$horaSalidaGroup)
 
 
 ## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
-vuelosDeparted2$horaSalida <- NULL
+###############vuelosDeparted2$horaSalida <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$horaSalidaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$horaSalida == "2:30 - 2:59",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$horaSalidaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$horaSalida == "2:30 - 2:59",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$horaSalidaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$horaSalidaGroup)
 
 ###################################################################### 
 
@@ -2137,27 +2170,27 @@ summary(vuelosDeparted2$horaSalidaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","mesLlegada"))
 variables <- unique(df$mesLlegada)
 mediaMesLlegada <- mediasRetrasos(variables,df)
-boxplot(mediaMesLlegada$retrasoMedio)
-barplot(mediaMesLlegada$retrasoMedio, names.arg=mediaMesLlegada$codigo)
-summary(mediaMesLlegada$retrasoMedio)
-str(mediaMesLlegada)
+#boxplot(mediaMesLlegada$retrasoMedio)
+#barplot(mediaMesLlegada$retrasoMedio, names.arg=mediaMesLlegada$codigo)
+#summary(mediaMesLlegada$retrasoMedio)
+#str(mediaMesLlegada)
 
 ## 6.17.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -1.489
-MLlegInf1 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio <= (-1.489),]
-str(MLlegInf1)
+#MLlegInf1 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio <= (-1.489),]
+#str(MLlegInf1)
 
 ## retraso medio entre -1.489 y -1.071 (incluido)
-MLlegEntre14y10 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.489) & mediaMesLlegada$retrasoMedio <= (-1.071),]
-str(MLlegEntre14y10)
+#MLlegEntre14y10 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.489) & mediaMesLlegada$retrasoMedio <= (-1.071),]
+#str(MLlegEntre14y10)
 
 ## retraso medio entre -1.071 y -0.01465 (incluido)
-MLlegEntre10y00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.071) & mediaMesLlegada$retrasoMedio <= (-0.01465),]
-str(MLlegEntre10y00)
+#MLlegEntre10y00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-1.071) & mediaMesLlegada$retrasoMedio <= (-0.01465),]
+#str(MLlegEntre10y00)
 
 ## retraso medio superior a -0.01465
-MLlegSup00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-0.01465),]
-str(MLlegSup00)
+#MLlegSup00 <- mediaMesLlegada[mediaMesLlegada$retrasoMedio > (-0.01465),]
+#str(MLlegSup00)
 
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
@@ -2173,8 +2206,8 @@ cuartil2 <- quantile(mediaMesLlegada$retrasoMedio,.75)
 
 mediaMesLlegada$mesLlegadaGroup <- asignarGrupoPorCuartiles(mediaMesLlegada, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaMesLlegada)
-summary(mediaMesLlegada)
+#head(mediaMesLlegada)
+#summary(mediaMesLlegada)
 
 
 ## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
@@ -2184,23 +2217,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$mesLlegadaGroup <- asignarGruposDF(vuelosDeparted$mesLlegada ,dfCodigoGrupo)
-summary(vuelosDeparted$mesLlegadaGroup)
-str(vuelosDeparted$mesLlegadaGroup)
+#summary(vuelosDeparted$mesLlegadaGroup)
+#str(vuelosDeparted$mesLlegadaGroup)
 
 
 ## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
-vuelosDeparted2$mesLlegada <- NULL
+#################vuelosDeparted2$mesLlegada <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$mesLlegadaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$mesLlegada == "6",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$mesLlegadaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$mesLlegada == "6",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$mesLlegadaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$mesLlegadaGroup)
 
 ###################################################################### 
 
@@ -2217,27 +2250,27 @@ summary(vuelosDeparted2$mesLlegadaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaLlegada"))
 variables <- unique(df$diaLlegada)
 mediaDiaLlegada <- mediasRetrasos(variables,df)
-boxplot(mediaDiaLlegada$retrasoMedio)
-barplot(mediaDiaLlegada$retrasoMedio, names.arg=mediaDiaLlegada$codigo)
-summary(mediaDiaLlegada$retrasoMedio)
-str(mediaDiaLlegada)
+#boxplot(mediaDiaLlegada$retrasoMedio)
+#barplot(mediaDiaLlegada$retrasoMedio, names.arg=mediaDiaLlegada$codigo)
+#summary(mediaDiaLlegada$retrasoMedio)
+#str(mediaDiaLlegada)
 
 ## 6.19.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -0.8248
-diaLlegInf08 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio <= (-0.8248),]
-str(diaLlegInf08)
+#diaLlegInf08 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio <= (-0.8248),]
+#str(diaLlegInf08)
 
 ## retraso medio entre -0.8248 y -0.2593 (incluido)
-diaLlegEntr08y02 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.8248) & mediaDiaLlegada$retrasoMedio <= (-0.2593),]
-str(diaLlegEntr08y02)
+#diaLlegEntr08y02 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.8248) & mediaDiaLlegada$retrasoMedio <= (-0.2593),]
+#str(diaLlegEntr08y02)
 
 ## retraso medio entre -0.2583 y 0.3672 (incluido)
-diaLlegEntr02y03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.2593) & mediaDiaLlegada$retrasoMedio <= 0.3672,]
-str(diaLlegEntr02y03)
+#diaLlegEntr02y03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > (-0.2593) & mediaDiaLlegada$retrasoMedio <= 0.3672,]
+#str(diaLlegEntr02y03)
 
 ## retraso medio superior a 0.3672
-diaLlegSup03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > 0.3672,]
-str(diaLlegSup03)
+#diaLlegSup03 <- mediaDiaLlegada[mediaDiaLlegada$retrasoMedio > 0.3672,]
+#str(diaLlegSup03)
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
 ## retraso medio inferior o igual a -0.8248           -> 1
@@ -2252,8 +2285,8 @@ cuartil2 <- quantile(mediaDiaLlegada$retrasoMedio,.75)
 
 mediaDiaLlegada$diaLlegadaGroup <- asignarGrupoPorCuartiles(mediaDiaLlegada, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaDiaLlegada)
-summary(mediaDiaLlegada)
+#head(mediaDiaLlegada)
+#summary(mediaDiaLlegada)
 
 ## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
@@ -2262,23 +2295,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$diaLlegadaGroup <- asignarGruposDF(vuelosDeparted$diaLlegada ,dfCodigoGrupo)
-summary(vuelosDeparted$diaLlegadaGroup)
-str(vuelosDeparted$diaLlegadaGroup)
+#summary(vuelosDeparted$diaLlegadaGroup)
+#str(vuelosDeparted$diaLlegadaGroup)
 
 
 ## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
-vuelosDeparted2$diaLlegada <- NULL
+############vuelosDeparted2$diaLlegada <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$diaLlegadaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$diaLlegada == "9",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$diaLlegadaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$diaLlegada == "9",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$diaLlegadaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$diaLlegadaGroup)
 
 ###################################################################### 
 
@@ -2288,27 +2321,27 @@ summary(vuelosDeparted2$diaLlegadaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","horaLlegada"))
 variables <- unique(df$horaLlegada)
 mediaHoraLlegada <- mediasRetrasos(variables,df)
-boxplot(mediaHoraLlegada$retrasoMedio)
-barplot(mediaHoraLlegada$retrasoMedio)
-summary(mediaHoraLlegada$retrasoMedio)
-str(mediaHoraLlegada)
+#boxplot(mediaHoraLlegada$retrasoMedio)
+#barplot(mediaHoraLlegada$retrasoMedio)
+#summary(mediaHoraLlegada$retrasoMedio)
+#str(mediaHoraLlegada)
 
 ## 6.20.2. Segmentamos la variable en grupos en base a su retraso medio
 ## retraso medio inferior o igual a -2.528
-HLlinf2 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio <= (-2.528),]
-str(HLlinf2)
+#HLlinf2 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio <= (-2.528),]
+#str(HLlinf2)
 
 ## retraso medio entre -2.528 y -0.002247 (incluido)
-HLlEntre2y0 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-2.528) & mediaHoraLlegada$retrasoMedio <= (-0.002247),]
-str(HLlEntre2y0)
+#HLlEntre2y0 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-2.528) & mediaHoraLlegada$retrasoMedio <= (-0.002247),]
+#str(HLlEntre2y0)
 
 ## retraso medio entre -0.002247 y 1.881 (incluido)
-HLlEntre0y1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-0.002247) & mediaHoraLlegada$retrasoMedio <= 1.881,]
-str(HLlEntre0y1)
+#HLlEntre0y1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > (-0.002247) & mediaHoraLlegada$retrasoMedio <= 1.881,]
+#str(HLlEntre0y1)
 
 ## retraso medio superior a 1.881
-HLlSup1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > 1.881,]
-str(HLlSup1)
+#HLlSup1 <- mediaHoraLlegada[mediaHoraLlegada$retrasoMedio > 1.881,]
+#str(HLlSup1)
 
 
 ## los grupos en funcion de los cuartiles quedan de la siguiente forma:
@@ -2324,8 +2357,8 @@ cuartil2 <- quantile(mediaHoraLlegada$retrasoMedio,.75)
 
 mediaHoraLlegada$horaLlegadaGroup <- asignarGrupoPorCuartiles(mediaHoraLlegada, cuartil1, mediana, cuartil2)
 ## Comprobamos que se han indicado correctamente los grupos
-head(mediaHoraLlegada)
-summary(mediaHoraLlegada)
+#head(mediaHoraLlegada)
+#summary(mediaHoraLlegada)
 
 ## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
@@ -2334,23 +2367,23 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 vuelosDeparted$horaLlegadaGroup <- asignarGruposDF(vuelosDeparted$horaLlegada ,dfCodigoGrupo)
-summary(vuelosDeparted$horaLlegadaGroup)
-str(vuelosDeparted$horaLlegadaGroup)
+#summary(vuelosDeparted$horaLlegadaGroup)
+#str(vuelosDeparted$horaLlegadaGroup)
 
 
 ## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
-vuelosDeparted2$horaLlegada <- NULL
+#######################vuelosDeparted2$horaLlegada <- NULL
 
 ## Comprobacion de asignacion de grupo
-dfCodigoGrupo
-head(vuelosDeparted2)
-dfCodigoGrupo[dfCodigoGrupo$horaLlegadaGroup==3,]
-head(vuelosDeparted2)
-head(vuelosDeparted2[vuelosDeparted2$horaLlegada == "18:00 - 18:29",],4)
+#dfCodigoGrupo
+#head(vuelosDeparted2)
+#dfCodigoGrupo[dfCodigoGrupo$horaLlegadaGroup==3,]
+#head(vuelosDeparted2)
+#head(vuelosDeparted2[vuelosDeparted2$horaLlegada == "18:00 - 18:29",],4)
 
-str(vuelosDeparted2)
-summary(vuelosDeparted2$horaLlegadaGroup)
+#str(vuelosDeparted2)
+#summary(vuelosDeparted2$horaLlegadaGroup)
 
 ###################################################################### 
 
@@ -2360,10 +2393,10 @@ summary(vuelosDeparted2$horaLlegadaGroup)
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
 variables <- unique(df$diaSemanaSalida)
 mediaDiaSemSalida <- mediasRetrasos(variables,df)
-boxplot(mediaDiaSemSalida$retrasoMedio)
-barplot(mediaDiaSemSalida$retrasoMedio, names.arg=mediaDiaSemSalida$codigo)
-summary(mediaDiaSemSalida$retrasoMedio)
-str(mediaDiaSemSalida)
+#boxplot(mediaDiaSemSalida$retrasoMedio)
+#barplot(mediaDiaSemSalida$retrasoMedio, names.arg=mediaDiaSemSalida$codigo)
+#summary(mediaDiaSemSalida$retrasoMedio)
+#str(mediaDiaSemSalida)
 
 
 ###################################################################### 
@@ -2374,10 +2407,10 @@ str(mediaDiaSemSalida)
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaLlegada"))
 variables <- unique(df$diaSemanaLlegada)
 mediaDiaSemLlegada <- mediasRetrasos(variables,df)
-boxplot(mediaDiaSemLlegada$retrasoMedio)
-barplot(mediaDiaSemLlegada$retrasoMedio, names.arg=mediaDiaSemLlegada$codigo)
-summary(mediaDiaSemLlegada$retrasoMedio)
-str(mediaDiaSemLlegada)
+#boxplot(mediaDiaSemLlegada$retrasoMedio)
+#barplot(mediaDiaSemLlegada$retrasoMedio, names.arg=mediaDiaSemLlegada$codigo)
+#summary(mediaDiaSemLlegada$retrasoMedio)
+#str(mediaDiaSemLlegada)
 
 
 ###################################################################### 
