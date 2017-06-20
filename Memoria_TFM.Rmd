@@ -35,12 +35,83 @@ summary(vuelos)
 ```
 
 
-Realizando el summary observamos, entre otras cosas, que algunas de las variables se encuentran vacías y que la mayoría de vuelos tiene el valor **Departed** en su código de estado (variable general_status_code). 
+Realizando el summary observamos lo siguiente:
+
+* Varias variables únicamente almacenan valores NAs, por lo tanto deberan ser eliminadas.
+* El codigo de aerolinea que más se utiliza es XX. Podemos entender no existía un código y se rellenó este campo con XX.
+* La mayoría de vuelos tiene el valor **Departed** en su código de estado (variable general_status_code). 
+* La mayoría de los vuelos despegan y aterrizan en aeropuertos Españoles.
+* La máxima distancia de un vuelo son 9275 kilómetros y la mínima son 123 kilómetros.
+* Existen vuelos que llegan a su destino con 59 minutos de adelanto así como existen vuelos que llegan a su destino con 59 minutos de retraso.
+* Existen vuelos que despegan de su origen con 59 minutos de adelanto así como existen vuelos que despegan de su origen con 59 minutos de retraso.
+* La media de piezas de equipajes en los aviones es de 61.
+
+* Información sobre las fechas de los vuelos:
+```{r lubridate,echo=FALSE,include=FALSE}
+library(lubridate)
+```
+
+```{r año actual_time_of_arrival,out.width='100%'}
+barplot(table(year(ymd_hms(vuelos$actual_time_of_departure))))
+```
+De la gráfica anterior se puede observar que los vuelos estan concentrados en el año 2016.
 
 
-## 3. Análisis de las variables 
+```{r mes actual_time_of_arrival, out.width='100%'}
+barplot(table(month(ymd_hms(vuelos$actual_time_of_departure))))
+```
+De la gráfica anterior determinamos que los meses en los que más vuelos se hacen son Enero, Febrero y Marzo.
 
 
-## 4. Metodología a utilizar
+```{r distancia vuelo,out.width='100%'}
+boxplot(vuelos$distance, main="Distancia vuelos")
+```
+De la gráfica anterior determinamos que la distancia para la mayoría de vuelos no supera los 2000 km.
+
+
+```{r retraso llegada,out.width='100%'}
+boxplot(vuelos$arrival_delay, main="Retraso llegada")
+summary(vuelos$arrival_delay)
+```
+
+Observando la gráfica anterior vemos que los retrasos de llegada de los aviones se concentran entre -9 y 7 minutos.
+
+
+Teniendo en cuenta esta primera observación de los datos, vemos que es necesario transformarlos para poder obtener toda su información.
+Se analizarán aquellas variables con valores NA. Se utilizará el paquete **lubridate** para trabajar con las fechas. Las variables almacenadas como numéricas (como por ejemplo fligth_number) seran transformadas a tipo factor, ya que son valores categóricos.
+
+
+
+## 3. Metodología a utilizar
+
+En primer lugar eliminaremos del dataset aquellas variables que únicamente tienen NAs.
+
+```{r eliminar variables NA}
+vuelos$arrival_date <- NULL
+vuelos$cabin_3_code <- NULL
+vuelos$cabin_3_fitted_configuration <- NULL
+vuelos$cabin_3_saleable <- NULL
+vuelos$cabin_3_pax_boarded <- NULL
+vuelos$cabin_3_rpk <- NULL
+vuelos$cabin_3_ask <- NULL
+vuelos$cabin_4_code <- NULL
+vuelos$cabin_4_fitted_configuration <- NULL
+vuelos$cabin_4_saleable <- NULL
+vuelos$cabin_4_pax_boarded <- NULL
+vuelos$cabin_4_rpk <- NULL
+vuelos$cabin_4_ask <- NULL
+```
+
+
+El siguiente paso a realizar es obtener los datos con los que queremos trabajar. Para ello nos fijamos en la variable **general_status_code**
+
+```{r variable general_status_code}
+table(vuelos$general_status_code)
+```
+
+Los datos que nos interesan son aquellos vuelos que tienen el valor **Departed**.
+```{r vuelosDeparted}
+vuelosDeparted <- vuelos[vuelos$general_status_code=="Departed",]
+```
 
 
