@@ -1057,6 +1057,7 @@ vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
 
 
 
+
 ## 6. Variables de tipo FACTOR
 vuelosDeparted2 <- vuelosDeparted
 ## Ya que muchas de estas variables estan compuestas por demasiados valores como para analizarlos uno por uno
@@ -1139,6 +1140,10 @@ asignarGruposDF <- function(codigos, dfCodigosGrupos){
 ##################################################################################################
 
 
+
+
+
+
 ## 6.1. Flight_Number
 ## 6.1.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
@@ -1211,6 +1216,11 @@ vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
 
 
 
+
+
+
+
+
 ## 6.2. Variable board_point
 ## 6.2.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
@@ -1278,6 +1288,9 @@ vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
 #head(vuelosDeparted)
 
 ###################################################################### 
+
+
+
 
 
 
@@ -1357,6 +1370,10 @@ vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
 
 
 
+
+
+
+
 ## 6.4 Board_lon (COMPLETADA)
 ## 6.4.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
@@ -1426,8 +1443,12 @@ vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
 #summary(vuelosDeparted2$boardLonGroup)
 
 
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.5 Board_country_code (COMPLETADA)
@@ -1498,6 +1519,10 @@ vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
 #summary(vuelosDeparted2$boardCountryCodeGroup)
 
 ###################################################################### 
+
+
+
+
 
 
 ## 6.6 off_point (COMPLETADA)
@@ -1573,6 +1598,11 @@ vuelosDeparted2$offPointGroup <- vuelosDeparted$offPointGroup
 ###################################################################### 
 
 
+
+
+
+
+
 ## 6.7 off_lat (COMPLETADA)
 ## 6.7.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_lat"))
@@ -1643,8 +1673,12 @@ vuelosDeparted2$offLatGroup <- vuelosDeparted$offLatGroup
 #summary(vuelosDeparted2$offLatGroup)
 
 
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.8 off_lon (COMPLETADA)
@@ -1717,8 +1751,11 @@ vuelosDeparted2$offLonGroup <- vuelosDeparted$offLonGroup
 #summary(vuelosDeparted2$offLonGroup)
 
 
-
 ###################################################################### 
+
+
+
+
 
 
 ## 6.9 off_country_code (COMPLETADA)
@@ -1791,8 +1828,11 @@ vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
 #summary(vuelosDeparted2$offCountryCodeGroup)
 
 
-
 ###################################################################### 
+
+
+
+
 
 
 ## 6.10 aircraft_type (COMPLETADA)
@@ -1865,9 +1905,12 @@ vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$aircraftTypeGroup)
 
-
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.11 aircraft_registration_number (COMPLETADA)
@@ -1940,10 +1983,12 @@ vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$aircraftRegNumberGroup)
 
-
-
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.12 routing (COMPLETADA)
@@ -2015,8 +2060,12 @@ vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$routingGroup)
 
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.13 mesSalida (COMPLETADA)
@@ -2089,14 +2138,20 @@ vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$mesSalidaGroup)
 
-
 ###################################################################### 
+
+
+
 
 
 ## 6.14 anyoSalida (COMPLETADA)
 ## No se analiza ya que solo tiene los valores 2015, 2016 y 2017
 
 ###################################################################### 
+
+
+
+
 
 
 ## 6.15 diaSalida (COMPLETADA)
@@ -2169,6 +2224,10 @@ vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
 #summary(vuelosDeparted2$diaSalidaGroup)
 
 ###################################################################### 
+
+
+
+
 
 
 ## 6.16 horaSalida (PENDIENTE)
@@ -2244,6 +2303,10 @@ vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
 ###################################################################### 
 
 
+
+
+
+
 ## 6.17 mesLlegada (COMPLETADA)
 ## 6.17.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","mesLlegada"))
@@ -2317,8 +2380,14 @@ vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
 ###################################################################### 
 
 
+
+
+
 ## 6.18 anyoLlegada (COMPLETADA)
 ## No se hace analisis ya que solo tiene los valores 2015, 2016 y 2017
+
+
+
 
 
 ###################################################################### 
@@ -2395,6 +2464,10 @@ vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
 ###################################################################### 
 
 
+
+
+
+
 ## 6.20 horaLlegada (COMPLETADA)
 ## 6.20.1. Calculamos el retraso medio. 
 df <- subset(vuelosDeparted, select = c("arrival_delay","horaLlegada"))
@@ -2467,6 +2540,11 @@ vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
 ###################################################################### 
 
 
+
+
+
+
+
 ## 6.21 diaSemanaSalida (COMPLETADA)
 ## 6.22.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
@@ -2477,8 +2555,12 @@ mediaDiaSemSalida <- mediasRetrasos(variables,df)
 #summary(mediaDiaSemSalida$retrasoMedio)
 #str(mediaDiaSemSalida)
 
-
 ###################################################################### 
+
+
+
+
+
 
 
 ## 6.22 disSemanaLlegada (COMPLETADA)
@@ -2491,13 +2573,28 @@ mediaDiaSemLlegada <- mediasRetrasos(variables,df)
 #summary(mediaDiaSemLlegada$retrasoMedio)
 #str(mediaDiaSemLlegada)
 
-
 ###################################################################### 
+
+
+
+
+
+summary(vuelosDeparted2)
 
 
 
 #####################################################################################################
 ########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
+
+## Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
+## variable sera eliminada
+vuelosDeparted$general_status_code <- NULL
+
+## Como todos los vuelos tienen el valor Y en la variable cabin_1_code, esta variable sera eliminada
+vuelosDeparted$cabin_1_code <- NULL
+
+
+
 
 ## COMPROBAR CORRELACION ENTRE VARIABLES
 tabla1 <- table(vuelosDeparted$board_point, vuelosDeparted$off_point)
@@ -2507,22 +2604,6 @@ chisq.test(tabla1)
 ## Si p-value es menor que 0.05 determinamos que hay dependencia
 ## si p-value es mayor que 0.05 determinamos que no hay dependencia
 
-
-
-
-
-## Eliminamos la variable board_point del dataframe resultante
-vuelosDeparted2$board_point <- NULL
-## Eliminamos la variable general_status_code, ya que siempre sera Departed
-vuelosDeparted2$general_status_code <- NULL
-## Eliminamos las fechas, ya que tenemos las fechas divididas en dias, mes y hora
-vuelosDeparted2$scheduled_time_of_arrival <- NULL
-vuelosDeparted2$scheduled_time_of_departure <- NULL
-vuelosDeparted2$actual_time_of_departure <- NULL
-vuelosDeparted2$actual_time_of_arrival <- NULL
-
-## Eliminamos la variable cabin_1_code, ya que solo tiene el valor 1
-vuelosDeparted2$cabin_1_code <- NULL
 
 
 
