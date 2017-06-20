@@ -32,7 +32,6 @@ vuelos$cabin_4_ask <- NULL
 
 #summary(vuelos)
 
-table(vuelos$general_status_code)
 
 ## Nos centraremos en la variable "general_status_code" .
 #vuelosCancelled <- vuelos[vuelos$general_status_code=="Cancelled",]   ## 1601 registros
@@ -82,9 +81,6 @@ library(lubridate)
 #str(vuelosDeparted)
 #summary(vuelosDeparted)
 
-boxplot(vuelosDeparted$arrival_delay, main="Retraso llegada")
-summary(vuelosDeparted$arrival_delay)
-
 vuelosDeparted$scheduled_time_of_departure <- ymd_hms(vuelosDeparted$scheduled_time_of_departure)
 vuelosDeparted$estimated_time_of_departure <- ymd_hms(vuelosDeparted$estimated_time_of_departure)
 vuelosDeparted$actual_time_of_departure <- ymd_hms(vuelosDeparted$actual_time_of_departure)
@@ -92,10 +88,6 @@ vuelosDeparted$scheduled_time_of_arrival <- ymd_hms(vuelosDeparted$scheduled_tim
 vuelosDeparted$estimated_time_of_arrival <- ymd_hms(vuelosDeparted$estimated_time_of_arrival)
 vuelosDeparted$actual_time_of_arrival <- ymd_hms(vuelosDeparted$actual_time_of_arrival)
 
-table(year(vuelosDeparted$actual_time_of_departure))
-summary(vuelosDeparted$actual_time_of_arrival)
-
-boxplot(vuelosDeparted$distance)
 
 #summary(vuelosDeparted)
 
@@ -107,7 +99,7 @@ vuelosDeparted$snapshot_date <- NULL ## La fecha de captura de datos es irreleva
 vuelosDeparted$snapshot_time <- NULL ## La hora de captura de datos es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_departure <- NULL  ## La fecha estimada de salida es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_arrival <- NULL    ## La fecha estimada de llegada es irrelevante para el estudio
-##vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
+vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
 
 
 
@@ -133,6 +125,9 @@ vuelosDeparted$flight_number <- as.factor(vuelosDeparted$flight_number)
 #str(vuelosDeparted$flight_number)
 #unique(vuelosDeparted$flight_number)  ## 1045 vuelos distintos
 #table(vuelosDeparted$flight_number)
+
+
+
 
 ### 4.2 flight_date
 ## (COMPLETADA)
@@ -167,6 +162,8 @@ vuelosDeparted$flight_date <- NULL
 #summary(vuelosDeparted)
 
 
+
+
 ### 4.3 board_point 
 ## (COMPLETADA)
 ###############################################################################################
@@ -177,6 +174,8 @@ vuelosDeparted$flight_date <- NULL
 
 ### Esta variable no contiene NAs y se almacena como factor.
 ### La analizaremos mas adelante
+
+
 
 
 
@@ -192,6 +191,9 @@ vuelosDeparted$flight_date <- NULL
 vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 
 
+
+
+
 ### 4.5 board_lon
 ## (COMPLETADA)
 ###############################################################################################
@@ -202,6 +204,9 @@ vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 ### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
 ### y la analizaremos mas adelante
 vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
+
+
+
 
 
 ### 4.6 board_country_code ( y off_country_code )
@@ -264,6 +269,7 @@ vuelosDeparted$off_country_code <- as.factor(vuelosDeparted$off_country_code)
 
 
 
+
 ### 4.7 departure_date
 ## (COMPLETADA)
 ###############################################################################################
@@ -298,6 +304,9 @@ vuelosDeparted$departure_date <- NULL
 
 
 
+
+
+
 ### 4.8 off_point
 ## (COMPLETADA)
 ###############################################################################################
@@ -307,6 +316,9 @@ vuelosDeparted$departure_date <- NULL
 
 ### Esta variable no contiene NAs y esta almacenada como tipo factor.
 ### Se analizara mas adelante
+
+
+
 
 
 
@@ -323,6 +335,9 @@ vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
 
 
 
+
+
+
 ### 4.10 off_lon
 ## (COMPLETADA)
 ###############################################################################################
@@ -336,6 +351,9 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 
 
+
+
+
 ### 4.11 distance
 ## (COMPLETADA)
 ###############################################################################################
@@ -343,6 +361,9 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 #summary(vuelosDeparted$distance)
 
 ### Esta variable no contiene NAs y se encuentra almacenado como int. No haremos cambios en este campo
+
+
+
 
 
 
@@ -355,6 +376,8 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ### Esta variable no contiene NAs y ya fue transformada a Date, por lo que
 ### se analizara mas adelante
+
+
 
 
 
@@ -371,6 +394,8 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 
 
+
+
 ### 4.14 scheduled_time_of_arrival
 ## (COMPLETADA)
 ###############################################################################################
@@ -380,6 +405,9 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ### Esta variable no contiene NAs y ya fue transformada a Date, por lo que 
 ### se analizara mas adelante
+
+
+
 
 
 
@@ -441,6 +469,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
+
+
 ### 4.16 departure_delay
 ## (COMPLETADA)
 ###############################################################################################
@@ -449,6 +479,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(vuelosDeparted$departure_delay)
 
 ## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
+
+
 
 
 
@@ -464,6 +496,7 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
+
 ### 4.18 sched_blocktime
 ## (COMPLETADA)
 ###############################################################################################
@@ -472,6 +505,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(vuelosDeparted$sched_blocktime)
 
 ## Este campo esta almacenado como int y no contiene NAs. De momento no se modificara
+
+
 
 
 
@@ -543,6 +578,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
+
+
 ### 4.20 aircraft_type
 ## (COMPLETADA)
 ###############################################################################################
@@ -552,6 +589,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 ## Este campo no contiene NAs y esta almacenado como tipo factor. 
 ## Se estudiara mas adelante
+
+
 
 
 
@@ -570,10 +609,14 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
+
+
 ### 4.22 general_status_code
 ## (COMPLETADA)
 ###############################################################################################
 ## Este campo ya fue analizado
+
+
 
 
 
@@ -588,6 +631,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 ## Este campo se almacena como factor y no contiene NAs.
 ## Se estudiara mas adelante
+
+
 
 
 
@@ -636,6 +681,7 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
+
 ### 4.25 cabin_1_fitted_configuration / cabin_2_fitted_configuration -> Numero de asientos
 ## (COMPLETADA)
 ###############################################################################################
@@ -656,6 +702,8 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(cabin2Vacio)
 
 ## Estos datos coinciden con los datos de cabin_2_code. Todo OK.
+
+
 
 
 
@@ -747,6 +795,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
 ### 4.28 cabin_1_rpk / cabin_2_rpk  Beneficio en funcion de los pasajeros o unidad tipica para evaluar la demanda 
 ## (COMPLETADA)
 ###############################################################################################
@@ -760,6 +809,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$cabin_2_rpk)
 
 ## Campo almacenado como entero. Existen 89966 NAs
+
 
 
 
@@ -782,6 +832,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
+
 ### 4.30 total_rpk
 ### (COMPLETADA)
 ###############################################################################################
@@ -790,6 +842,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$total_rpk)
 
 ## Campo almacenado como entero. No contiene NAs
+
 
 
 
@@ -808,6 +861,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
+
 ### 4.32 load_factor
 ## (COMPLETADA)
 ###############################################################################################
@@ -816,6 +871,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$load_factor)
 
 ## Campo almacenado como num. No existen NAs
+
+
 
 
 
@@ -833,6 +890,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
+
 ### 4.34 total_no_shows
 ## (COMPLETADA)
 ###############################################################################################
@@ -845,6 +904,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
+
 ### 4.35 total_cabin_crew 
 ## (COMPLETADA)
 ###############################################################################################
@@ -853,6 +914,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$total_cabin_crew)
 
 ## Campo almacenado como int. No existen NAs
+
+
 
 
 
@@ -871,6 +934,7 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
 ### 4.37 total_baggage_weight
 ## (COMPLETADA)
 ###############################################################################################
@@ -884,6 +948,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
+
+
 ### 4.38 number_of_baggage_pieces
 ## (COMPLETADA)
 ###############################################################################################
@@ -892,6 +958,8 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$number_of_baggage_pieces)
 
 ## Campo almacenado como int. No existen NAs
+
+
 
 
 
