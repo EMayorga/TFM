@@ -2579,36 +2579,132 @@ mediaDiaSemLlegada <- mediasRetrasos(variables,df)
 
 
 
-summary(vuelosDeparted2)
+str(vuelosDeparted)
 
 
 
 #####################################################################################################
-########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
+## 7. ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
 
-## Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
+## 7.1 Eliminamos las variables categoricas analizadas
+vuelosDeparted$airline_code <- NULL
+vuelosDeparted$flight_number <- NULL
+vuelosDeparted$board_point <- NULL
+vuelosDeparted$board_lat <- NULL
+vuelosDeparted$board_lon <- NULL
+vuelosDeparted$board_country_code <- NULL
+vuelosDeparted$off_point <- NULL
+vuelosDeparted$off_lat <- NULL
+vuelosDeparted$off_lon <- NULL
+vuelosDeparted$off_country_code <- NULL
+vuelosDeparted$aircraft_type <- NULL
+vuelosDeparted$aircraft_registration_number <- NULL
+vuelosDeparted$routing <- NULL
+vuelosDeparted$horaLlegada <- NULL
+vuelosDeparted$horaSalida <- NULL
+
+## 7.2 Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
 ## variable sera eliminada
 vuelosDeparted$general_status_code <- NULL
 
-## Como todos los vuelos tienen el valor Y en la variable cabin_1_code, esta variable sera eliminada
+## 7.3 Como todos los vuelos tienen el valor Y en la variable cabin_1_code, esta variable sera eliminada
 vuelosDeparted$cabin_1_code <- NULL
 
+## 7.4 Eliminamos las variables de fechas, ya que se han divido en rango de horas, dia, mes y año
+vuelosDeparted$scheduled_time_of_arrival <- NULL
+vuelosDeparted$actual_time_of_arrival <- NULL
+vuelosDeparted$scheduled_time_of_departure <- NULL
+vuelosDeparted$actual_time_of_departure <- NULL
+
+## 7.5 Eliminamos la variable sched_blocktime, ya que la que realmente nos vale es act_blocktime
+vuelosDeparted$sched_blocktime <- NULL
+
+## 7.6 Eliminamos las variables anyo_salida y anyo_llegada, ya que es informacion irrelevante.
+vuelosDeparted$anyoLlegada <- NULL
+vuelosDeparted$anyoSalida <- NULL
+
+
+## 7.7 Comprobar correlacion entre variables
+## Existen varias variables dentro del modelo que pueden estar correlacionadas, por lo tanto las estudiaremos y 
+## determinaremos si son necesarias.
+
+#str(vuelosDeparted)
+## 7.7.1 diaSalida VS diaLlegada y diaSalidaGroup VS diaLlegadaGroup
+tablaDia <- table(vuelosDeparted$diaSalida, vuelosDeparted$diaLlegada)
+tablaDia
+plot(tablaDia, col = c("red", "blue"), main = "Dia Salida vs. Dia Llegada")
+chisq.test(tablaDia)
+## P-value indica que existe correlacion entre ambas variables
+vuelosDeparted$diaLlegada <- NULL
+vuelosDeparted$diaVuelo <- vuelosDeparted$diaSalida
+vuelosDeparted$diaSalida <- NULL
+
+tablaDiaGroup <- table(vuelosDeparted$diaSalidaGroup, vuelosDeparted$diaLlegadaGroup)
+tablaDiaGroup
+plot(tablaDiaGroup, col = c("red", "blue"), main = "Dia Salida Group vs. Dia Llegada Group")
+chisq.test(tablaDiaGroup)
+## P-Value indica que hay correlacion entre ambas variables
+vuelosDeparted$diaLlegadaGroup <- NULL
+vuelosDeparted$diaVueloGroup <- vuelosDeparted$diaSalidaGroup
+vuelosDeparted$diaSalidaGroup <- NULL
+
+
+## 7.7.2 MesSalida VS MesLlegada y MesSalidaGroup VS MesLlegadaGroup
+tablaMes <- table(vuelosDeparted$mesSalida, vuelosDeparted$mesLlegada)
+tablaMes
+plot(tablaMes, col = c("red", "blue"), main = "Mes Salida vs. Mes Llegada")
+chisq.test(tablaMes)
+## En base al valor de P-value (menor que 0.05) determinamos que hay correlacion entre estas dos variables, por 
+## lo que podemos eliminar una de ellas para realizar el estudio.
+vuelosDeparted$mesLlegada <- NULL
+vuelosDeparted$mesVuelo <- vuelosDeparted$mesSalida
+vuelosDeparted$mesSalida <- NULL
+
+
+tablaMesGroup <- table(vuelosDeparted$mesSalidaGroup, vuelosDeparted$mesLlegadaGroup)
+tablaMesGroup
+plot(tablaMesGroup, col = c("red", "blue"), main = "Mes Salida Group vs. Mes Llegada Group")
+chisq.test(tablaMesGroup)
+## El valor p-value indica que hay correlacion entre las dos variabels, por lo que eliminaremos una de ellas.
+vuelosDeparted$mesLlegadaGroup <- NULL
+vuelosDeparted$mesVueloGroup <- vuelosDeparted$mesSalidaGroup
+vuelosDeparted$mesSalidaGroup <- NULL
+
+
+## 7.7.3 diaSemanaSalida VS diaSemanaLlegada y 
+tablaDiaSemana <- table(vuelosDeparted$diaSemanaSalida, vuelosDeparted$diaSemanaLlegada)
+tablaDiaSemana
+plot(tablaDiaSemana, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
+chisq.test(tablaDiaSemana)
+## P-value indica que hay correlacion. Eliminaremos una de las variables
+vuelosDeparted$diaSemanaLlegada <- NULL
+vuelosDeparted$diaSemanaVuelo <- vuelosDeparted$diaSemanaSalida
+vuelosDeparted$diaSemanaSalida <- NULL
+
+
+## 7.7.4 
+tabla <- table(vuelosDeparted$distance, vuelosDeparted$arrival_delay)
+tabla
+plot(tabla, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
+chisq.test(tabla, simulate.p.value = TRUE)
 
 
 
-## COMPROBAR CORRELACION ENTRE VARIABLES
-tabla1 <- table(vuelosDeparted$board_point, vuelosDeparted$off_point)
-plot(tabla1, col = c("red", "blue"), main = "dia semana Llegada vs. dia semana Salida")
-chisq.test(tabla1)
-## En base al valor de P-value determinamos que hay dependencia entre estas dos variables.
-## Si p-value es menor que 0.05 determinamos que hay dependencia
-## si p-value es mayor que 0.05 determinamos que no hay dependencia
 
 
 
 
 
-
-## Escribimos el dataframe resultante para reusarlo en la siguiente fase
+## 8. Escribimos el dataframe resultante para reusarlo en la siguiente fase
 write.csv('vuelosDeparted.csv',x = vuelosDeparted)
+
+
+
+
+mediaDiaSemLlegada
+ordenado <- mediaDiaSemLlegada[order(mediaDiaSemLlegada$retrasoMedio),] 
+ordenado$orden <- 1:length(ordenado$codigo)
+
+
+
 
