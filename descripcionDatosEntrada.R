@@ -2706,5 +2706,22 @@ ordenado <- mediaDiaSemLlegada[order(mediaDiaSemLlegada$retrasoMedio),]
 ordenado$orden <- 1:length(ordenado$codigo)
 
 
+### Funcion que asigna pesos a las variables en funcion de su retraso medio
+asignarPesos <- function(dfRetrasoMedio){
+  
+  dfRetrasoMedioOrdenado <- dfRetrasoMedio[order(dfRetrasoMedio[,2]),]
+  dfRetrasoMedioOrdenado[,4] <- 1:length(dfRetrasoMedioOrdenado[,2])
+  
+  return(dfRetrasoMedioOrdenado)
+}
 
+mediaDiaSemLlegada2 <- mediaDiaSemLlegada
 
+pesosMediaDiaSem <- asignarPesos(mediaDiaSemLlegada2)
+
+muestra <- head(vuelosDeparted2$diaSemanaLlegada, 100)
+pesosMediaDiaSem$retrasoMedio<-NULL
+pesosMediaDiaSem$numeroVuelos<-NULL
+
+muestra$peso <- asignarGruposDF(head(vuelosDeparted2$diaSemanaLlegada, 100),pesosMediaDiaSem)
+muestra
