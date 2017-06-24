@@ -1154,3 +1154,4 @@ chisq.test(tabla, simulate.p.value = TRUE)
 write.csv('vuelos2.csv',x = vuelosDeparted)
 
 str(vuelosDeparted)
+
