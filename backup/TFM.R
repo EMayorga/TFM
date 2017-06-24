@@ -912,12 +912,12 @@ vuelosDeparted$file_sequence_number <- NULL
 
 ### 5. CREACION DE NUEVAS VARIABLES
 
-## Segmentamos las fechas en a�os, mes, dia y hora
+## Segmentamos las fechas en años, mes, dia y hora
 ## 5.1. Mes de salida del vuelo
 vuelosDeparted$mesSalida <- as.integer(month(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$mesSalida <- as.factor(vuelosDeparted$mesSalida)
 
-## 5.2 a�o de salida del vuelo
+## 5.2 aÑo de salida del vuelo
 vuelosDeparted$anyoSalida <- as.integer(year(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$anyoSalida <- as.factor(vuelosDeparted$anyoSalida)
 
@@ -1106,7 +1106,7 @@ mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoPorCuartiles(mediaRetrasosVu
 #table(mediaRetrasosVuelo$fligthNumberGroup)
 
 
-## 6.1.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.1.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaRetrasosVuelo
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1116,7 +1116,7 @@ vuelosDeparted$flightNumberGroup <- asignarGruposDF(vuelosDeparted$flight_number
 #str(vuelosDeparted$flightNumberGroup)
 
 
-## 6.1.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.1.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
 ############  vuelosDeparted2$flight_number <- NULL
 
@@ -1180,7 +1180,7 @@ mediaPuntoEmbarque$boardPointGroup <- asignarGrupoPorCuartiles(mediaPuntoEmbarqu
 #table(mediaPuntoEmbarque$boardPointGroup)
 
 
-## 6.2.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.2.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaPuntoEmbarque
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1189,7 +1189,7 @@ vuelosDeparted$boardPointGroup <- asignarGruposDF(vuelosDeparted$board_point ,df
 #summary(vuelosDeparted$boardPointGroup)
 #str(vuelosDeparted$boardPointGroup)
 
-## 6.2.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.2.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
 ##############vuelosDeparted2$board_point <- NULL
 
@@ -1251,7 +1251,7 @@ mediaLatEmbarque$boardLatGroup <- asignarGrupoPorCuartiles(mediaLatEmbarque, cua
 #head(mediaLatEmbarque)
 #summary(mediaLatEmbarque)
 
-## 6.3.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.3.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaLatEmbarque
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1260,7 +1260,7 @@ vuelosDeparted$boardLatGroup <- asignarGruposDF(vuelosDeparted$board_lat ,dfCodi
 #summary(vuelosDeparted$boardLatGroup)
 #str(vuelosDeparted$boardLatGroup)
 
-## 6.3.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.3.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
 ################vuelosDeparted2$board_lat <- NULL
 
@@ -1327,13 +1327,13 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 
-## 6.4.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.4.4 AÃ±adir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardLonGroup <- asignarGruposDF(vuelosDeparted$board_lon ,dfCodigoGrupo)
 #summary(vuelosDeparted$boardLonGroup)
 #str(vuelosDeparted$boardLonGroup)
 
 
-## 6.4.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.4.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
 ################vuelosDeparted2$board_lon <- NULL
 
@@ -1400,12 +1400,12 @@ dfCodigoGrupo <- mediaBoardCC
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
-## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.5.4 AÃ±adir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardCountryCodeGroup <- asignarGruposDF(vuelosDeparted$board_country_code ,dfCodigoGrupo)
 #summary(vuelosDeparted$boardCountryCodeGroup)
 #str(vuelosDeparted$boardCountryCodeGroup)
 
-## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.5.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
 ##################vuelosDeparted2$board_country_code <- NULL
 
@@ -1466,7 +1466,7 @@ mediaOffPoint$offPointGroup <- asignarGrupoPorCuartiles(mediaOffPoint, cuartil1,
 #summary(mediaOffPoint)
 
 
-## 6.6.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.6.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffPoint
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1477,7 +1477,7 @@ vuelosDeparted$offPointGroup <- asignarGruposDF(vuelosDeparted$off_point ,dfCodi
 #str(vuelosDeparted$offPointGroup)
 
 
-## 6.6.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.6.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offPointGroup <- vuelosDeparted$offPointGroup
 ################vuelosDeparted2$off_point <- NULL
 
@@ -1539,7 +1539,7 @@ mediaOffLat$offLatGroup <- asignarGrupoPorCuartiles(mediaOffLat, cuartil1, media
 #summary(mediaOffLat)
 
 
-## 6.7.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.7.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffLat
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1550,7 +1550,7 @@ vuelosDeparted$offLatGroup <- asignarGruposDF(vuelosDeparted$off_lat ,dfCodigoGr
 #str(vuelosDeparted$offLatGroup)
 
 
-## 6.7.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.7.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLatGroup <- vuelosDeparted$offLatGroup
 ###############vuelosDeparted2$off_lat <- NULL
 
@@ -1613,7 +1613,7 @@ mediaOffLon$offLonGroup <- asignarGrupoPorCuartiles(mediaOffLon, cuartil1, media
 #summary(mediaOffLon)
 
 
-## 6.8.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.8.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffLon
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1624,7 +1624,7 @@ vuelosDeparted$offLonGroup <- asignarGruposDF(vuelosDeparted$off_lon ,dfCodigoGr
 #str(vuelosDeparted$offLonGroup)
 
 
-## 6.8.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.8.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLonGroup <- vuelosDeparted$offLonGroup
 ###############vuelosDeparted2$off_lon <- NULL
 
@@ -1687,7 +1687,7 @@ mediaOffCC$offCountryCodeGroup <- asignarGrupoPorCuartiles(mediaOffCC, cuartil1,
 #summary(mediaOffCC)
 
 
-## 6.9.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.9.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffCC
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1698,7 +1698,7 @@ vuelosDeparted$offCountryCodeGroup <- asignarGruposDF(vuelosDeparted$off_country
 #str(vuelosDeparted$offCountryCodeGroup)
 
 
-## 6.9.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.9.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
 ################vuelosDeparted2$off_country_code <- NULL
 
@@ -1761,7 +1761,7 @@ mediaTipoAvion$aircraftTypeGroup <- asignarGrupoPorCuartiles(mediaTipoAvion, cua
 #summary(mediaTipoAvion)
 
 
-## 6.10.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.10.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaTipoAvion
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1773,7 +1773,7 @@ vuelosDeparted$aircraftTypeGroup <- asignarGruposDF(vuelosDeparted$aircraft_type
 
 
 
-## 6.10.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.10.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
 ################vuelosDeparted2$aircraft_type <- NULL
 
@@ -1837,7 +1837,7 @@ mediaNumRegAvion$aircraftRegNumberGroup <- asignarGrupoPorCuartiles(mediaNumRegA
 #summary(mediaNumRegAvion)
 
 
-## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.11.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaNumRegAvion
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1848,7 +1848,7 @@ vuelosDeparted$aircraftRegNumberGroup <- asignarGruposDF(vuelosDeparted$aircraft
 #str(vuelosDeparted$aircraftRegNumberGroup)
 
 
-## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.11.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
 ########vuelosDeparted2$aircraft_registration_number <- NULL
 
@@ -1912,7 +1912,7 @@ mediaRutas$routingGroup <- asignarGrupoPorCuartiles(mediaRutas, cuartil1, median
 #summary(mediaRutas)
 
 
-## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.12.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaRutas
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1923,7 +1923,7 @@ vuelosDeparted$routingGroup <- asignarGruposDF(vuelosDeparted$routing ,dfCodigoG
 #str(vuelosDeparted$routingGroup)
 
 
-## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.12.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
 ##############vuelosDeparted2$routing <- NULL
 
@@ -1985,7 +1985,7 @@ mediaMesSalida$mesSalidaGroup <- asignarGrupoPorCuartiles(mediaMesSalida, cuarti
 #summary(mediaMesSalida)
 
 
-## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.13.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaMesSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1996,7 +1996,7 @@ vuelosDeparted$mesSalidaGroup <- asignarGruposDF(vuelosDeparted$mesSalida ,dfCod
 #str(vuelosDeparted$mesSalidaGroup)
 
 
-## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.13.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
 #############vuelosDeparted2$mesSalida <- NULL
 
@@ -2064,7 +2064,7 @@ mediaDiaSalida$diaSalidaGroup <- asignarGrupoPorCuartiles(mediaDiaSalida, cuarti
 #summary(mediaDiaSalida)
 
 
-## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.15.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaDiaSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2075,7 +2075,7 @@ vuelosDeparted$diaSalidaGroup <- asignarGruposDF(vuelosDeparted$diaSalida ,dfCod
 #str(vuelosDeparted$diaSalidaGroup)
 
 
-## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.15.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
 ####################vuelosDeparted2$diaSalida <- NULL
 
@@ -2137,7 +2137,7 @@ mediaHoraSalida$horaSalidaGroup <- asignarGrupoPorCuartiles(mediaHoraSalida, cua
 #summary(mediaHoraSalida)
 
 
-## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.16.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaHoraSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2148,7 +2148,7 @@ vuelosDeparted$horaSalidaGroup <- asignarGruposDF(vuelosDeparted$horaSalida ,dfC
 #str(vuelosDeparted$horaSalidaGroup)
 
 
-## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.16.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
 ###############vuelosDeparted2$horaSalida <- NULL
 
@@ -2210,7 +2210,7 @@ mediaMesLlegada$mesLlegadaGroup <- asignarGrupoPorCuartiles(mediaMesLlegada, cua
 #summary(mediaMesLlegada)
 
 
-## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.17.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaMesLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2221,7 +2221,7 @@ vuelosDeparted$mesLlegadaGroup <- asignarGruposDF(vuelosDeparted$mesLlegada ,dfC
 #str(vuelosDeparted$mesLlegadaGroup)
 
 
-## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.17.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
 #################vuelosDeparted2$mesLlegada <- NULL
 
@@ -2288,7 +2288,7 @@ mediaDiaLlegada$diaLlegadaGroup <- asignarGrupoPorCuartiles(mediaDiaLlegada, cua
 #head(mediaDiaLlegada)
 #summary(mediaDiaLlegada)
 
-## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.19.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaDiaLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2299,7 +2299,7 @@ vuelosDeparted$diaLlegadaGroup <- asignarGruposDF(vuelosDeparted$diaLlegada ,dfC
 #str(vuelosDeparted$diaLlegadaGroup)
 
 
-## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.19.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
 ############vuelosDeparted2$diaLlegada <- NULL
 
@@ -2360,7 +2360,7 @@ mediaHoraLlegada$horaLlegadaGroup <- asignarGrupoPorCuartiles(mediaHoraLlegada, 
 #head(mediaHoraLlegada)
 #summary(mediaHoraLlegada)
 
-## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.20.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaHoraLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2371,7 +2371,7 @@ vuelosDeparted$horaLlegadaGroup <- asignarGruposDF(vuelosDeparted$horaLlegada ,d
 #str(vuelosDeparted$horaLlegadaGroup)
 
 
-## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.20.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
 #######################vuelosDeparted2$horaLlegada <- NULL
 
@@ -2605,7 +2605,7 @@ vuelosDeparted2$actual_time_of_arrival <- NULL
 1. Se deben hacer grupos para el resto de variables de tipo factor en funcion de los retrasos medios
 2. Almacenar la tabla de normalizacion (necesitamos los maximos y minimos de cada columna para realizar los test)
 3. Mejorar la funcion de normalizacion (falla cuando hay NAs en el vector a normalizar)
-4. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el año 
+4. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el aÃ±o 
    del vuelo.
 
 #############################################################################################################
