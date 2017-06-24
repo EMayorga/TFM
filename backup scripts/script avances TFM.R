@@ -1,6 +1,6 @@
 #####  TFM
 
-## En esta ruta est· el script que nos ha enviado Israel por correo 
+## En esta ruta est√° el script que nos ha enviado Israel por correo 
 setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM")
 
 ## Apertura del dataset
