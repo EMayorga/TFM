@@ -71,7 +71,7 @@ tablaVuelosNormalizados <- obtenerTablaNormalizacion(vuelos)
 vuelosNormalizado <- normalizarDF(vuelos)
 
 write.csv('tablaVuelosNormalizados.csv',x = tablaVuelosNormalizados)
-write.csv('vuelosNormalizado.csv',x = vuelosNormalizado)
+write.csv('vuelosFinalNormalizado.csv',x = vuelosNormalizado)
 
 
 

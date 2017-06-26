@@ -1,18 +1,17 @@
 ## 6. Variables de tipo FACTOR
 
 ##En esta ruta est? el script que nos ha enviado Israel por correo 
-##setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
-setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master") ##RUTA SERGIO
+#setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master") ##RUTA SERGIO
 vuelos <- read.table("vuelosDatosAtmosfericos.csv", header = T, sep = ",")
 
 
 
 vuelosDeparted <- vuelos
-vuelosDeparted2 <- vuelosDeparted
+##vuelosDeparted2 <- vuelosDeparted
 ## Ya que muchas de estas variables estan compuestas por demasiados valores como para analizarlos uno por uno
 ## decidimos agrupar los valores de estas variables en funcion del retraso medio para cada uno de ellos.
-## Las agrupaciones se haran en base a los cuartiles 
 
 ## FUNCIONES GENERICAS A UTILIZAR
 
