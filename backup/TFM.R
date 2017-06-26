@@ -9,7 +9,7 @@ setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
 ## Apertura del dataset
 vuelos <- read.table("operations_leg.csv", header = T, sep = "^")
 
-str(vuelos)
+
 
 
 ## 1. Primera visualizacion de los datos
@@ -32,7 +32,6 @@ vuelos$cabin_4_ask <- NULL
 
 #summary(vuelos)
 
-
 ## Nos centraremos en la variable "general_status_code" .
 #vuelosCancelled <- vuelos[vuelos$general_status_code=="Cancelled",]   ## 1601 registros
 vuelosDeparted <- vuelos[vuelos$general_status_code=="Departed",]     ## 220247 registros
@@ -53,9 +52,8 @@ library(lubridate)
 #vuelosCancelled$scheduled_time_of_arrival <- ymd_hms(vuelosCancelled$scheduled_time_of_arrival)
 #vuelosCancelled$estimated_time_of_arrival <- ymd_hms(vuelosCancelled$estimated_time_of_arrival)
 #vuelosCancelled$actual_time_of_arrival <- ymd_hms(vuelosCancelled$actual_time_of_arrival)
+
 #summary(vuelosCancelled)
-
-
 
 ## Observamos que las fechas reales de salida y de llegada no estan indicadas, por lo que no es relevante para el estudio
 
@@ -88,7 +86,6 @@ vuelosDeparted$scheduled_time_of_arrival <- ymd_hms(vuelosDeparted$scheduled_tim
 vuelosDeparted$estimated_time_of_arrival <- ymd_hms(vuelosDeparted$estimated_time_of_arrival)
 vuelosDeparted$actual_time_of_arrival <- ymd_hms(vuelosDeparted$actual_time_of_arrival)
 
-
 #summary(vuelosDeparted)
 
 ## En este DF se encuentran los datos que queremos estudiar, por lo tanto utilizaremos "vuelosDeparted"
@@ -99,7 +96,7 @@ vuelosDeparted$snapshot_date <- NULL ## La fecha de captura de datos es irreleva
 vuelosDeparted$snapshot_time <- NULL ## La hora de captura de datos es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_departure <- NULL  ## La fecha estimada de salida es irrelevante para el estudio
 vuelosDeparted$estimated_time_of_arrival <- NULL    ## La fecha estimada de llegada es irrelevante para el estudio
-vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
+##vuelosDeparted$est_blocktime <- NULL  ## El tiempo de vuelo estimado es irrelevante para el estudio
 
 
 
@@ -125,9 +122,6 @@ vuelosDeparted$flight_number <- as.factor(vuelosDeparted$flight_number)
 #str(vuelosDeparted$flight_number)
 #unique(vuelosDeparted$flight_number)  ## 1045 vuelos distintos
 #table(vuelosDeparted$flight_number)
-
-
-
 
 ### 4.2 flight_date
 ## (COMPLETADA)
@@ -162,8 +156,6 @@ vuelosDeparted$flight_date <- NULL
 #summary(vuelosDeparted)
 
 
-
-
 ### 4.3 board_point 
 ## (COMPLETADA)
 ###############################################################################################
@@ -174,8 +166,6 @@ vuelosDeparted$flight_date <- NULL
 
 ### Esta variable no contiene NAs y se almacena como factor.
 ### La analizaremos mas adelante
-
-
 
 
 
@@ -191,9 +181,6 @@ vuelosDeparted$flight_date <- NULL
 vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 
 
-
-
-
 ### 4.5 board_lon
 ## (COMPLETADA)
 ###############################################################################################
@@ -204,9 +191,6 @@ vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 ### Esta variable no contiene NAs y se almacena como numeric, la pasamos a factor
 ### y la analizaremos mas adelante
 vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
-
-
-
 
 
 ### 4.6 board_country_code ( y off_country_code )
@@ -269,7 +253,6 @@ vuelosDeparted$off_country_code <- as.factor(vuelosDeparted$off_country_code)
 
 
 
-
 ### 4.7 departure_date
 ## (COMPLETADA)
 ###############################################################################################
@@ -304,9 +287,6 @@ vuelosDeparted$departure_date <- NULL
 
 
 
-
-
-
 ### 4.8 off_point
 ## (COMPLETADA)
 ###############################################################################################
@@ -316,9 +296,6 @@ vuelosDeparted$departure_date <- NULL
 
 ### Esta variable no contiene NAs y esta almacenada como tipo factor.
 ### Se analizara mas adelante
-
-
-
 
 
 
@@ -335,9 +312,6 @@ vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
 
 
 
-
-
-
 ### 4.10 off_lon
 ## (COMPLETADA)
 ###############################################################################################
@@ -351,9 +325,6 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 
 
-
-
-
 ### 4.11 distance
 ## (COMPLETADA)
 ###############################################################################################
@@ -361,9 +332,6 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 #summary(vuelosDeparted$distance)
 
 ### Esta variable no contiene NAs y se encuentra almacenado como int. No haremos cambios en este campo
-
-
-
 
 
 
@@ -376,8 +344,6 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ### Esta variable no contiene NAs y ya fue transformada a Date, por lo que
 ### se analizara mas adelante
-
-
 
 
 
@@ -394,8 +360,6 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 
 
-
-
 ### 4.14 scheduled_time_of_arrival
 ## (COMPLETADA)
 ###############################################################################################
@@ -405,9 +369,6 @@ vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ### Esta variable no contiene NAs y ya fue transformada a Date, por lo que 
 ### se analizara mas adelante
-
-
-
 
 
 
@@ -469,8 +430,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
-
-
 ### 4.16 departure_delay
 ## (COMPLETADA)
 ###############################################################################################
@@ -479,8 +438,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(vuelosDeparted$departure_delay)
 
 ## La variable no contiene NAs y se encuentra almacenada como int, por ahora no haremos modificaciones
-
-
 
 
 
@@ -496,7 +453,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
-
 ### 4.18 sched_blocktime
 ## (COMPLETADA)
 ###############################################################################################
@@ -505,8 +461,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(vuelosDeparted$sched_blocktime)
 
 ## Este campo esta almacenado como int y no contiene NAs. De momento no se modificara
-
-
 
 
 
@@ -578,8 +532,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
-
-
 ### 4.20 aircraft_type
 ## (COMPLETADA)
 ###############################################################################################
@@ -589,8 +541,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 ## Este campo no contiene NAs y esta almacenado como tipo factor. 
 ## Se estudiara mas adelante
-
-
 
 
 
@@ -609,14 +559,10 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
-
-
 ### 4.22 general_status_code
 ## (COMPLETADA)
 ###############################################################################################
 ## Este campo ya fue analizado
-
-
 
 
 
@@ -631,8 +577,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 ## Este campo se almacena como factor y no contiene NAs.
 ## Se estudiara mas adelante
-
-
 
 
 
@@ -681,7 +625,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 
 
-
 ### 4.25 cabin_1_fitted_configuration / cabin_2_fitted_configuration -> Numero de asientos
 ## (COMPLETADA)
 ###############################################################################################
@@ -702,8 +645,6 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 #summary(cabin2Vacio)
 
 ## Estos datos coinciden con los datos de cabin_2_code. Todo OK.
-
-
 
 
 
@@ -743,7 +684,7 @@ vuelosDeparted <- vuelosDeparted[is.na(vuelosDeparted$actual_time_of_arrival)==F
 
 ## Estos 41 registros deben ser eliminados
 vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" | 
-                                   (vuelosDeparted$cabin_2_code=="J" & is.na(vuelosDeparted$cabin_2_saleable)==FALSE),]
+                            (vuelosDeparted$cabin_2_code=="J" & is.na(vuelosDeparted$cabin_2_saleable)==FALSE),]
 
 
 
@@ -795,7 +736,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
 ### 4.28 cabin_1_rpk / cabin_2_rpk  Beneficio en funcion de los pasajeros o unidad tipica para evaluar la demanda 
 ## (COMPLETADA)
 ###############################################################################################
@@ -809,7 +749,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$cabin_2_rpk)
 
 ## Campo almacenado como entero. Existen 89966 NAs
-
 
 
 
@@ -832,8 +771,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
-
 ### 4.30 total_rpk
 ### (COMPLETADA)
 ###############################################################################################
@@ -842,7 +779,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$total_rpk)
 
 ## Campo almacenado como entero. No contiene NAs
-
 
 
 
@@ -861,8 +797,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
-
 ### 4.32 load_factor
 ## (COMPLETADA)
 ###############################################################################################
@@ -871,8 +805,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$load_factor)
 
 ## Campo almacenado como num. No existen NAs
-
-
 
 
 
@@ -890,8 +822,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
-
 ### 4.34 total_no_shows
 ## (COMPLETADA)
 ###############################################################################################
@@ -904,8 +834,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
-
 ### 4.35 total_cabin_crew 
 ## (COMPLETADA)
 ###############################################################################################
@@ -914,8 +842,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$total_cabin_crew)
 
 ## Campo almacenado como int. No existen NAs
-
-
 
 
 
@@ -934,7 +860,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
 ### 4.37 total_baggage_weight
 ## (COMPLETADA)
 ###############################################################################################
@@ -948,8 +873,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 
 
 
-
-
 ### 4.38 number_of_baggage_pieces
 ## (COMPLETADA)
 ###############################################################################################
@@ -958,8 +881,6 @@ vuelosDeparted <- vuelosDeparted[trimws(vuelosDeparted$cabin_2_code)=="" |
 #summary(vuelosDeparted$number_of_baggage_pieces)
 
 ## Campo almacenado como int. No existen NAs
-
-
 
 
 
@@ -991,12 +912,12 @@ vuelosDeparted$file_sequence_number <- NULL
 
 ### 5. CREACION DE NUEVAS VARIABLES
 
-## Segmentamos las fechas en a�os, mes, dia y hora
+## Segmentamos las fechas en años, mes, dia y hora
 ## 5.1. Mes de salida del vuelo
 vuelosDeparted$mesSalida <- as.integer(month(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$mesSalida <- as.factor(vuelosDeparted$mesSalida)
 
-## 5.2 a�o de salida del vuelo
+## 5.2 aÑo de salida del vuelo
 vuelosDeparted$anyoSalida <- as.integer(year(vuelosDeparted$actual_time_of_departure))
 vuelosDeparted$anyoSalida <- as.factor(vuelosDeparted$anyoSalida)
 
@@ -1052,7 +973,6 @@ vuelosDeparted$diaSemanaSalida <- as.factor(vuelosDeparted$diaSemanaSalida)
 ## 5.10. Dia de la semana para la llegada de los vuelos
 vuelosDeparted$diaSemanaLlegada <- weekdays(as.Date(vuelosDeparted$actual_time_of_arrival))
 vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
-
 
 
 
@@ -1140,10 +1060,6 @@ asignarGruposDF <- function(codigos, dfCodigosGrupos){
 ##################################################################################################
 
 
-
-
-
-
 ## 6.1. Flight_Number
 ## 6.1.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","flight_number"))
@@ -1190,7 +1106,7 @@ mediaRetrasosVuelo$fligthNumberGroup <- asignarGrupoPorCuartiles(mediaRetrasosVu
 #table(mediaRetrasosVuelo$fligthNumberGroup)
 
 
-## 6.1.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.1.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaRetrasosVuelo
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1200,7 +1116,7 @@ vuelosDeparted$flightNumberGroup <- asignarGruposDF(vuelosDeparted$flight_number
 #str(vuelosDeparted$flightNumberGroup)
 
 
-## 6.1.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.1.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
 ############  vuelosDeparted2$flight_number <- NULL
 
@@ -1213,11 +1129,6 @@ vuelosDeparted2$flightNumberGroup <- vuelosDeparted$flightNumberGroup
 
 
 ####################################################################
-
-
-
-
-
 
 
 
@@ -1269,7 +1180,7 @@ mediaPuntoEmbarque$boardPointGroup <- asignarGrupoPorCuartiles(mediaPuntoEmbarqu
 #table(mediaPuntoEmbarque$boardPointGroup)
 
 
-## 6.2.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.2.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaPuntoEmbarque
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1278,7 +1189,7 @@ vuelosDeparted$boardPointGroup <- asignarGruposDF(vuelosDeparted$board_point ,df
 #summary(vuelosDeparted$boardPointGroup)
 #str(vuelosDeparted$boardPointGroup)
 
-## 6.2.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.2.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
 ##############vuelosDeparted2$board_point <- NULL
 
@@ -1288,9 +1199,6 @@ vuelosDeparted2$boardPointGroup <- vuelosDeparted$boardPointGroup
 #head(vuelosDeparted)
 
 ###################################################################### 
-
-
-
 
 
 
@@ -1343,7 +1251,7 @@ mediaLatEmbarque$boardLatGroup <- asignarGrupoPorCuartiles(mediaLatEmbarque, cua
 #head(mediaLatEmbarque)
 #summary(mediaLatEmbarque)
 
-## 6.3.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.3.4 AÃ±adir el nuevo vector al dataframe de vuelos
 dfCodigoGrupo <- mediaLatEmbarque
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
@@ -1352,7 +1260,7 @@ vuelosDeparted$boardLatGroup <- asignarGruposDF(vuelosDeparted$board_lat ,dfCodi
 #summary(vuelosDeparted$boardLatGroup)
 #str(vuelosDeparted$boardLatGroup)
 
-## 6.3.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.3.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
 ################vuelosDeparted2$board_lat <- NULL
 
@@ -1367,10 +1275,6 @@ vuelosDeparted2$boardLatGroup <- vuelosDeparted$boardLatGroup
 
 
 ###################################################################### 
-
-
-
-
 
 
 
@@ -1423,13 +1327,13 @@ dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
 
-## 6.4.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.4.4 AÃ±adir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardLonGroup <- asignarGruposDF(vuelosDeparted$board_lon ,dfCodigoGrupo)
 #summary(vuelosDeparted$boardLonGroup)
 #str(vuelosDeparted$boardLonGroup)
 
 
-## 6.4.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.4.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
 ################vuelosDeparted2$board_lon <- NULL
 
@@ -1443,12 +1347,8 @@ vuelosDeparted2$boardLonGroup <- vuelosDeparted$boardLonGroup
 #summary(vuelosDeparted2$boardLonGroup)
 
 
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.5 Board_country_code (COMPLETADA)
@@ -1500,12 +1400,12 @@ dfCodigoGrupo <- mediaBoardCC
 dfCodigoGrupo$retrasoMedio <- NULL
 dfCodigoGrupo$numeroVuelos <- NULL
 
-## 6.5.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.5.4 AÃ±adir el nuevo vector al dataframe de vuelos
 vuelosDeparted$boardCountryCodeGroup <- asignarGruposDF(vuelosDeparted$board_country_code ,dfCodigoGrupo)
 #summary(vuelosDeparted$boardCountryCodeGroup)
 #str(vuelosDeparted$boardCountryCodeGroup)
 
-## 6.5.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.5.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
 ##################vuelosDeparted2$board_country_code <- NULL
 
@@ -1519,10 +1419,6 @@ vuelosDeparted2$boardCountryCodeGroup <- vuelosDeparted$boardCountryCodeGroup
 #summary(vuelosDeparted2$boardCountryCodeGroup)
 
 ###################################################################### 
-
-
-
-
 
 
 ## 6.6 off_point (COMPLETADA)
@@ -1570,7 +1466,7 @@ mediaOffPoint$offPointGroup <- asignarGrupoPorCuartiles(mediaOffPoint, cuartil1,
 #summary(mediaOffPoint)
 
 
-## 6.6.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.6.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffPoint
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1581,7 +1477,7 @@ vuelosDeparted$offPointGroup <- asignarGruposDF(vuelosDeparted$off_point ,dfCodi
 #str(vuelosDeparted$offPointGroup)
 
 
-## 6.6.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.6.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offPointGroup <- vuelosDeparted$offPointGroup
 ################vuelosDeparted2$off_point <- NULL
 
@@ -1596,11 +1492,6 @@ vuelosDeparted2$offPointGroup <- vuelosDeparted$offPointGroup
 
 
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.7 off_lat (COMPLETADA)
@@ -1648,7 +1539,7 @@ mediaOffLat$offLatGroup <- asignarGrupoPorCuartiles(mediaOffLat, cuartil1, media
 #summary(mediaOffLat)
 
 
-## 6.7.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.7.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffLat
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1659,7 +1550,7 @@ vuelosDeparted$offLatGroup <- asignarGruposDF(vuelosDeparted$off_lat ,dfCodigoGr
 #str(vuelosDeparted$offLatGroup)
 
 
-## 6.7.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.7.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLatGroup <- vuelosDeparted$offLatGroup
 ###############vuelosDeparted2$off_lat <- NULL
 
@@ -1673,12 +1564,8 @@ vuelosDeparted2$offLatGroup <- vuelosDeparted$offLatGroup
 #summary(vuelosDeparted2$offLatGroup)
 
 
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.8 off_lon (COMPLETADA)
@@ -1726,7 +1613,7 @@ mediaOffLon$offLonGroup <- asignarGrupoPorCuartiles(mediaOffLon, cuartil1, media
 #summary(mediaOffLon)
 
 
-## 6.8.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.8.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffLon
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1737,7 +1624,7 @@ vuelosDeparted$offLonGroup <- asignarGruposDF(vuelosDeparted$off_lon ,dfCodigoGr
 #str(vuelosDeparted$offLonGroup)
 
 
-## 6.8.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.8.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offLonGroup <- vuelosDeparted$offLonGroup
 ###############vuelosDeparted2$off_lon <- NULL
 
@@ -1751,11 +1638,8 @@ vuelosDeparted2$offLonGroup <- vuelosDeparted$offLonGroup
 #summary(vuelosDeparted2$offLonGroup)
 
 
+
 ###################################################################### 
-
-
-
-
 
 
 ## 6.9 off_country_code (COMPLETADA)
@@ -1803,7 +1687,7 @@ mediaOffCC$offCountryCodeGroup <- asignarGrupoPorCuartiles(mediaOffCC, cuartil1,
 #summary(mediaOffCC)
 
 
-## 6.9.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.9.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaOffCC
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1814,7 +1698,7 @@ vuelosDeparted$offCountryCodeGroup <- asignarGruposDF(vuelosDeparted$off_country
 #str(vuelosDeparted$offCountryCodeGroup)
 
 
-## 6.9.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.9.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
 ################vuelosDeparted2$off_country_code <- NULL
 
@@ -1828,11 +1712,8 @@ vuelosDeparted2$offCountryCodeGroup <- vuelosDeparted$offCountryCodeGroup
 #summary(vuelosDeparted2$offCountryCodeGroup)
 
 
+
 ###################################################################### 
-
-
-
-
 
 
 ## 6.10 aircraft_type (COMPLETADA)
@@ -1880,7 +1761,7 @@ mediaTipoAvion$aircraftTypeGroup <- asignarGrupoPorCuartiles(mediaTipoAvion, cua
 #summary(mediaTipoAvion)
 
 
-## 6.10.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.10.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaTipoAvion
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1892,7 +1773,7 @@ vuelosDeparted$aircraftTypeGroup <- asignarGruposDF(vuelosDeparted$aircraft_type
 
 
 
-## 6.10.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.10.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
 ################vuelosDeparted2$aircraft_type <- NULL
 
@@ -1905,12 +1786,9 @@ vuelosDeparted2$aircraftTypeGroup <- vuelosDeparted$aircraftTypeGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$aircraftTypeGroup)
 
+
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.11 aircraft_registration_number (COMPLETADA)
@@ -1959,7 +1837,7 @@ mediaNumRegAvion$aircraftRegNumberGroup <- asignarGrupoPorCuartiles(mediaNumRegA
 #summary(mediaNumRegAvion)
 
 
-## 6.11.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.11.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaNumRegAvion
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -1970,7 +1848,7 @@ vuelosDeparted$aircraftRegNumberGroup <- asignarGruposDF(vuelosDeparted$aircraft
 #str(vuelosDeparted$aircraftRegNumberGroup)
 
 
-## 6.11.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.11.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
 ########vuelosDeparted2$aircraft_registration_number <- NULL
 
@@ -1983,12 +1861,10 @@ vuelosDeparted2$aircraftRegNumberGroup <- vuelosDeparted$aircraftRegNumberGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$aircraftRegNumberGroup)
 
+
+
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.12 routing (COMPLETADA)
@@ -2036,7 +1912,7 @@ mediaRutas$routingGroup <- asignarGrupoPorCuartiles(mediaRutas, cuartil1, median
 #summary(mediaRutas)
 
 
-## 6.12.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.12.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaRutas
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2047,7 +1923,7 @@ vuelosDeparted$routingGroup <- asignarGruposDF(vuelosDeparted$routing ,dfCodigoG
 #str(vuelosDeparted$routingGroup)
 
 
-## 6.12.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.12.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
 ##############vuelosDeparted2$routing <- NULL
 
@@ -2060,12 +1936,8 @@ vuelosDeparted2$routingGroup <- vuelosDeparted$routingGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$routingGroup)
 
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.13 mesSalida (COMPLETADA)
@@ -2113,7 +1985,7 @@ mediaMesSalida$mesSalidaGroup <- asignarGrupoPorCuartiles(mediaMesSalida, cuarti
 #summary(mediaMesSalida)
 
 
-## 6.13.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.13.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaMesSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2124,7 +1996,7 @@ vuelosDeparted$mesSalidaGroup <- asignarGruposDF(vuelosDeparted$mesSalida ,dfCod
 #str(vuelosDeparted$mesSalidaGroup)
 
 
-## 6.13.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.13.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
 #############vuelosDeparted2$mesSalida <- NULL
 
@@ -2138,20 +2010,14 @@ vuelosDeparted2$mesSalidaGroup <- vuelosDeparted$mesSalidaGroup
 #str(vuelosDeparted2)
 #summary(vuelosDeparted2$mesSalidaGroup)
 
+
 ###################################################################### 
-
-
-
 
 
 ## 6.14 anyoSalida (COMPLETADA)
 ## No se analiza ya que solo tiene los valores 2015, 2016 y 2017
 
 ###################################################################### 
-
-
-
-
 
 
 ## 6.15 diaSalida (COMPLETADA)
@@ -2198,7 +2064,7 @@ mediaDiaSalida$diaSalidaGroup <- asignarGrupoPorCuartiles(mediaDiaSalida, cuarti
 #summary(mediaDiaSalida)
 
 
-## 6.15.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.15.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaDiaSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2209,7 +2075,7 @@ vuelosDeparted$diaSalidaGroup <- asignarGruposDF(vuelosDeparted$diaSalida ,dfCod
 #str(vuelosDeparted$diaSalidaGroup)
 
 
-## 6.15.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.15.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
 ####################vuelosDeparted2$diaSalida <- NULL
 
@@ -2224,10 +2090,6 @@ vuelosDeparted2$diaSalidaGroup <- vuelosDeparted$diaSalidaGroup
 #summary(vuelosDeparted2$diaSalidaGroup)
 
 ###################################################################### 
-
-
-
-
 
 
 ## 6.16 horaSalida (PENDIENTE)
@@ -2275,7 +2137,7 @@ mediaHoraSalida$horaSalidaGroup <- asignarGrupoPorCuartiles(mediaHoraSalida, cua
 #summary(mediaHoraSalida)
 
 
-## 6.16.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.16.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaHoraSalida
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2286,7 +2148,7 @@ vuelosDeparted$horaSalidaGroup <- asignarGruposDF(vuelosDeparted$horaSalida ,dfC
 #str(vuelosDeparted$horaSalidaGroup)
 
 
-## 6.16.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.16.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
 ###############vuelosDeparted2$horaSalida <- NULL
 
@@ -2301,10 +2163,6 @@ vuelosDeparted2$horaSalidaGroup <- vuelosDeparted$horaSalidaGroup
 #summary(vuelosDeparted2$horaSalidaGroup)
 
 ###################################################################### 
-
-
-
-
 
 
 ## 6.17 mesLlegada (COMPLETADA)
@@ -2352,7 +2210,7 @@ mediaMesLlegada$mesLlegadaGroup <- asignarGrupoPorCuartiles(mediaMesLlegada, cua
 #summary(mediaMesLlegada)
 
 
-## 6.17.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.17.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaMesLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2363,7 +2221,7 @@ vuelosDeparted$mesLlegadaGroup <- asignarGruposDF(vuelosDeparted$mesLlegada ,dfC
 #str(vuelosDeparted$mesLlegadaGroup)
 
 
-## 6.17.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.17.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
 #################vuelosDeparted2$mesLlegada <- NULL
 
@@ -2380,14 +2238,8 @@ vuelosDeparted2$mesLlegadaGroup <- vuelosDeparted$mesLlegadaGroup
 ###################################################################### 
 
 
-
-
-
 ## 6.18 anyoLlegada (COMPLETADA)
 ## No se hace analisis ya que solo tiene los valores 2015, 2016 y 2017
-
-
-
 
 
 ###################################################################### 
@@ -2436,7 +2288,7 @@ mediaDiaLlegada$diaLlegadaGroup <- asignarGrupoPorCuartiles(mediaDiaLlegada, cua
 #head(mediaDiaLlegada)
 #summary(mediaDiaLlegada)
 
-## 6.19.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.19.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaDiaLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2447,7 +2299,7 @@ vuelosDeparted$diaLlegadaGroup <- asignarGruposDF(vuelosDeparted$diaLlegada ,dfC
 #str(vuelosDeparted$diaLlegadaGroup)
 
 
-## 6.19.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.19.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
 ############vuelosDeparted2$diaLlegada <- NULL
 
@@ -2462,10 +2314,6 @@ vuelosDeparted2$diaLlegadaGroup <- vuelosDeparted$diaLlegadaGroup
 #summary(vuelosDeparted2$diaLlegadaGroup)
 
 ###################################################################### 
-
-
-
-
 
 
 ## 6.20 horaLlegada (COMPLETADA)
@@ -2512,7 +2360,7 @@ mediaHoraLlegada$horaLlegadaGroup <- asignarGrupoPorCuartiles(mediaHoraLlegada, 
 #head(mediaHoraLlegada)
 #summary(mediaHoraLlegada)
 
-## 6.20.4 Añadir el nuevo vector al dataframe de vuelos
+## 6.20.4 AÃ±adir el nuevo vector al dataframe de vuelos
 ## asignar el grupo a los datos del dataframe
 dfCodigoGrupo <- mediaHoraLlegada
 dfCodigoGrupo$retrasoMedio <- NULL
@@ -2523,7 +2371,7 @@ vuelosDeparted$horaLlegadaGroup <- asignarGruposDF(vuelosDeparted$horaLlegada ,d
 #str(vuelosDeparted$horaLlegadaGroup)
 
 
-## 6.20.5 Añadir nueva variable al dataframe resultante y eliminar la variable categorica analizada
+## 6.20.5 AÃ±adir nueva variable al dataframe resultante y eliminar la variable categorica analizada
 vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
 #######################vuelosDeparted2$horaLlegada <- NULL
 
@@ -2540,11 +2388,6 @@ vuelosDeparted2$horaLlegadaGroup <- vuelosDeparted$horaLlegadaGroup
 ###################################################################### 
 
 
-
-
-
-
-
 ## 6.21 diaSemanaSalida (COMPLETADA)
 ## 6.22.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
@@ -2555,12 +2398,8 @@ mediaDiaSemSalida <- mediasRetrasos(variables,df)
 #summary(mediaDiaSemSalida$retrasoMedio)
 #str(mediaDiaSemSalida)
 
+
 ###################################################################### 
-
-
-
-
-
 
 
 ## 6.22 disSemanaLlegada (COMPLETADA)
@@ -2573,120 +2412,41 @@ mediaDiaSemLlegada <- mediasRetrasos(variables,df)
 #summary(mediaDiaSemLlegada$retrasoMedio)
 #str(mediaDiaSemLlegada)
 
+
 ###################################################################### 
 
 
 
 
 
-str(vuelosDeparted)
-
-
 
 #####################################################################################################
-## 7. ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
+########## ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
 
-## 7.1 Eliminamos las variables categoricas analizadas
-vuelosDeparted$airline_code <- NULL
-vuelosDeparted$flight_number <- NULL
-vuelosDeparted$board_point <- NULL
-vuelosDeparted$board_lat <- NULL
-vuelosDeparted$board_lon <- NULL
-vuelosDeparted$board_country_code <- NULL
-vuelosDeparted$off_point <- NULL
-vuelosDeparted$off_lat <- NULL
-vuelosDeparted$off_lon <- NULL
-vuelosDeparted$off_country_code <- NULL
-vuelosDeparted$aircraft_type <- NULL
-vuelosDeparted$aircraft_registration_number <- NULL
-vuelosDeparted$routing <- NULL
-vuelosDeparted$horaLlegada <- NULL
-vuelosDeparted$horaSalida <- NULL
-
-## 7.2 Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
-## variable sera eliminada
-vuelosDeparted$general_status_code <- NULL
-
-## 7.3 Como todos los vuelos tienen el valor Y en la variable cabin_1_code, esta variable sera eliminada
-vuelosDeparted$cabin_1_code <- NULL
-
-## 7.4 Eliminamos las variables de fechas, ya que se han divido en rango de horas, dia, mes y a�o
-vuelosDeparted$scheduled_time_of_arrival <- NULL
-vuelosDeparted$actual_time_of_arrival <- NULL
-vuelosDeparted$scheduled_time_of_departure <- NULL
-vuelosDeparted$actual_time_of_departure <- NULL
-
-## 7.5 Eliminamos la variable sched_blocktime, ya que la que realmente nos vale es act_blocktime
-vuelosDeparted$sched_blocktime <- NULL
-
-## 7.6 Eliminamos las variables anyo_salida y anyo_llegada, ya que es informacion irrelevante.
-vuelosDeparted$anyoLlegada <- NULL
-vuelosDeparted$anyoSalida <- NULL
+## COMPROBAR CORRELACION ENTRE VARIABLES
+tabla1 <- table(vuelosDeparted$board_point, vuelosDeparted$off_point)
+plot(tabla1, col = c("red", "blue"), main = "dia semana Llegada vs. dia semana Salida")
+chisq.test(tabla1)
+## En base al valor de P-value determinamos que hay dependencia entre estas dos variables.
+## Si p-value es menor que 0.05 determinamos que hay dependencia
+## si p-value es mayor que 0.05 determinamos que no hay dependencia
 
 
-## 7.7 Comprobar correlacion entre variables
-## Existen varias variables dentro del modelo que pueden estar correlacionadas, por lo tanto las estudiaremos y 
-## determinaremos si son necesarias.
-
-#str(vuelosDeparted)
-## 7.7.1 diaSalida VS diaLlegada y diaSalidaGroup VS diaLlegadaGroup
-tablaDia <- table(vuelosDeparted$diaSalida, vuelosDeparted$diaLlegada)
-tablaDia
-plot(tablaDia, col = c("red", "blue"), main = "Dia Salida vs. Dia Llegada")
-chisq.test(tablaDia)
-## P-value indica que existe correlacion entre ambas variables
-vuelosDeparted$diaLlegada <- NULL
-vuelosDeparted$diaVuelo <- vuelosDeparted$diaSalida
-vuelosDeparted$diaSalida <- NULL
-
-tablaDiaGroup <- table(vuelosDeparted$diaSalidaGroup, vuelosDeparted$diaLlegadaGroup)
-tablaDiaGroup
-plot(tablaDiaGroup, col = c("red", "blue"), main = "Dia Salida Group vs. Dia Llegada Group")
-chisq.test(tablaDiaGroup)
-## P-Value indica que hay correlacion entre ambas variables
-vuelosDeparted$diaLlegadaGroup <- NULL
-vuelosDeparted$diaVueloGroup <- vuelosDeparted$diaSalidaGroup
-vuelosDeparted$diaSalidaGroup <- NULL
 
 
-## 7.7.2 MesSalida VS MesLlegada y MesSalidaGroup VS MesLlegadaGroup
-tablaMes <- table(vuelosDeparted$mesSalida, vuelosDeparted$mesLlegada)
-tablaMes
-plot(tablaMes, col = c("red", "blue"), main = "Mes Salida vs. Mes Llegada")
-chisq.test(tablaMes)
-## En base al valor de P-value (menor que 0.05) determinamos que hay correlacion entre estas dos variables, por 
-## lo que podemos eliminar una de ellas para realizar el estudio.
-vuelosDeparted$mesLlegada <- NULL
-vuelosDeparted$mesVuelo <- vuelosDeparted$mesSalida
-vuelosDeparted$mesSalida <- NULL
 
+## Eliminamos la variable board_point del dataframe resultante
+vuelosDeparted2$board_point <- NULL
+## Eliminamos la variable general_status_code, ya que siempre sera Departed
+vuelosDeparted2$general_status_code <- NULL
+## Eliminamos las fechas, ya que tenemos las fechas divididas en dias, mes y hora
+vuelosDeparted2$scheduled_time_of_arrival <- NULL
+vuelosDeparted2$scheduled_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_arrival <- NULL
 
-tablaMesGroup <- table(vuelosDeparted$mesSalidaGroup, vuelosDeparted$mesLlegadaGroup)
-tablaMesGroup
-plot(tablaMesGroup, col = c("red", "blue"), main = "Mes Salida Group vs. Mes Llegada Group")
-chisq.test(tablaMesGroup)
-## El valor p-value indica que hay correlacion entre las dos variabels, por lo que eliminaremos una de ellas.
-vuelosDeparted$mesLlegadaGroup <- NULL
-vuelosDeparted$mesVueloGroup <- vuelosDeparted$mesSalidaGroup
-vuelosDeparted$mesSalidaGroup <- NULL
-
-
-## 7.7.3 diaSemanaSalida VS diaSemanaLlegada y 
-tablaDiaSemana <- table(vuelosDeparted$diaSemanaSalida, vuelosDeparted$diaSemanaLlegada)
-tablaDiaSemana
-plot(tablaDiaSemana, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
-chisq.test(tablaDiaSemana)
-## P-value indica que hay correlacion. Eliminaremos una de las variables
-vuelosDeparted$diaSemanaLlegada <- NULL
-vuelosDeparted$diaSemanaVuelo <- vuelosDeparted$diaSemanaSalida
-vuelosDeparted$diaSemanaSalida <- NULL
-
-
-## 7.7.4 
-tabla <- table(vuelosDeparted$distance, vuelosDeparted$arrival_delay)
-tabla
-plot(tabla, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
-chisq.test(tabla, simulate.p.value = TRUE)
+## Eliminamos la variable cabin_1_code, ya que solo tiene el valor 1
+vuelosDeparted2$cabin_1_code <- NULL
 
 
 
@@ -2695,33 +2455,326 @@ chisq.test(tabla, simulate.p.value = TRUE)
 
 
 
-## 8. Escribimos el dataframe resultante para reusarlo en la siguiente fase
-write.csv('vuelosDeparted.csv',x = vuelosDeparted)
 
 
 
 
-mediaDiaSemLlegada
-ordenado <- mediaDiaSemLlegada[order(mediaDiaSemLlegada$retrasoMedio),] 
-ordenado$orden <- 1:length(ordenado$codigo)
 
 
-### Funcion que asigna pesos a las variables en funcion de su retraso medio
-asignarPesos <- function(dfRetrasoMedio){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 7. Tabla de normalizacion de cada variable
+obtenerTablaNormalizacion <- function(df){
+
+  nombresdf <- colnames(df)
+  nombres <- vector()
+  maximos <- vector()
+  minimos <- vector()
   
-  dfRetrasoMedioOrdenado <- dfRetrasoMedio[order(dfRetrasoMedio[,2]),]
-  dfRetrasoMedioOrdenado[,4] <- 1:length(dfRetrasoMedioOrdenado[,2])
+  for (i in 1:length(df)){
+    nombres[i] <- nombresdf[i]
+    if(is.numeric(df[,i])){
+      vectorDatos <- df[,i]
+      
+      maximos[i] <- max(vectorDatos, na.rm = TRUE)
+      minimos[i] <- min(vectorDatos, na.rm = TRUE)
+    }
+    else{
+      maximos[i] <- 0
+      minimos[i] <- 0
+    }
+    
+  }
+  maximos <- as.factor(maximos)
+  minimos <- as.factor(minimos)
   
-  return(dfRetrasoMedioOrdenado)
+  dfaux <- as.data.frame(list(nombres,maximos,minimos), col.names = c("Columna","Maximo","Minimo"))
+  return(dfaux)
+  
 }
 
-mediaDiaSemLlegada2 <- mediaDiaSemLlegada
+vuelosDeparted2 <- head(vuelosDeparted, 1000)
 
-pesosMediaDiaSem <- asignarPesos(mediaDiaSemLlegada2)
+tablaNormalizacion <- obtenerTablaNormalizacion(vuelosDeparted2)
+tablaNormalizacion
 
-muestra <- head(vuelosDeparted2$diaSemanaLlegada, 100)
-pesosMediaDiaSem$retrasoMedio<-NULL
-pesosMediaDiaSem$numeroVuelos<-NULL
 
-muestra$peso <- asignarGruposDF(head(vuelosDeparted2$diaSemanaLlegada, 100),pesosMediaDiaSem)
-muestra
+## 8. Normalizar dataframe
+## funcion que normaliza un dataframe (hay que mejorarle en los casos donde existen NAs)
+normalizar <- function(df){
+  
+  ## df <- dataframe a normalizar
+  for (i in 1:length(df)){
+    columna <- vector()
+    if(is.numeric(df[,i])){
+      vectorDatos <- df[,i]
+      maximo <- max(vectorDatos, na.rm = TRUE)
+      minimo <- min(vectorDatos, na.rm = TRUE)
+      for (j in 1:length(vectorDatos)){
+        if(is.na(vectorDatos[j])){
+          columna[j] = minimo
+        }else{
+          columna[j] = (vectorDatos[j]-minimo)/(maximo - minimo)
+        }
+      }
+      df[,i] = columna
+    }
+  }
+  
+  return(df)
+  
+}
+
+vuelosDeparted2 <- normalizar(vuelosDeparted)
+
+
+
+
+
+
+
+
+
+str(vuelosDeparted2)
+vuelosDeparted2$est_blocktime <- NULL
+vuelosDeparted2$flight_number <- NULL
+summary(vuelosDeparted2$general_status_code)
+vuelosDeparted2$general_status_code <- NULL
+vuelosDeparted2$scheduled_time_of_departure <- NULL
+vuelosDeparted2$actual_time_of_departure <- NULL
+vuelosDeparted2$scheduled_time_of_arrival <- NULL
+vuelosDeparted2$actual_time_of_arrival <- NULL
+
+
+#########################################     PUNTOS PENDIENTES   ###########################################
+
+
+1. Se deben hacer grupos para el resto de variables de tipo factor en funcion de los retrasos medios
+2. Almacenar la tabla de normalizacion (necesitamos los maximos y minimos de cada columna para realizar los test)
+3. Mejorar la funcion de normalizacion (falla cuando hay NAs en el vector a normalizar)
+4. Una vez tengamos todo hecho se deberan eliminar las variables que no aportan valor al modelo, como por ejemplo el aÃ±o 
+   del vuelo.
+
+#############################################################################################################
+
+
+## escribimos el dataframe resultante para reusarlo en la siguiente fase
+write.csv('vuelosDeparted.csv',x = vuelosDeparted)
+###
+
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+## board_point, board_lat, board_lon, board_country_code
+   ###### board_point
+str(vuelosDeparted)
+uniqueBP <- unique(vuelosDeparted$board_point)
+dfBP <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
+dfBoardPoint <- mediasRetrasos(uniqueBP, dfBP)
+barplot(dfBoardPoint$retrasoMedio)
+
+    ##### board_lat
+uniqueBL <- unique(vuelosDeparted$board_lat)
+dfBL <- subset(vuelosDeparted, select = c("arrival_delay","board_lat"))
+dfBoardLat <- mediasRetrasos(uniqueBL, dfBL)
+barplot(dfBoardLat$retrasoMedio)
+
+    ##### board_lon
+uniqueBLn <- unique(vuelosDeparted$board_lon)
+dfBLn <- subset(vuelosDeparted, select = c("arrival_delay","board_lon"))
+dfBoardLon <- mediasRetrasos(uniqueBLn, dfBLn)
+barplot(dfBoardLon$retrasoMedio)
+
+    ##### board_country_code
+uniqueBCC <- unique(vuelosDeparted$board_country_code)
+dfBCC <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
+dfBoardCC <- mediasRetrasos(uniqueBCC, dfBCC)
+barplot(dfBoardCC$retrasoMedio)
+#### Board_country_code aporta informacion diferente a las tres variables anteriores.
+#### Board_point, board_lat y board_lon se pueden tratar como una unica variable, por lo tanto estudiaremos unicamente 
+#### board_point
+vuelosDeparted$board_lat <- NULL
+vuelosDeparted$board_lon <- NULL
+
+
+    ##### off_country_code
+uniqueOCC <- unique(vuelosDeparted$off_country_code)
+dfOCC <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
+dfOffCC <- mediasRetrasos(uniqueOCC, dfOCC)
+barplot(dfOffCC$retrasoMedio)
+
+### board_country_code y off_country_code se trataran por separado
+
+###### off_point
+str(vuelosDeparted)
+uniqueOP <- unique(vuelosDeparted$off_point)
+dfOP <- subset(vuelosDeparted, select = c("arrival_delay","off_point"))
+dfOffPoint <- mediasRetrasos(uniqueOP, dfOP)
+barplot(dfOffPoint$retrasoMedio)
+
+##### off_lat
+uniqueOL <- unique(vuelosDeparted$off_lat)
+dfOL <- subset(vuelosDeparted, select = c("arrival_delay","off_lat"))
+dfOffLat <- mediasRetrasos(uniqueOL, dfOL)
+barplot(dfOffLat$retrasoMedio)
+str(dfOffLat)
+
+##### off_lon
+uniqueOLn <- unique(vuelosDeparted$off_lon)
+dfOLn <- subset(vuelosDeparted, select = c("arrival_delay","off_lon"))
+dfOffLon <- mediasRetrasos(uniqueOLn, dfOLn)
+barplot(dfOffLon$retrasoMedio)
+str(dfOffLon)
+
+#### Al igual que anteriormente, off_point, off_lat y off_lon se trataran como una unica variable
+
+#########  GRAFICAS DEL RETRASO EN FUNCION DE VARIABLES
+
+library(ggplot2)
+
+plot(vuelosDeparted$mesLlegada, vuelosDeparted$arrival_delay)
+ggplot(vuelosDeparted$mesSalida, vuelosDeparted$arrival_delay)
+beanplot(vuelosDeparted$diaLlegada, vuelosDeparted$arrival_delay)
+
+
+str(vuelosDeparted)
+
+## graficas de retraso de llegada en base a variables categoricas
+ggplot(vuelosDeparted,aes(airline_code,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(flight_number,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(board_point,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(board_country_code,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(off_point,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(off_country_code,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(aircraft_type,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(aircraft_registration_number,arrival_delay)) + geom_violin(scale = "count")
+#### ggplot(vuelosDeparted,aes(general_status_code,arrival_delay)) + geom_violin(scale = "count") no tiene sentido
+#ggplot(vuelosDeparted,aes(routing,arrival_delay)) + geom_violin(scale = "count")
+#### ggplot(vuelosDeparted,aes(cabin_1_code,arrival_delay)) + geom_violin(scale = "count") no tiene sentido
+ggplot(vuelosDeparted,aes(cabin_2_code,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(mesSalida,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(anyoSalida,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(diaSalida,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(horaSalida,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(mesLlegada,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(anyoLlegada,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(diaLlegada,arrival_delay)) + geom_violin(scale = "count")
+#ggplot(vuelosDeparted,aes(horaLlegada,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(diaSemanaSalida,arrival_delay)) + geom_violin(scale = "count")
+ggplot(vuelosDeparted,aes(diaSemanaLlegada,arrival_delay)) + geom_violin(scale = "count")
+
+
+## graficas de retraso en base a variables numericas
+ggplot(vuelosDeparted, aes(x = board_lat, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = board_lon, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = off_lat, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = off_lon, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = distance, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = departure_delay, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = act_blocktime, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = cabin_1_fitted_configuration, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = cabin_1_saleable, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = cabin_1_pax_boarded, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = cabin_1_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = cabin_1_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = load_factor, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = total_pax, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = total_no_shows, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = total_cabin_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = total_technical_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = total_baggage_weight, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelosDeparted, aes(x = number_of_baggage_pieces, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+
+
+table(vuelosDeparted$horaLlegada)
+
+
+
+
+#########  APLICACION DE MODELOS
+# http://www.revistaseden.org/files/14-cap%2014.pdf
+
+indices <- sample( 1:nrow( vuelosDeparted2 ), 150000 )
+muestra <- vuelosDeparted2[ indices, ]
+
+str(muestra)
+
+head(vuelosDeparted2)
+
+####################################################################
+
+
+warnings()
+length(d)
+dfAux <- vuelosDeparted
+
+model1 <- lm(arrival_delay ~ distance+act_blocktime+cabin_1_fitted_configuration+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+total_rpk+total_ask+load_factor+total_pax+
+               total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
+               number_of_baggage_pieces+flightNumberCode, 
+             na.action = na.omit, data = muestra)
+
+summary(model1)
+
+
+head(vuelosDeparted[vuelosDeparted$flight_number==7854,])
