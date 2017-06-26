@@ -1054,5 +1054,5 @@ vuelosDeparted$diaSemanaLlegada <- weekdays(as.Date(vuelosDeparted$actual_time_o
 vuelosDeparted$diaSemanaLlegada <- as.factor(vuelosDeparted$diaSemanaLlegada)
 
 
-
-
+## 6. Escribimos el dataframe resultante para reusarlo en la siguiente fase
+write.csv('vuelosDeparted.csv',x = vuelosDeparted)

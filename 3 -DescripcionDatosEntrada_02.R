@@ -4,7 +4,7 @@
 ##setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master") ##RUTA SERGIO
-vuelos <- read.table("vuelos.csv", header = T, sep = ",")
+vuelos <- read.table("vuelosDatosAtmosfericos.csv", header = T, sep = ",")
 
 
 
@@ -1151,7 +1151,5 @@ chisq.test(tabla, simulate.p.value = TRUE)
 
 
 ## 8. Escribimos el dataframe resultante para reusarlo en la siguiente fase
-write.csv('vuelos2.csv',x = vuelosDeparted)
-
-str(vuelosDeparted)
+write.csv('vuelosFinal.csv',x = vuelosDeparted)
 
