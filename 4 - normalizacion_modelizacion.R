@@ -1,7 +1,14 @@
 ## Script para normalizar y aplicar modelos
 
+library(ggplot2)
+library(effects)
+library(plyr)
+library(ROCR)
+
+
+
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
-setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master/") ## ruta portatil
+setwd("C:/Users/sergi/Downloads/TFM-master/TFM-master/") ## ruta portatil
 
 vuelos <- read.table("vuelosFinal.csv", header = T, sep = ",")
 vuelos$X <- NULL
@@ -108,6 +115,71 @@ layout(matrix(c(1,2,3,4),2,2)) # optional 4 graphs/page
 plot(model2)
 
 
+#modelos de regresión linea individual
+
+model_ind_1=lm(arrival_delay ~ departure_delay, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_1)
+
+model_ind_2=lm(arrival_delay ~ distance, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_2)
+
+model_ind_3=lm(arrival_delay ~ est_blocktime, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_3)
+
+model_ind_4=lm(arrival_delay ~ act_blocktime, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_4)
+
+model_ind_5=lm(arrival_delay ~ TMIN_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_5)
+
+model_ind_6=lm(arrival_delay ~ TMIN_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_6)
+
+model_ind_7=lm(arrival_delay ~ TMAX_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_7)
+
+model_ind_8=lm(arrival_delay ~ TMAX_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_8)
+
+model_ind_9=lm(arrival_delay ~ TAVG_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_9)
+
+model_ind_10=lm(arrival_delay ~ TAVG_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_10)
+
+model_ind_11=lm(arrival_delay ~ SNOW_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_11)
+
+model_ind_12=lm(arrival_delay ~ SNOW_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_12)
+
+model_ind_13=lm(arrival_delay ~ PRCP_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_13)
+
+model_ind_14=lm(arrival_delay ~ PRCP_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_14)
+
+model_ind_15=lm(arrival_delay ~ SNWD_o, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_15)
+
+model_ind_16=lm(arrival_delay ~ SNWD_d, na.action = na.omit, data = vuelosNormalizado)
+summary(model_ind_16)
+
+
+
+
+#####
+modelCom =lm(arrival_delay ~ ., na.action = na.omit, data = vuelosNormalizado)
+summary(modelCom)
+
+modelo =lm(arrival_delay ~ TMIN_o+TMIN_d+TMAX_o+TAVG_o+distance+departure_delay+est_blocktime+act_blocktime, data = vuelosNormalizado)
+summary(modelo)
+plot(modelo$residuals)
+hist(modelo$residuals)
+qqnorm(modelo$residuals); qqline(modelo$residuals,col=2)
+confint(modelo,level=0.95) 
+
+
 
 
 
@@ -124,7 +196,7 @@ summary(model3)
 Prediccion      <- round(predict(model3, newdata = Test, type = "response"))
 (MC              <- table(Test[, "departure_delay"],Prediccion))   # Matriz de Confusión
 
+ #poisson
 
-
-
-
+model_poisson=glm(arrival_delay~.-TMIN_o-TMIN_d-TMAX_o-TAVG_o-distance-departure_delay-est_blocktime-act_blocktime, family=poisson(link = "log"),data=vuelosNormalizado)
+summary(model_poisson)
