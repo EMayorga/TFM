@@ -3,7 +3,7 @@
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master/") ## ruta portatil
 
-vuelos <- read.table("vuelos2.csv", header = T, sep = ",")
+vuelos <- read.table("vuelosFinal.csv", header = T, sep = ",")
 vuelos$X <- NULL
 
 
@@ -71,7 +71,7 @@ tablaVuelosNormalizados <- obtenerTablaNormalizacion(vuelos)
 vuelosNormalizado <- normalizarDF(vuelos)
 
 write.csv('tablaVuelosNormalizados.csv',x = tablaVuelosNormalizados)
-write.csv('vuelosNormalizado.csv',x = vuelosNormalizado)
+write.csv('vuelosFinalNormalizado.csv',x = vuelosNormalizado)
 
 
 
