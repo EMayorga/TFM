@@ -1025,12 +1025,12 @@ str(vuelosDeparted)
 vuelosDeparted$airline_code <- NULL
 vuelosDeparted$flight_number <- NULL
 vuelosDeparted$board_point <- NULL
-#vuelosDeparted$board_lat <- NULL
-#vuelosDeparted$board_lon <- NULL
+vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
+vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
 vuelosDeparted$board_country_code <- NULL
 vuelosDeparted$off_point <- NULL
-#vuelosDeparted$off_lat <- NULL
-#vuelosDeparted$off_lon <- NULL
+vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
+vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 vuelosDeparted$off_country_code <- NULL
 vuelosDeparted$aircraft_type <- NULL
 vuelosDeparted$aircraft_registration_number <- NULL
