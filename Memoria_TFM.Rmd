@@ -51,67 +51,78 @@ Realizando el summary observamos lo siguiente:
 library(lubridate)
 ```
 
+
+La siguiente gráfica muestra una relacion de los vuelos por año.
 ```{r año actual_time_of_arrival,out.width='100%'}
 barplot(table(year(ymd_hms(vuelos$actual_time_of_departure))))
 ```
 De la gráfica anterior se puede observar que los vuelos estan concentrados en el año 2016.
+A continuación se indica el número de vuelos que se ha realizado cada año.
+```{r tabla anyos}
+table(year(ymd_hms(vuelos$actual_time_of_departure)))
+```
 
 
+La siguiente gráfica muestra la relacion entre los vuelos y los meses del año:
 ```{r mes actual_time_of_arrival, out.width='100%'}
 barplot(table(month(ymd_hms(vuelos$actual_time_of_departure))))
 ```
 De la gráfica anterior determinamos que los meses en los que más vuelos se hacen son Enero, Febrero y Marzo.
 
 
+El siguiente boxplot muestra informacion de la distancia de los vuelos:
 ```{r distancia vuelo,out.width='100%'}
 boxplot(vuelos$distance, main="Distancia vuelos")
+summary(vuelos$distance)
 ```
-De la gráfica anterior determinamos que la distancia para la mayoría de vuelos no supera los 2000 km.
+Del boxplot anterior determinamos que la distancia media realizada en los vuelos es de 925 km.
+El vuelo que menos distancia recorrio fueron 123 km y el vuelo que más distancia recorrio fueron 9275 km.
 
 
+La siguiente gráfica muestra informacion sobre el retraso de llegada para los vuelos.
 ```{r retraso llegada,out.width='100%'}
 boxplot(vuelos$arrival_delay, main="Retraso llegada")
 summary(vuelos$arrival_delay)
 ```
 
-Observando la gráfica anterior vemos que los retrasos de llegada de los aviones se concentran entre -9 y 7 minutos.
+Observando la gráfica anterior vemos que los retrasos de llegada de los vuelos se concentran entre -9 y 7 minutos.
 
 
-Teniendo en cuenta esta primera observación de los datos, vemos que es necesario transformarlos para poder obtener toda su información.
-Se analizarán aquellas variables con valores NA. Se utilizará el paquete **lubridate** para trabajar con las fechas. Las variables almacenadas como numéricas (como por ejemplo fligth_number) seran transformadas a tipo factor, ya que son valores categóricos.
+Teniendo en cuenta esta primera observación de los datos en bruto, analizaremos cada variable con el fin de obtener el máximo de información posible antes de aplicar cualquier modelo.
 
 
 
 ## 3. Metodología a utilizar
 
-En primer lugar eliminaremos del dataset aquellas variables que únicamente tienen NAs.
+3.1. La primera accion a tomar sera obtener el conjunto de datos a analizar. Para ello, nos fijamos en la variable **general status code**. Obtendremos aquellos registros cuyo valor para esta variable sea **Departed**.
 
-```{r eliminar variables NA}
-vuelos$arrival_date <- NULL
-vuelos$cabin_3_code <- NULL
-vuelos$cabin_3_fitted_configuration <- NULL
-vuelos$cabin_3_saleable <- NULL
-vuelos$cabin_3_pax_boarded <- NULL
-vuelos$cabin_3_rpk <- NULL
-vuelos$cabin_3_ask <- NULL
-vuelos$cabin_4_code <- NULL
-vuelos$cabin_4_fitted_configuration <- NULL
-vuelos$cabin_4_saleable <- NULL
-vuelos$cabin_4_pax_boarded <- NULL
-vuelos$cabin_4_rpk <- NULL
-vuelos$cabin_4_ask <- NULL
-```
+3.2. El siguiente paso será limpiar los datos, analizar las variables de entrada, eliminar los NAs en el caso de ser posible, comprobar que los datos son correctos y crear nuevas variables en base a los datos existentes (siempre que sea posible y tenga sentido).
+
+3.3 Se añadiran datos climaticos al dataset de entrada en funcion de las coordenadas geograficas.
+
+Los pasos seguidos para el tratamiento de datos y para añadir datos climaticos se incluyen en los archivos adjuntos **DescripcionDatosEntrada_01.R, ScriptWeather.ipynb, DescripcionDatosEntrada_02.R**.
+
+3.4. Se utilizaran diferentes algoritmos para determinar las variables que mas influyen en el retraso de los vuelos.
+Aplicaremos regresion lineal, regresion logistica, ranfom forest y PCA. Se analizaran los resultados de cada algoritmo por separado y, finalmente, se hara una comparacion entre ellos.
+
+3.5. Una vez determinado el mejor algoritmo analizaremos la relacion de las variables que forman el dataset con el retraso de los vuelos para determinar cual de ellas es más influyente
+
+* Regresion Lineal
+
+* Regresion Logistica
+
+* Random Forest
+
+* PCA
+
+* Comparativa de los Modelos Anteriores
+
+* Analisis de variables en funcion al retraso de los vuelos
 
 
-El siguiente paso a realizar es obtener los datos con los que queremos trabajar. Para ello nos fijamos en la variable **general_status_code**
 
-```{r variable general_status_code}
-table(vuelos$general_status_code)
-```
+## 4. Resumen de Resultados 
 
-Los datos que nos interesan son aquellos vuelos que tienen el valor **Departed**.
-```{r vuelosDeparted}
-vuelosDeparted <- vuelos[vuelos$general_status_code=="Departed",]
-```
+Una vez realizado el análisis del dataframe obtenemos los siguientes resultados:
 
 
