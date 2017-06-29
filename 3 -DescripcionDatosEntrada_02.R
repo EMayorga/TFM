@@ -1012,8 +1012,6 @@ mediaDiaSemLlegada <- mediasRetrasos(variables,df)
 
 
 
-
-
 str(vuelosDeparted)
 
 
@@ -1021,26 +1019,13 @@ str(vuelosDeparted)
 #####################################################################################################
 ## 7. ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
 
-## 7.1 Eliminamos las variables categoricas analizadas
-vuelosDeparted$airline_code <- NULL
-vuelosDeparted$flight_number <- NULL
-vuelosDeparted$board_point <- NULL
+
+
+# 7.1. Convertimos a factor las coordenadas geograficas
 vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
 vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
-vuelosDeparted$board_country_code <- NULL
-vuelosDeparted$off_point <- NULL
 vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
 vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
-vuelosDeparted$off_country_code <- NULL
-vuelosDeparted$aircraft_type <- NULL
-vuelosDeparted$aircraft_registration_number <- NULL
-vuelosDeparted$routing <- NULL
-vuelosDeparted$horaLlegada <- NULL
-vuelosDeparted$horaSalida <- NULL
-vuelosDeparted$mesLlegada <- NULL
-vuelosDeparted$mesSalida <- NULL
-vuelosDeparted$diaLlegada <- NULL
-vuelosDeparted$diaSalida <- NULL
 
 ## 7.2 Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
 ## variable sera eliminada
@@ -1061,6 +1046,27 @@ vuelosDeparted$sched_blocktime <- NULL
 ## 7.6 Eliminamos las variables anyo_salida y anyo_llegada, ya que es informacion irrelevante.
 vuelosDeparted$anyoLlegada <- NULL
 vuelosDeparted$anyoSalida <- NULL
+
+## 7.7 Escribimos el dataframe con todas sus variables para poder analizarlo completamente y realizar graficas
+write.csv('vuelosCompletoGraficas.csv',x = vuelosDeparted)
+
+## 7.8 Eliminamos las variables categoricas analizadas
+vuelosDeparted$airline_code <- NULL
+vuelosDeparted$flight_number <- NULL
+vuelosDeparted$board_point <- NULL
+vuelosDeparted$board_country_code <- NULL
+vuelosDeparted$off_point <- NULL
+vuelosDeparted$off_country_code <- NULL
+vuelosDeparted$aircraft_type <- NULL
+vuelosDeparted$aircraft_registration_number <- NULL
+vuelosDeparted$routing <- NULL
+vuelosDeparted$horaLlegada <- NULL
+vuelosDeparted$horaSalida <- NULL
+vuelosDeparted$mesLlegada <- NULL
+vuelosDeparted$mesSalida <- NULL
+vuelosDeparted$diaLlegada <- NULL
+vuelosDeparted$diaSalida <- NULL
+
 
 
 
