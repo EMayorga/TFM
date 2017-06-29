@@ -1,7 +1,7 @@
 ## 6. Variables de tipo FACTOR
 
 ##En esta ruta est? el script que nos ha enviado Israel por correo 
-setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM/archivos_datos_drive") ## ruta curro
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 #setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master") ##RUTA SERGIO
 vuelos <- read.table("vuelosDatosAtmosfericos.csv", header = T, sep = ",")
@@ -131,7 +131,6 @@ vuelosDeparted2$pesosFligthNumber <- vuelosDeparted$pesosFligthNumber
 
 
 
-
 ## 6.2. Variable board_point
 ## 6.2.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_point"))
@@ -173,7 +172,6 @@ vuelosDeparted2$pesosBoardPoint <- vuelosDeparted$pesosBoardPoint
 #head(vuelosDeparted)
 
 ###################################################################### 
-
 
 
 
@@ -221,7 +219,6 @@ vuelosDeparted2$pesosBoardLat <- vuelosDeparted$pesosBoardLat
 
 
 ###################################################################### 
-
 
 
 
@@ -279,7 +276,6 @@ vuelosDeparted2$pesosBoardLon <- vuelosDeparted$pesosBoardLon
 
 
 
-
 ## 6.5 Board_country_code (COMPLETADA)
 ## 6.5.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","board_country_code"))
@@ -321,7 +317,6 @@ vuelosDeparted2$pesosBoardCountryCode <- vuelosDeparted$pesosBoardCountryCode
 #summary(vuelosDeparted2$pesosBoardCountryCode)
 
 ###################################################################### 
-
 
 
 
@@ -371,7 +366,6 @@ vuelosDeparted2$pesosOffPoint <- vuelosDeparted$pesosOffPoint
 
 
 ###################################################################### 
-
 
 
 
@@ -428,7 +422,6 @@ vuelosDeparted2$pesoOffLat <- vuelosDeparted$pesoOffLat
 
 
 
-
 ## 6.8 off_lon (COMPLETADA)
 ## 6.8.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_lon"))
@@ -478,7 +471,6 @@ vuelosDeparted2$pesoOffLon <- vuelosDeparted$pesoOffLon
 
 
 
-
 ## 6.9 off_country_code (COMPLETADA)
 ## 6.9.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","off_country_code"))
@@ -523,7 +515,6 @@ vuelosDeparted2$pesoOffCountryCode <- vuelosDeparted$pesoOffCountryCode
 
 
 ###################################################################### 
-
 
 
 
@@ -579,7 +570,6 @@ vuelosDeparted2$pesoAircraftType <- vuelosDeparted$pesoAircraftType
 
 
 
-
 ## 6.11 aircraft_registration_number (COMPLETADA)
 ## 6.11.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","aircraft_registration_number"))
@@ -623,7 +613,6 @@ vuelosDeparted2$pesoAircraftRegNumber <- vuelosDeparted$pesoAircraftRegNumber
 #summary(vuelosDeparted2$pesoAircraftRegNumber)
 
 ###################################################################### 
-
 
 
 
@@ -674,7 +663,6 @@ vuelosDeparted2$pesoRouting <- vuelosDeparted$pesoRouting
 #summary(vuelosDeparted2$pesoRouting)
 
 ###################################################################### 
-
 
 
 
@@ -739,7 +727,6 @@ vuelosDeparted2$pesoMesSalida <- vuelosDeparted$pesoMesSalida
 
 
 
-
 ## 6.15 diaSalida (COMPLETADA)
 ## 6.15.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSalida"))
@@ -789,7 +776,6 @@ vuelosDeparted2$pesoDiaSalida <- vuelosDeparted$pesoDiaSalida
 
 
 
-
 ## 6.16 horaSalida (PENDIENTE)
 ## 6.16.1. Calculamos el retraso medio.
 df <- subset(vuelosDeparted, select = c("arrival_delay","horaSalida"))
@@ -834,7 +820,6 @@ vuelosDeparted2$pesoHoraSalida <- vuelosDeparted$pesoHoraSalida
 #summary(vuelosDeparted2$pesoHoraSalida)
 
 ###################################################################### 
-
 
 
 
@@ -896,7 +881,6 @@ vuelosDeparted2$pesoMesLlegada <- vuelosDeparted$pesoMesLlegada
 
 
 
-
 ###################################################################### 
 
 
@@ -943,7 +927,6 @@ vuelosDeparted2$pesoDiaLlegada <- vuelosDeparted$pesoDiaLlegada
 #summary(vuelosDeparted2$pesoDiaLlegada)
 
 ###################################################################### 
-
 
 
 
@@ -998,7 +981,6 @@ vuelosDeparted2$pesoHoraLlegada <- vuelosDeparted$pesoHoraLlegada
 
 
 
-
 ## 6.21 diaSemanaSalida (COMPLETADA)
 ## 6.22.1. Calculamos el retraso medio
 df <- subset(vuelosDeparted, select = c("arrival_delay","diaSemanaSalida"))
@@ -1010,7 +992,6 @@ mediaDiaSemSalida <- mediasRetrasos(variables,df)
 #str(mediaDiaSemSalida)
 
 ###################################################################### 
-
 
 
 
@@ -1031,8 +1012,6 @@ mediaDiaSemLlegada <- mediasRetrasos(variables,df)
 
 
 
-
-
 str(vuelosDeparted)
 
 
@@ -1040,26 +1019,13 @@ str(vuelosDeparted)
 #####################################################################################################
 ## 7. ELIMINAR VARIABLES CATEGORICAS ANALIZADAS Y SIN ANALIZAR QUE NO TENGAN SENTIDO MANTENER
 
-## 7.1 Eliminamos las variables categoricas analizadas
-vuelosDeparted$airline_code <- NULL
-vuelosDeparted$flight_number <- NULL
-vuelosDeparted$board_point <- NULL
-vuelosDeparted$board_lat <- NULL
-vuelosDeparted$board_lon <- NULL
-vuelosDeparted$board_country_code <- NULL
-vuelosDeparted$off_point <- NULL
-vuelosDeparted$off_lat <- NULL
-vuelosDeparted$off_lon <- NULL
-vuelosDeparted$off_country_code <- NULL
-vuelosDeparted$aircraft_type <- NULL
-vuelosDeparted$aircraft_registration_number <- NULL
-vuelosDeparted$routing <- NULL
-vuelosDeparted$horaLlegada <- NULL
-vuelosDeparted$horaSalida <- NULL
-vuelosDeparted$mesLlegada <- NULL
-vuelosDeparted$mesSalida <- NULL
-vuelosDeparted$diaLlegada <- NULL
-vuelosDeparted$diaSalida <- NULL
+
+
+# 7.1. Convertimos a factor las coordenadas geograficas
+vuelosDeparted$board_lat <- as.factor(vuelosDeparted$board_lat)
+vuelosDeparted$board_lon <- as.factor(vuelosDeparted$board_lon)
+vuelosDeparted$off_lat <- as.factor(vuelosDeparted$off_lat)
+vuelosDeparted$off_lon <- as.factor(vuelosDeparted$off_lon)
 
 ## 7.2 Como todos los vuelos tienen el valor Departed en la variable general_status_code, esta
 ## variable sera eliminada
@@ -1081,74 +1047,68 @@ vuelosDeparted$sched_blocktime <- NULL
 vuelosDeparted$anyoLlegada <- NULL
 vuelosDeparted$anyoSalida <- NULL
 
+## 7.7 Escribimos el dataframe con todas sus variables para poder analizarlo completamente y realizar graficas
+write.csv('vuelosCompletoGraficas.csv',x = vuelosDeparted)
 
-str(vuelosDeparted)
-
-## 7.7 Comprobar correlacion entre variables
-## Existen varias variables dentro del modelo que pueden estar correlacionadas, por lo tanto las estudiaremos y 
-## determinaremos si son necesarias.
-
-#str(vuelosDeparted)
-## 7.7.1 diaSalida VS diaLlegada y diaSalidaGroup VS diaLlegadaGroup
-tablaDia <- table(vuelosDeparted$diaSalida, vuelosDeparted$diaLlegada)
-tablaDia
-plot(tablaDia, col = c("red", "blue"), main = "Dia Salida vs. Dia Llegada")
-chisq.test(tablaDia)
-## P-value indica que existe correlacion entre ambas variables
+## 7.8 Eliminamos las variables categoricas analizadas
+vuelosDeparted$airline_code <- NULL
+vuelosDeparted$flight_number <- NULL
+vuelosDeparted$board_point <- NULL
+vuelosDeparted$board_country_code <- NULL
+vuelosDeparted$off_point <- NULL
+vuelosDeparted$off_country_code <- NULL
+vuelosDeparted$aircraft_type <- NULL
+vuelosDeparted$aircraft_registration_number <- NULL
+vuelosDeparted$routing <- NULL
+vuelosDeparted$horaLlegada <- NULL
+vuelosDeparted$horaSalida <- NULL
+vuelosDeparted$mesLlegada <- NULL
+vuelosDeparted$mesSalida <- NULL
 vuelosDeparted$diaLlegada <- NULL
-vuelosDeparted$diaVuelo <- vuelosDeparted$diaSalida
 vuelosDeparted$diaSalida <- NULL
 
-tablaDiaGroup <- table(vuelosDeparted$diaSalidaGroup, vuelosDeparted$diaLlegadaGroup)
-tablaDiaGroup
-plot(tablaDiaGroup, col = c("red", "blue"), main = "Dia Salida Group vs. Dia Llegada Group")
-chisq.test(tablaDiaGroup)
-## P-Value indica que hay correlacion entre ambas variables
-vuelosDeparted$diaLlegadaGroup <- NULL
-vuelosDeparted$diaVueloGroup <- vuelosDeparted$diaSalidaGroup
-vuelosDeparted$diaSalidaGroup <- NULL
 
-
-## 7.7.2 MesSalida VS MesLlegada y MesSalidaGroup VS MesLlegadaGroup
-tablaMes <- table(vuelosDeparted$mesSalida, vuelosDeparted$mesLlegada)
-tablaMes
-plot(tablaMes, col = c("red", "blue"), main = "Mes Salida vs. Mes Llegada")
-chisq.test(tablaMes)
-## En base al valor de P-value (menor que 0.05) determinamos que hay correlacion entre estas dos variables, por 
-## lo que podemos eliminar una de ellas para realizar el estudio.
-vuelosDeparted$mesLlegada <- NULL
-vuelosDeparted$mesVuelo <- vuelosDeparted$mesSalida
-vuelosDeparted$mesSalida <- NULL
-
-
-tablaMesGroup <- table(vuelosDeparted$mesSalidaGroup, vuelosDeparted$mesLlegadaGroup)
-tablaMesGroup
-plot(tablaMesGroup, col = c("red", "blue"), main = "Mes Salida Group vs. Mes Llegada Group")
-chisq.test(tablaMesGroup)
-## El valor p-value indica que hay correlacion entre las dos variabels, por lo que eliminaremos una de ellas.
-vuelosDeparted$mesLlegadaGroup <- NULL
-vuelosDeparted$mesVueloGroup <- vuelosDeparted$mesSalidaGroup
-vuelosDeparted$mesSalidaGroup <- NULL
-
-
-## 7.7.3 diaSemanaSalida VS diaSemanaLlegada y 
-tablaDiaSemana <- table(vuelosDeparted$diaSemanaSalida, vuelosDeparted$diaSemanaLlegada)
-tablaDiaSemana
-plot(tablaDiaSemana, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
-chisq.test(tablaDiaSemana)
-## P-value indica que hay correlacion. Eliminaremos una de las variables
-vuelosDeparted$diaSemanaLlegada <- NULL
-vuelosDeparted$diaSemanaVuelo <- vuelosDeparted$diaSemanaSalida
-vuelosDeparted$diaSemanaSalida <- NULL
-
-
-## 7.7.4 
-tabla <- table(vuelosDeparted$distance, vuelosDeparted$arrival_delay)
-tabla
-plot(tabla, col = c("red", "blue"), main = "Dia Salida  vs. Dia Llegada Group")
-chisq.test(tabla, simulate.p.value = TRUE)
 
 
 ## 8. Escribimos el dataframe resultante para reusarlo en la siguiente fase
 write.csv('vuelosFinal.csv',x = vuelosDeparted)
+
+
+
+## 9. Escribimos en la carpeta mediasFactores los dataframe que almacenan las medias para cada variable
+## de tipo factor que ha sido analizada
+
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+#setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master") ##RUTA SERGIO
+
+dir.create("mediasFactores")
+
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM/mediasFactores") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset/mediasFactores") ## ruta portatil
+#setwd("C:/Users/sergi/Downloads/TFM-master (3)/TFM-master/mediasFactores") ##RUTA SERGIO
+
+
+write.csv('mediaFlightNumber.csv',x = mediaRetrasosVuelo)
+write.csv('mediaBoardPoint.csv',x = mediaPuntoEmbarque)
+write.csv('mediaBoardLat.csv',x = mediaLatEmbarque)
+write.csv('mediaBoardLon.csv',x = mediaBoardLon)
+write.csv('mediaBoardCC.csv',x = mediaBoardCC)
+write.csv('mediaOffPoint.csv',x = mediaOffPoint)
+write.csv('mediaOffLat.csv',x = mediaOffLat)
+write.csv('mediaOffLon.csv',x = mediaOffLon)
+write.csv('mediaOffCC.csv',x = mediaOffCC)
+write.csv('mediaAircraftType.csv',x = mediaTipoAvion)
+write.csv('mediaAircraftRegistratioNumber.csv',x = mediaNumRegAvion)
+write.csv('mediaRouting.csv',x = mediaRutas)
+write.csv('mediaMesSalida.csv',x = mediaMesSalida)
+write.csv('mediaDiaSalida.csv',x = mediaDiaSalida)
+write.csv('mediaHoraSalida.csv',x = mediaHoraSalida)
+write.csv('mediaMesLlegada.csv',x = mediaMesLlegada)
+write.csv('mediaDiaLlegada.csv',x = mediaDiaLlegada)
+write.csv('mediaHoraLlegada.csv',x = mediaHoraLlegada)
+write.csv('mediaDiaSemanaSalida.csv',x = mediaDiaSemSalida)
+write.csv('mediaDiaSemanaLlegada.csv',x = mediaDiaSemLlegada)
+
+
 
