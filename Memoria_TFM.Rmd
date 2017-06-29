@@ -123,6 +123,6 @@ Aplicaremos regresion lineal, regresion logistica, ranfom forest y PCA. Se anali
 
 ## 4. Resumen de Resultados 
 
-
+Una vez realizado el análisis del dataframe obtenemos los siguientes resultados:
 
 
