@@ -1,8 +1,8 @@
 
 ## Archivo donde se pintaran graficas de las variables del dataset con el fin de analizarlas.
 
-#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 
 
 ## Apertura del dataset
@@ -55,6 +55,11 @@ mediasRetrasos <- function(numVuelos, muestra){
   df <- as.data.frame(list(vectorCodigos,vectorRetrasos,vectorNumeroVuelos), col.names = c("codigo","retrasoMedio","numeroVuelos"))
   return(df)
 }
+
+
+#Airline_code
+ggplot(vuelos,aes(airline_code,arrival_delay)) + geom_violin(scale = "count")
+
 
 # Flight_number
 df <- subset(vuelos, select = c("arrival_delay","flight_number"))
@@ -145,10 +150,18 @@ df <- subset(vuelos, select = c("arrival_delay","off_country_code"))
 variables <- unique(df$off_country_code)
 mediaOffCC <- mediasRetrasos(variables,df)
   
+
+# actual_time_of_departure
+
+# actual_time_of_arrival
+
+
 # AircraftType
 df <- subset(vuelos, select = c("arrival_delay","aircraft_type"))
 variables <- unique(df$aircraft_type)
 mediaAircraftType <- mediasRetrasos(variables,df)
+
+ggplot(vuelos,aes(aircraft_type,arrival_delay)) + geom_violin(scale = "count")
   
 # AircraftRegistrationNumber
 df <- subset(vuelos, select = c("arrival_delay","aircraft_registration_number"))
@@ -201,51 +214,83 @@ variables <- unique(df$diaSemanaLlegada)
 mediaDiaSemanaLlegada <- mediasRetrasos(variables,df)
 
 
-ggplot(vuelos,aes(airline_code,arrival_delay)) + geom_violin(scale = "count")
-## graficas de retraso de llegada en base a variables categoricas
-ggplot(vuelos,aes(airline_code,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(flight_number,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(board_point,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(board_country_code,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(off_point,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(off_country_code,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(aircraft_type,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(aircraft_registration_number,arrival_delay)) + geom_violin(scale = "count")
-#### ggplot(vuelos,aes(general_status_code,arrival_delay)) + geom_violin(scale = "count") no tiene sentido
-#ggplot(vuelos,aes(routing,arrival_delay)) + geom_violin(scale = "count")
-#### ggplot(vuelos,aes(cabin_1_code,arrival_delay)) + geom_violin(scale = "count") no tiene sentido
-ggplot(vuelos,aes(cabin_2_code,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(mesSalida,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(anyoSalida,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(diaSalida,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(horaSalida,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(mesLlegada,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(anyoLlegada,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(diaLlegada,arrival_delay)) + geom_violin(scale = "count")
-#ggplot(vuelos,aes(horaLlegada,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(diaSemanaSalida,arrival_delay)) + geom_violin(scale = "count")
-ggplot(vuelos,aes(diaSemanaLlegada,arrival_delay)) + geom_violin(scale = "count")
+
+
+
+
+
+
 
 
 # Variables numericas
 ## graficas de retraso en base a variables numericas
-ggplot(vuelos, aes(x = board_lat, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = board_lon, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = off_lat, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = off_lon, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = distance, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = departure_delay, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = act_blocktime, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_fitted_configuration, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_saleable, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_pax_boarded, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = load_factor, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_pax, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_no_shows, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_cabin_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_technical_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_baggage_weight, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = number_of_baggage_pieces, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
 
+# distance 
+
+# departure_delay
+
+# arrival_delay 
+
+# act_blocktime 
+
+# cabin_1_fitted_configuration 
+
+# cabin_1_saleable   
+
+# cabin_1_pax_boarded 
+
+# cabin_1_rpk    
+
+# cabin_1_ask   
+
+# cabin_2_fitted_configuration 
+
+# cabin_2_saleable
+
+# cabin_2_pax_boarded  
+
+# cabin_2_rpk   
+
+# cabin_2_ask
+
+# total_rpk  
+
+# total_ask   
+
+# load_factor 
+
+# total_pax   
+
+# total_no_shows   
+
+# total_cabin_crew 
+
+# total_technical_crew    
+
+# total_baggage_weight 
+
+# number_of_baggage_pieces  
+
+
+ggplot(vuelos, aes(y = board_lat, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = board_lon, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = off_lat, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = off_lon, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = distance, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(x = arrival_delay, y = departure_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = act_blocktime, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = cabin_1_fitted_configuration, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = cabin_1_saleable, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = cabin_1_pax_boarded, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = cabin_1_rpk, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = cabin_1_ask, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = load_factor, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = total_pax, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = total_no_shows, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = total_cabin_crew, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = total_technical_crew, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = total_baggage_weight, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+ggplot(vuelos, aes(y = number_of_baggage_pieces, x = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+
+
+   
