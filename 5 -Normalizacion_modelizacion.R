@@ -79,12 +79,27 @@ write.csv('vuelosFinalNormalizado.csv',x = vuelosNormalizado)
 vuelosNormalizado <- read.table("vuelosNormalizado.csv", header = T, sep = ",")
 
 
-#modelo analizando todas las variables
+ 
+
+
+###Modelo de regresión lineal del retraso de llegada.
+##cogemos una muestra aleatoria
 indices <- sample( 1:nrow( vuelosNormalizado ), 150000 )
 muestra <- vuelosNormalizado[ indices, ]
 
 
-model1 <- lm(arrival_delay ~ distance+act_blocktime+cabin_1_fitted_configuration+
+##### modelos de regresion de variables con todas variables del dataframe
+modelCom1 =lm(arrival_delay ~ ., na.action = na.omit, data = muestra)
+summary(modelCom1)
+
+modelCom2 =lm(departure_delay ~ ., na.action = na.omit, data = muestra)
+summary(modelCom2)
+#se puede observar que lo que más influye es el retraso de salida.
+
+
+
+##para hacer el modelo con las variables deseadas
+model1 <- lm(departure_delay ~ distance+act_blocktime+cabin_1_fitted_configuration+
                cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+total_rpk+total_ask+load_factor+total_pax+
                total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
                number_of_baggage_pieces+pesosFligthNumber+
@@ -96,21 +111,21 @@ model1 <- lm(arrival_delay ~ distance+act_blocktime+cabin_1_fitted_configuration
 
 summary(model1)
 
-#####
-modelCom1 =lm(arrival_delay ~ ., na.action = na.omit, data = vuelosNormalizado)
-summary(modelCom1)
+model1b <- lm(departure_delay ~ TMIN_o+TMIN_d+TMAX_o+TMAX_d+
+            TAVG_o+TAVG_d+PRCP_o+PRCP_d+SNWD_o+SNWD_d, 
+             na.action = na.omit, data = vuelosNormalizado)
 
-modelCom2 =lm(departure_delay ~ ., na.action = na.omit, data = vuelosNormalizado)
-summary(modelCom2)
-####
+summary(model1b)
+#en este modelo se puede observar que lo que más influye en el retraso por medios atmosfericos es la temperatura media.
+#si llueve también influye aunque menos
+hist(model1b$residuals)
 
-#colnames(vuelosNormalizado)
 
-model2 <-lm(departure_delay ~  TAVG_o + TAVG_d ,na.action = na.omit, data = vuelosNormalizado)
-summary(model2)
-#fit <- lm(y ~ x1 + x2 + x3, data=mydata)
+
+ 
+
+
 hist(model2$residuals)
-layout(matrix(c(1,2,3,4),2,2)) # optional 4 graphs/page 
 plot(model2)
 
 
@@ -121,35 +136,43 @@ muestra         <- sample(nrow(vuelosNormalizado),nrow(vuelosNormalizado)*.3)
 Train           <- vuelosNormalizado[-muestra,]
 Test            <- vuelosNormalizado[muestra,]
 
-model3     <- glm(arrival_delay ~., Train, family = binomial(link="logit"))
+model3     <- glm(departure_delay ~., Train, family = binomial(link="logit"))
 summary(model3)
 
 
 Prediccion      <- round(predict(model3, newdata = Test, type = "response"))
 (MC              <- table(Test[, "departure_delay"],Prediccion))   # Matriz de Confusión
 
+
+
+
+
 ###random forest
 install.packages("randomForest")
 library(randomForest)
 
 
-nn <- vuelosNormalizado[sample(nrow(vuelosNormalizado), 100), ]
-
-
-set.seed(111)
-indices <- sample( 1:nrow( vuelosNormalizado ), 150000 )
-indices2 <- sample(1 :nrow( nn ), 5)
+set.seed(1)
+indices <- sample( 1:nrow( vuelosNormalizado ), 10000 )
 muestra <- vuelosNormalizado[ indices, ]
-muestra2 <- nn[ indices2, ]
+rf <- randomForest(departure_delay ~ .,na.action=na.omit,proximity=TRUE,
+                   keep.forest=FALSE, data=muestra)
+print(rf)
+summary(rf)
 
-rf <- randomForest(departure_delay ~ .,na.action=na.omit, data=muestra2)
+importance(rf)#para ver que variables son mas importantes
+plot(margin(rf))
+MDSplot(rf, muestra$departure_delay)
+MDSplot(rf, muestra$departure_delay, palette=rep(1, 3), pch=as.numeric(muestra$departure_delay))
+
+
 pred <- predict(rf, muestra2)
-table(pred, muestra2$departure_delay)
+table(pred, muestra$departure_delay)
 
 
 ###pca
 
-##♥ELEGIR VARIABLES QUE NO SEAN NULAS  O CONSTANTES COMO SNOW_d
+##ELEGIR VARIABLES QUE NO SEAN NULAS  O CONSTANTES
 vuelosPCA <- data.frame("TMIN_o" = vuelosNormalizado$TMIN_o, 
                   "TMIN_d" = vuelosNormalizado$TMIN_d, 
                   "TMAX_o" = vuelosNormalizado$TMAX_o,
@@ -161,8 +184,6 @@ vuelosPCA <- data.frame("TMIN_o" = vuelosNormalizado$TMIN_o,
                   "arrival_delay" = vuelosNormalizado$arrival_delay,
                   "est_blocktime" = vuelosNormalizado$est_blocktime,
                   "act_blocktime" = vuelosNormalizado$act_blocktime,
-                  #"SNOW_o" = vuelosNormalizado$SNOW_o,
-                  #"SNOW_d" = vuelosNormalizado$SNOW_d,
                   "PRCP_o" = vuelosNormalizado$PRCP_o,
                   "PRCP_d" = vuelosNormalizado$PRCP_d,
                   "pesoHoraLlegada" = vuelosNormalizado$pesoHoraLlegada,
