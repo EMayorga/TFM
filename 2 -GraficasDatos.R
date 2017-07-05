@@ -1,8 +1,8 @@
 
 ## Archivo donde se pintaran graficas de las variables del dataset con el fin de analizarlas.
 
-#setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
-setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
+setwd("C:/Users/epifanio.mayorga/Desktop/Master/TFM") ## ruta curro
+#setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
 
 
 ## Apertura del dataset
@@ -651,6 +651,7 @@ str(vuelos)
 
 # Variables numericas
 ## graficas de retraso en base a variables numericas
+
 ggplot(vuelos, aes(x = distance, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
 ggplot(vuelos, aes(x = departure_delay, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
 ggplot(vuelos, aes(x = act_blocktime, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
@@ -669,3 +670,5 @@ ggplot(vuelos, aes(x = total_technical_crew, y = arrival_delay)) + geom_point() 
 ggplot(vuelos, aes(x = total_baggage_weight, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
 ggplot(vuelos, aes(x = number_of_baggage_pieces, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
 
+## De los graficos anteriores se puede observar que únicamente existe correlacion con la variable
+## arrival_delay por medio de la variable departure_delay
