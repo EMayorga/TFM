@@ -1,7 +1,8 @@
 ## Script para normalizar y aplicar modelos
 
+#cambiar esta ruta por donde esten los datos
 #setwd("C:/Users/Emoli/Desktop/Master/TFM/Dataset") ## ruta portatil
-setwd("C:/Users/sergi/Downloads/TFM-master (1)/TFM-master/") ## ruta portatil
+setwd("C:/Users/sergi/Downloads/TFM-master111/TFM-master") ## ruta portatil
 
 vuelos <- read.table("vuelosFinal.csv", header = T, sep = ",")
 vuelos$X <- NULL
@@ -78,10 +79,6 @@ write.csv('vuelosFinalNormalizado.csv',x = vuelosNormalizado)
 ## 2. Aplicacion de modelos
 vuelosNormalizado <- read.table("vuelosNormalizado.csv", header = T, sep = ",")
 
-
- 
-
-
 ###Modelo de regresión lineal del retraso de llegada.
 ##cogemos una muestra aleatoria
 indices <- sample( 1:nrow( vuelosNormalizado ), 150000 )
@@ -91,7 +88,6 @@ muestra <- vuelosNormalizado[ indices, ]
 ##### modelos de regresion de variables con todas variables del dataframe
 modelCom1 =lm(arrival_delay ~ ., na.action = na.omit, data = muestra)
 summary(modelCom1)
-
 modelCom2 =lm(departure_delay ~ ., na.action = na.omit, data = muestra)
 summary(modelCom2)
 #se puede observar que lo que más influye es el retraso de salida.
@@ -126,6 +122,7 @@ hist(model1b$residuals)
 
 
 hist(model2$residuals)
+
 plot(model2)
 
 
@@ -161,14 +158,9 @@ print(rf)
 summary(rf)
 
 importance(rf)#para ver que variables son mas importantes
-plot(margin(rf))
+ 
 MDSplot(rf, muestra$departure_delay)
-MDSplot(rf, muestra$departure_delay, palette=rep(1, 3), pch=as.numeric(muestra$departure_delay))
-
-
-pred <- predict(rf, muestra2)
-table(pred, muestra$departure_delay)
-
+ 
 
 ###pca
 
