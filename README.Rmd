@@ -1,11 +1,2 @@
----
-title: "Memoria_TFM"
-output:
-  html_document: default
-  pdf_document: default
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+ 
 Este es el repositorio que contiene un trabajo de fin de Máster!. Contiene tanto scripts en R y como un notebook de Jupyter. Hay disponible una memoria a modo resumen del trabajo que hemos realizado.
