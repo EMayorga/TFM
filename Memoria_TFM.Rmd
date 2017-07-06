@@ -3,21 +3,24 @@ title: "Memoria_TFM"
 output:
   html_document: default
   pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+ 
 ```
 
 ## 1. Introduccion
 
-El Trabajo Fin de M·ster consistir· en analizar el impacto de diversos factores en el retraso de los vuelos.
-Se aÒadiran datos clim·ticos al dataset de entrada y se estudiar· el impacto del clima y del resto de variables sobre el retraso de los vuelos.
-Para realizar el presente trabajo se utilizar·n los lenguajes Python y R.
+El Trabajo Fin de M√°ster consistir√° en analizar el impacto de diversos factores en el retraso de los vuelos.
+Se a√±adiran datos clim√°ticos al dataset de entrada y se estudiar√° el impacto del clima y del resto de variables sobre el retraso de los vuelos.
 
-## 2. An·lisis del dataset de entrada
+Para realizar el presente trabajo se han usado los lenguajes Python (con los notebooks de jupyter) y R.
 
-A continuaciÛn se muestra un breve an·lisis de las variables del dataset de entrada:
+## 2. An√°lisis del dataset de entrada
+
+A continuaci√≥n se muestra un breve an√°lisis de las variables del dataset de entrada:
 
 ```{r dataset, echo=FALSE}
 vuelos <- read.table("operations_leg.csv", header = T, sep = "^")
@@ -34,40 +37,36 @@ Los tipos de las variables son variados, existiendo los siguientes: logi, int, n
 summary(vuelos)
 ```
 
+Ejecutando el comando "summary"" observamos lo siguiente:
 
-Realizando el summary observamos lo siguiente:
-
-* Varias variables ˙nicamente almacenan valores NAs, por lo tanto deberan ser eliminadas.
-* El codigo de aerolinea que m·s se utiliza es XX. Podemos entender no existÌa un cÛdigo y se rellenÛ este campo con XX.
-* La mayorÌa de vuelos tiene el valor **Departed** en su cÛdigo de estado (variable general_status_code). 
-* La mayorÌa de los vuelos despegan y aterrizan en aeropuertos EspaÒoles.
-* La m·xima distancia de un vuelo son 9275 kilÛmetros y la mÌnima son 123 kilÛmetros.
-* Existen vuelos que llegan a su destino con 59 minutos de adelanto asÌ como existen vuelos que llegan a su destino con 59 minutos de retraso.
-* Existen vuelos que despegan de su origen con 59 minutos de adelanto asÌ como existen vuelos que despegan de su origen con 59 minutos de retraso.
+* Varias variables √∫nicamente contienen valores NAs, por lo tanto deberan ser eliminadas.
+* El codigo de aerolinea que m√°s se utiliza es XX. Podemos entender no exist√≠a un c√≥digo y se rellene este campo con XX.
+* La mayor√≠a de vuelos tiene el valor **Departed** en su c√≥digo de estado (variable general_status_code). 
+* La mayor√≠a de los vuelos despegan y aterrizan en aeropuertos Espa√±oles.
+* La m√°xima distancia de un vuelo son 9275 kil?metros y la m√≠nima son 123 kil√≥metros.
+* Existen vuelos que llegan a su destino con 59 minutos de adelanto as√≠ como existen vuelos que llegan a su destino con 59 minutos de retraso.
+* Existen vuelos que despegan de su origen con 59 minutos de adelanto as√≠ como existen vuelos que despegan de su origen con 59 minutos de retraso.
 * La media de piezas de equipajes en los aviones es de 61.
 
-* InformaciÛn sobre las fechas de los vuelos:
+* Informaci√≥n sobre las fechas de los vuelos:
 ```{r lubridate,echo=FALSE,include=FALSE}
 library(lubridate)
 ```
 
-
-La siguiente gr·fica muestra una relacion de los vuelos por aÒo.
-```{r aÒo actual_time_of_arrival,out.width='100%'}
+La siguiente gr√°fica muestra una relacion de los vuelos por a√±o.
+```{r actual_time_of_arrival,out.width='100%'}
 barplot(table(year(ymd_hms(vuelos$actual_time_of_departure))))
 ```
-De la gr·fica anterior se puede observar que los vuelos estan concentrados en el aÒo 2016.
-A continuaciÛn se indica el n˙mero de vuelos que se ha realizado cada aÒo.
+De la gr√°fica anterior se puede observar que los vuelos estan concentrados en el a√±o 2016.
+A continuaci√≥n se indica el n√∫mero de vuelos que se ha realizado cada a√±o.
 ```{r tabla anyos}
 table(year(ymd_hms(vuelos$actual_time_of_departure)))
 ```
-
-
-La siguiente gr·fica muestra la relacion entre los vuelos y los meses del aÒo:
+La siguiente gr?fica muestra la relacion entre los vuelos y los meses del a?o:
 ```{r mes actual_time_of_arrival, out.width='100%'}
 barplot(table(month(ymd_hms(vuelos$actual_time_of_departure))))
 ```
-De la gr·fica anterior determinamos que los meses en los que m·s vuelos se hacen son Enero, Febrero y Marzo.
+De la gr√°fica anterior determinamos que los meses en los que m√°s vuelos se hacen son Enero, Febrero y Marzo.
 
 
 El siguiente boxplot muestra informacion de la distancia de los vuelos:
@@ -76,53 +75,183 @@ boxplot(vuelos$distance, main="Distancia vuelos")
 summary(vuelos$distance)
 ```
 Del boxplot anterior determinamos que la distancia media realizada en los vuelos es de 925 km.
-El vuelo que menos distancia recorrio fueron 123 km y el vuelo que m·s distancia recorrio fueron 9275 km.
+El vuelo que menos distancia recorri√≥ fueron 123 km y el vuelo que m√°s distancia recorrio fueron 9275 km.
 
 
-La siguiente gr·fica muestra informacion sobre el retraso de llegada para los vuelos.
+La siguiente gr√°fica muestra informacion sobre el retraso de llegada para los vuelos.
 ```{r retraso llegada,out.width='100%'}
 boxplot(vuelos$arrival_delay, main="Retraso llegada")
 summary(vuelos$arrival_delay)
 ```
-
-Observando la gr·fica anterior vemos que los retrasos de llegada de los vuelos se concentran entre -9 y 7 minutos.
-
-
-Teniendo en cuenta esta primera observaciÛn de los datos en bruto, analizaremos cada variable con el fin de obtener el m·ximo de informaciÛn posible antes de aplicar cualquier modelo.
+Observando la gr√°fica anterior vemos que los retrasos de llegada de los vuelos se concentran entre -9 y 7 minutos.
 
 
+Teniendo en cuenta esta primera observaci√≥n de los datos en bruto, analizaremos cada variable con el fin de obtener el m√°ximo de informaci√≥n posible antes de aplicar cualquier modelo.
 
-## 3. MetodologÌa a utilizar
+
+## 3. Metodolog√≠a a utilizar
 
 3.1. La primera accion a tomar sera obtener el conjunto de datos a analizar. Para ello, nos fijamos en la variable **general status code**. Obtendremos aquellos registros cuyo valor para esta variable sea **Departed**.
 
-3.2. El siguiente paso ser· limpiar los datos, analizar las variables de entrada, eliminar los NAs en el caso de ser posible, comprobar que los datos son correctos y crear nuevas variables en base a los datos existentes (siempre que sea posible y tenga sentido).
+3.2. El siguiente paso ser√° limpiar los datos, analizar las variables de entrada, eliminar los NAs en el caso de ser posible, comprobar que los datos son correctos y crear nuevas variables en base a los datos existentes (siempre que sea posible y tenga sentido).
 
-3.3 Se aÒadiran datos climaticos al dataset de entrada en funcion de las coordenadas geograficas.
+3.3 Se a√±adiran datos climaticos al dataset de entrada en funcion de las coordenadas geograficas.
 
-Los pasos seguidos para el tratamiento de datos y para aÒadir datos climaticos se incluyen en los archivos adjuntos **DescripcionDatosEntrada_01.R, ScriptWeather.ipynb, DescripcionDatosEntrada_02.R**.
+Los pasos seguidos en orden para el tratamiento de datos y para a√±adir datos climaticos se incluyen en los archivos adjuntos:
 
-3.4. Se utilizaran diferentes algoritmos para determinar las variables que mas influyen en el retraso de los vuelos.
-Aplicaremos regresion lineal, regresion logistica, ranfom forest y PCA. Se analizaran los resultados de cada algoritmo por separado y, finalmente, se hara una comparacion entre ellos.
+* 1 -DescripcionDatosEntrada_01.r
 
-3.5. Una vez determinado el mejor algoritmo analizaremos la relacion de las variables que forman el dataset con el retraso de los vuelos para determinar cual de ellas es m·s influyente
+* 2 -GraficasDatos.r
+
+* 3 -ScriptWeather.ipynb  -> se debe abrir con la herramienta jupyter notebook (python)
+
+* 4 -DescripcionDatosEntrada_02
+
+
+Para visualizar como se ha sido el proceso de agregaci√≥n de datos atm√≥sfericos, se puede ver el anexo adjuntado en el repositorio llamado:
+**ScriptWeather.md**
+
+3.4 Normalizaci√≥n.
+
+Para realizar un mejor estudio, hemos decidido normalizar los datos que tenemos. 
+Para ello se ejecuta la primera parte del archivo en R:
+
+* 5 -Normalizacion_modelizacion.r
+
+
+
+
+3.5. Se utilizaran diferentes algoritmos para determinar las variables que mas influyen en el retraso de los vuelos.
+Aplicaremos diferentes modelos y formas para analizar los datos que tenemos.
 
 * Regresion Lineal
 
+
+Primero tomamos una muestra aleatoria y luego vemos como influyen todas las variables respecto al retraso de la salida del vuelo:
+```{r summary2}
+vuelosNormalizado <- read.table("vuelosNormalizado.csv", header = T, sep = ",")
+indices <- sample( 1:nrow( vuelosNormalizado ), 150000 )
+muestra <- vuelosNormalizado[ indices, ]
+
+modelCom1 =lm(arrival_delay ~ ., na.action = na.omit, data = muestra)
+#summary(modelCom1)
+##para hacer el modelo con las variables deseadas
+model1 <- lm(departure_delay ~ distance+act_blocktime+cabin_1_fitted_configuration+
+               cabin_1_saleable+cabin_1_pax_boarded+cabin_1_rpk+cabin_1_ask+total_rpk+total_ask+load_factor+total_pax+
+               total_no_shows+total_cabin_crew+total_technical_crew+total_baggage_weight+
+               number_of_baggage_pieces+pesosFligthNumber+
+               pesosBoardPoint+pesosBoardLat+pesosBoardLon+pesosBoardCountryCode+pesosOffPoint+
+               pesoOffLat+pesoOffLon+pesoOffCountryCode+pesoAircraftType+pesoRouting+
+               pesoMesSalida+pesoDiaSalida+pesoHoraSalida+pesoMesLlegada+pesoDiaLlegada+
+               pesoHoraLlegada, 
+             na.action = na.omit, data = vuelosNormalizado)
+
+summary(model1)
+```
+
+
+Vamos a ver ahora que variables clim√°ticas afectan m√°s al retraso de la salida del vuelo:
+```{r summary3}
+model1b <- lm(departure_delay ~ TMIN_o+TMIN_d+TMAX_o+TMAX_d+
+            TAVG_o+TAVG_d+PRCP_o+PRCP_d+SNWD_o+SNWD_d, 
+             na.action = na.omit, data = vuelosNormalizado)
+
+summary(model1b)
+hist(model1b$residuals)
+
+```
+
+
+
 * Regresion Logistica
+Para la regresi√≥n log√≠stica se han realizado los siguientes comandos:
+
+```{r summary4}
+set.seed(1)
+muestra         <- sample(nrow(vuelosNormalizado),nrow(vuelosNormalizado)*.3)
+Train           <- vuelosNormalizado[-muestra,]
+Test            <- vuelosNormalizado[muestra,]
+
+model3     <- glm(departure_delay ~., Train, family = binomial(link="logit"))
+summary(model3)
+```
 
 * Random Forest
+```{r summary4}
+set.seed(1)
+indices <- sample( 1:nrow( vuelosNormalizado ), 10000 )
+muestra <- vuelosNormalizado[ indices, ]
+rf <- randomForest(departure_delay ~ .,na.action=na.omit,proximity=TRUE,
+                   keep.forest=FALSE, data=muestra)
+ 
+
+importance(rf)#para ver que variables son mas importantes
+MDSplot(rf, muestra$departure_delay)
+ 
+```
 
 * PCA
+```{r summary4}
+##ELEGIR VARIABLES QUE NO SEAN NULAS  O CONSTANTES
+vuelosPCA <- data.frame("TMIN_o" = vuelosNormalizado$TMIN_o, 
+                  "TMIN_d" = vuelosNormalizado$TMIN_d, 
+                  "TMAX_o" = vuelosNormalizado$TMAX_o,
+                  "TMAX_d" = vuelosNormalizado$TMAX_d,
+                  "TAVG_o" = vuelosNormalizado$TAVG_o,
+                  "TAVG_d" = vuelosNormalizado$TAVG_d,                 
+                  "distance" = vuelosNormalizado$distance, 
+                  "departure_delay" = vuelosNormalizado$departure_delay,
+                  "arrival_delay" = vuelosNormalizado$arrival_delay,
+                  "est_blocktime" = vuelosNormalizado$est_blocktime,
+                  "act_blocktime" = vuelosNormalizado$act_blocktime,
+                  "PRCP_o" = vuelosNormalizado$PRCP_o,
+                  "PRCP_d" = vuelosNormalizado$PRCP_d,
+                  "pesoHoraLlegada" = vuelosNormalizado$pesoHoraLlegada,
+                  "pesoDiaLlegada" = vuelosNormalizado$pesoDiaLlegada,
+                  "pesoMesLlegada" = vuelosNormalizado$pesoMesLlegada,
+                  "pesoHoraSalida" = vuelosNormalizado$pesoHoraSalida,
+                  "pesoDiaSalida" = vuelosNormalizado$pesoDiaSalida,
+                  "pesoMesSalida" = vuelosNormalizado$pesoMesSalida,
+                  "pesoRouting" = vuelosNormalizado$pesoRouting,
+                  "pesoAircraftRegNumber" = vuelosNormalizado$pesoAircraftRegNumber,
+                  "pesoAircraftType" = vuelosNormalizado$pesoAircraftType
+                  
+                  ) 
 
+
+PCA<-prcomp(vuelosPCA[,-c(1)],scale. = TRUE)
+
+summary(PCA)
+biplot(PCA)
+```
 * Comparativa de los Modelos Anteriores
-
-* Analisis de variables en funcion al retraso de los vuelos
-
+Si comparamos los modelos anteriores, podemos ver que nos apuntan a la misma direcci√≥n.
 
 
-## 4. Resumen de Resultados 
 
-Una vez realizado el an·lisis del dataframe obtenemos los siguientes resultados:
+
+## 4. Conclusiones y resumen de resultados
+
+Como conclusiones se puede indicar que las variables que m√°s influyen en el retraso de los vuelos analizados son:
+
+* la distancia.
+
+* Las caracter√≠sticas del avi√≥n, como el peso.
+
+* La hora de salida.
+
+* La temperatura media.
+
+* La ruta del vuelo.
+
+
+Es decir hay motivos obvios, como la de la hora del vuelo, si un vuelo esta programado por la tarde noche, es normal que se retrase ese vuelo.
+
+
+En cuanto al an√°lisis de variables atm√≥sfericas, se puede deducir que no son demasiado influyentes como otras variables. La temperatura es la variable que m√°s influye. Otras condiciones clim√°ticas no parecen ser relevantes.
+
+
+
+
 
 
