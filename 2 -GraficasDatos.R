@@ -650,25 +650,132 @@ str(vuelos)
 
 
 # Variables numericas
-## graficas de retraso en base a variables numericas
+## Graficas y correlaciones de retraso en base a variables numericas
+## Para comprobar la correlacion entre variables utilizaremos el test de correlacion de Pearson.
+## Establecemos que existe correlacion entre variables si el resultado del test devuelve un p-value
+## inferior a 0.05 y la correlacion tiene valores cercanos a -1 o 1
 
+## Distance
 ggplot(vuelos, aes(x = distance, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = departure_delay, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = act_blocktime, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_fitted_configuration, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_saleable, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_pax_boarded, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = cabin_1_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = load_factor, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_pax, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_no_shows, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_cabin_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_technical_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = total_baggage_weight, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
-ggplot(vuelos, aes(x = number_of_baggage_pieces, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$distance)
+## p-value  0.0002. 
+## cor     -0.0079  
+## No existe una correlacion significativa entre estas variables
 
-## De los graficos anteriores se puede observar que únicamente existe correlacion con la variable
-## arrival_delay por medio de la variable departure_delay
+## Departure_delay
+ggplot(vuelos, aes(x = departure_delay, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$departure_delay)
+## p-value  2.2e-16
+## cor      0.72
+## Existe correlacion entre estas dos variables
+
+## act_blocktime
+ggplot(vuelos, aes(x = act_blocktime, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$act_blocktime)
+## p-value 4.36e-13
+## cor    -0.015
+## No existe una correlacion significativa entre estas variables
+
+## cabin_1_fitted_configuration
+ggplot(vuelos, aes(x = cabin_1_fitted_configuration, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$cabin_1_fitted_configuration)
+## p-value 2.2e-16 
+## cor    -0.0237
+## No existe una correlacion significativa entre estas variables
+
+## cabin_1_saleable
+ggplot(vuelos, aes(x = cabin_1_saleable, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$cabin_1_saleable)
+## p-value 4.57e-10
+## cor    -0.013 
+## No existe una correlacion significativa entre estas variables
+
+## cabin_1_pax_boarded
+ggplot(vuelos, aes(x = cabin_1_pax_boarded, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$cabin_1_pax_boarded)
+## p-value 2.2e-16
+## cor     0.025
+## No existe una correlacion significativa entre estas variables
+
+## cabin_1_rpk
+ggplot(vuelos, aes(x = cabin_1_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$cabin_1_rpk)
+## p-value 1.361e-10 
+## cor     0.013
+## No existe una correlacion significativa entre estas variables
+
+## cabin_1_ask
+ggplot(vuelos, aes(x = cabin_1_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$cabin_1_ask)
+## p-value 0.913
+## cor    -0.0001
+## No existe correlacion
+
+## total_rpk
+ggplot(vuelos, aes(x = total_rpk, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_rpk)
+## p-value 9.142e-10
+## cor     0.0132
+## No existe correlacion
+
+## total_ask
+ggplot(vuelos, aes(x = total_ask, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_ask)
+## p-value 0.166
+## cor    -00029
+## No existe correlacion
+
+## load_factor
+ggplot(vuelos, aes(x = load_factor, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$load_factor)
+## p-value 2.2e-16
+## cor     0.0627
+## No existe correlacion
+
+## total_pax
+ggplot(vuelos, aes(x = total_pax, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_pax)
+## p-value 2.2e-16
+## cor     0.0242
+## No existe correlacion
+
+## total_no_shows
+ggplot(vuelos, aes(x = total_no_shows, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_no_shows)
+## p-value 2.799e-07
+## cor    -0.011
+## No existe correlacion
+
+## total_cabin_crew
+ggplot(vuelos, aes(x = total_cabin_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_cabin_crew)
+## p-value 1.06e-06
+## cor    -0.01
+## No existe correlacion
+
+## total_technical_crew
+ggplot(vuelos, aes(x = total_technical_crew, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_technical_crew)
+## p-value 0.09419
+## cor     0.0036
+## No existe correlacion
+
+## total_baggage_weight
+ggplot(vuelos, aes(x = total_baggage_weight, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$total_baggage_weight)
+## p-value 2.2e-16
+## cor     0.026
+# No existe correlacion
+
+## number_of_baggage_pieces
+ggplot(vuelos, aes(x = number_of_baggage_pieces, y = arrival_delay)) + geom_point() + geom_smooth(method = "lm", se=TRUE, color="red", formula = y ~ x)
+cor.test(vuelos$arrival_delay, vuelos$number_of_baggage_pieces)
+## p-value 2.2e-16
+## cor     0.0236
+## No existe correlacion
+
+
+## De las variables analizadas en este punto se observa que para la variable arrival_delay únicamente existe 
+## correlacion con la variable departure_delay
+
+
