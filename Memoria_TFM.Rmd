@@ -1,13 +1,14 @@
 ---
 title: "Memoria_TFM"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+setwd("C:/Users/sergi/Downloads/TFM-master33/TFM-master") ## RECUERDE CAMBIAR ESTA RUTA para el correcto funcionamiento
  
 ```
 
@@ -129,7 +130,7 @@ Aplicaremos diferentes modelos y formas para analizar los datos que tenemos.
 Para la regresión logística se han realizado los siguientes comandos:
 
 ```{r summary4b, echo=FALSE}
-setwd("C:/Users/sergi/Downloads/TFM-master222/TFM-master") ## ruta portatil
+
 
 vuelosNormalizado <- read.table("vuelosNormalizado.csv", header = T, sep = ",")
 vuelosNormalizado$X<-NULL
