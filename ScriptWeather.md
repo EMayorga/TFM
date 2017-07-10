@@ -6,6 +6,8 @@ A continuación se irán describiendo los pasos a ejecutar.
 
 El primer paso es importar las librerias necesarias:
 
+# PASO 1
+
 
 ```python
 import time
@@ -18,54 +20,63 @@ import os.path
 pd.set_option('display.max_columns', None)
 ```
 
+# PASO 2
+
 Se lee el fichero generado anteriormente para crear nuevas columnas.
 
 
 ```python
-if vuelos.empty:
-    
-    vuelos = pd.read_csv('vuelosDeparted.csv', sep=',',low_memory=False, )
-    vuelos.rename(columns={'Unnamed: 0': 'index'}, inplace=True)
+vuelos = pd.read_csv('vuelosDeparted.csv', sep=',',low_memory=False, )
+vuelos.rename(columns={'Unnamed: 0': 'index'}, inplace=True)
 
-    vuelos["TMIN_o"]= ''
-    vuelos["TMIN_d"]= ''
-    vuelos["TMAX_o"]= ''
-    vuelos["TMAX_d"]= ''
-    vuelos["TAVG_o"]= ''
-    vuelos["TAVG_d"]= ''
-    vuelos["SNOW_o"]= ''
-    vuelos["SNOW_d"]= ''
-    vuelos["PRCP_o"]= ''
-    vuelos["PRCP_d"]= ''
-    vuelos["SNWD_o"]= ''
-    vuelos["SNWD_d"]= ''
-    vuelos["ACMC_o"]= ''
-    vuelos["ACMC_d"]= ''
-    vuelos["ACSC_o"]= ''
-    vuelos["ACSC_d"]= ''
-    vuelos["AWDR_o"]= ''
-    vuelos["AWDR_d"]= ''
-    vuelos["AWND_o"]= ''
-    vuelos["AWND_d"]= ''
-    vuelos["EVAP_o"]= ''
-    vuelos["EVAP_d"]= ''
-    vuelos["FRTH_o"]= ''
-    vuelos["FRTH_d"]= ''
-    vuelos["TSUN_o"]= ''
-    vuelos["TSUN_d"]= ''
-    vuelos["WDMV_o"]= ''
-    vuelos["WDMV_d"]= ''
+vuelos["TMIN_o"]= ''
+vuelos["TMIN_d"]= ''
+vuelos["TMAX_o"]= ''
+vuelos["TMAX_d"]= ''
+vuelos["TAVG_o"]= ''
+vuelos["TAVG_d"]= ''
+vuelos["SNOW_o"]= ''
+vuelos["SNOW_d"]= ''
+vuelos["PRCP_o"]= ''
+vuelos["PRCP_d"]= ''
+vuelos["SNWD_o"]= ''
+vuelos["SNWD_d"]= ''
+vuelos["ACMC_o"]= ''
+vuelos["ACMC_d"]= ''
+vuelos["ACSC_o"]= ''
+vuelos["ACSC_d"]= ''
+vuelos["AWDR_o"]= ''
+vuelos["AWDR_d"]= ''
+vuelos["AWND_o"]= ''
+vuelos["AWND_d"]= ''
+vuelos["EVAP_o"]= ''
+vuelos["EVAP_d"]= ''
+vuelos["FRTH_o"]= ''
+vuelos["FRTH_d"]= ''
+vuelos["TSUN_o"]= ''
+vuelos["TSUN_d"]= ''
+vuelos["WDMV_o"]= ''
+vuelos["WDMV_d"]= ''
 
 
-    vuelos.to_csv('vuelos.csv', sep=',', index=False)
+vuelos.to_csv('vuelosDatosAtmosfericos.csv', sep=',', index=False)
 ```
 
+# PASO 3
+
 Se obtienen las estaciones metereólogicas de dónde se obtendrá el tiempo.
-Hay que bajarse el siguiente fichero:
+Hay que bajarse el siguiente fichero y renombrarlo como "stations.txt" :
 https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
 
-Se puede usar el siguiente comando:
+Se puede usar el siguiente comando en entornos unix:
 !wget http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt -O stations.txt
+
+
+```python
+!wget http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt -O stations.txt
+#si fallase el comando, habria que bajarse el archivo manualmente y renombrarlo a stations.txt (sobre todo en sistemas windows)
+    
+```
 
 
 ```python
@@ -80,17 +91,48 @@ stations2 = stations2[:-1]
 stations2 = map(lambda line: [line[0:11],float(line[13:20]),float(line[22:30]),line[41:71]], stations2)
 ```
 
+# PASO 4
+
 A continuación se obtendrá los ficheros y cargará en un dataframe con la información de las estaciones y su localización.
 Además se declaran varias funciones para calcular que estación es la más cercana a cada vuelo.
 
 Hay que tener en cuenta que los ficheros de datos de Noaa tienen la información anual.
+
+
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2017.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2016.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2015.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2014.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2013.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2012.csv.gz
+https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2011.csv.gz
+
 Por lo que hay que ir ejecutando cambiando la variable "year".
+
+# PASO 5
+
+En este paso se indica con que se año se desea trabajar. Se ha desarrollado el script para obtener y tratar datos de un año en concreto.
+
+
+```python
+year = '2017'
+```
+
+
+```python
+u = 'http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/'+year+'.csv.gz'
+w = year+'.csv.gz'
+!wget $u
+!gunzip $w     
+
+#si el comando falla, recomendamos bajar manualmente el fichero de la ruta. (sobre todo en sistemas windows)
+```
+
+# PASO 6
 
 
 ```python
 start = time.time()
-
-year = '2017'
 
 weatherdf = pd.read_csv(year+".csv",header=None)
 weatherdf.columns = ["id","date","type","Value1","Value2","Value3","Value4","Value5"]
@@ -168,6 +210,8 @@ end = time.time()
 print(end - start)
 ```
 
+# PASO 7
+
 
 ```python
 #aplicamos y obtenemos las estaciones
@@ -183,6 +227,8 @@ else:
     vuelos = vuelos.apply(lambda x: aplicarEstacionesOrigen(x),axis = 1)
     vuelos = vuelos.apply(lambda x: aplicarEstacionesDestino(x),axis = 1)
 ```
+
+# PASO 8
 
 La siguiente función trata y junta los datos.
 
@@ -413,6 +459,8 @@ def functionPlus(year, month, day):
     print(end - start)
 ```
 
+# PASO 9
+
 La ejecución de la siguiente celda hace que se procesen todos los vuelos de los días y meses del año.
 Recordar que hay que repetir lo mismo para cada año.
 
@@ -422,7 +470,7 @@ Recordar que hay que repetir lo mismo para cada año.
 
 dia = 1
 mes = 1
-anyo = 2017
+anyo = int(year)
 for mes in range(1,13):
     print 'empiezo el mes', mes
     mesw = str(mes)
@@ -436,14 +484,22 @@ for mes in range(1,13):
         functionPlus(year,mes,dia)
 ```
 
+# PASO 10
+
 
 ```python
-vuelos.to_csv('vuelos.csv', sep=',', index=False)
+vuelos.to_csv('vuelosDatosAtmosfericos.csv', sep=',', index=False)
 ```
 
-En este punto se han procesado todos los vuelos. Pero nos encontramos con el problema de tener demasiados nulos. Es decir, vuelos sin datos del tiempo. Entonces se ha decidido buscar la siguiente estación más cercana para disminuir este problema.
+NOTA IMPORTANTE, LEE ANTES DE CONTINUAR:
+Si se han procesado todos los años (2017, 2016, 2015, 2014, 2013, 2012, 2011) se puede continuar a la Segunda parte.
+Si no, se debe volver al Paso nº 5 y cambiar la variable "year" por el año que falte procesar. Es importante procesar todos los años, ya que ha sido lo que hemos hecho nosotros.
 
 # Segunda parte 
+
+Si se han procesado todos los años, se quiere decir que se han procesado todos los vuelos. Pero nos encontramos con el problema de tener demasiados nulos. Es decir, vuelos sin datos del tiempo. Entonces se ha decidido buscar la siguiente estación más cercana para disminuir este problema.
+
+# PASO 11
 
 
 ```python
@@ -536,11 +592,37 @@ def functionGest(year, month, day):
     vuelos[var_] = vuelosSinTratar.set_index(['index'])[var_].combine_first(vuelos.set_index(['index'])[var_]).values
 ```
 
+# PASO 12
+
 Como en pasos anteriores la siguiente celda habrá que modificarla y ejecutar los siguientes pasos varias veces. Una para cada dato a procesar.
 
 
-(Se podria montar un bucle, pero como tarda mucho, se ha particionado la ejecución)
+(Se intentó montar un bucle, pero como tarda mucho, se ha particionado la ejecución para controlar la ejecución)
 
+Para las siguientes variables de las cuales queremos quitar nulos, hay que hacer ejecuciones por cada año.
+- PRCP_o   
+- PRCP_d
+- TAVG_o
+- TAVG_d
+- TMAX_o
+- TMAX_d
+- TMIN_o
+- TMIN_d
+
+NOTA IMPORTANTE:
+
+Hay 7 años y 8 variables,y son muchas ejecuciones. Hay años con pocos datos como de 2011 - 2013 . Y se podría saltar si se desea. Nosotros hemos ejecutado todos los años. Se puede coger el año 2016 por ejemplo para seguir. Si no se tiene demasiado tiempo para ejecutar.
+Se dejo así por que era más cómodo para controlar lo que ibamos ejecutando y tratando.
+
+
+```python
+weatherdf = weather #reseteamos los datos del tiempo por si acaso.
+```
+
+
+```python
+year = '2017'  #cambiar el año para cada ciclo
+```
 
 
 ```python
@@ -552,8 +634,8 @@ stations2 = stationstxt.split("\n")
 stations2 = stations2[:-1]
 stations2 = map(lambda line: [line[0:11],float(line[13:20]),float(line[22:30]),line[41:71]], stations2)
 
-year = '2017'#cambiar el año para cada ciclo
-#########################  ir ejecutando de una en una para cada año
+
+#########################  ir comentando y descomentando (dejar solo 1 descomentada).
 var_ = "PRCP_o"   
 #var_ = "PRCP_d"
 #var_ = "TAVG_o"
@@ -563,10 +645,14 @@ var_ = "PRCP_o"
 #var_ = "TMIN_o"
 #var_ = "TMIN_d"
 ########################
+
+
 var = var_.split("_")[0]
 stationsX = weatherdf[weatherdf["type"]==var]
 stationsX = stationsX.sort_values(by=['id'])
 ```
+
+# PASO 13
 
 
 ```python
@@ -586,6 +672,8 @@ else:
     del lista['id']
 ```
 
+# PASO 14
+
 
 ```python
 m = 'board_stationid_o_'+var
@@ -600,8 +688,10 @@ else:
     coordenadasOrigen = coordenadasOrigen.apply(lambda x:obtenerEstacionBoard(x),axis = 1)
     vuelos = vuelos.apply(lambda x: aplicarEstacionesOrigen(x),axis = 1)
     
-vuelos.to_csv('vuelos.csv', sep=',', index=False)
+vuelos.to_csv('vuelosDatosAtmosfericos.csv', sep=',', index=False)
 ```
+
+# PASO 15
 
 
 ```python
@@ -617,6 +707,8 @@ else:
     coordenadasDestino = coordenadasDestino.apply(lambda x:obtenerEstacionOff(x),axis = 1)
     vuelos = vuelos.apply(lambda x: aplicarEstacionesDestino(x),axis = 1)
 ```
+
+# PASO 16
 
 Los siguientes bucles repasan día a día los vuelos del año y rellenan los datos.
 
@@ -635,8 +727,12 @@ for mes in range(1,13):
 
         functionGest(year2,mes,dia)
         
-vuelos.to_csv('vuelos.csv', sep=',', index=False) 
+vuelos.to_csv('vuelosDatosAtmosfericos.csv', sep=',', index=False) 
 ```
+
+IMPORTANTE: si no se han procesado todos los datos es necesario ir al paso 12 de nuevo y cambiar la configuración con nuevos datos a procesar.
+
+# PASO 17
 
 Borramos columnas que no se necesitarán
 
@@ -671,6 +767,8 @@ del vuelos['off_stationid_d_TMIN']
 del vuelos['SNWD_d']
 del vuelos['SNWD_o']
 ```
+
+# PASO 18
 
 Dejamos a nulos lo valores no tratados o no encontrados
 
@@ -707,6 +805,8 @@ def functionTreatNull(row):
 
 vuelos = vuelos.apply(lambda x: functionTreatNull(x), axis=1)
 ```
+
+# PASO 19
 
 
 ```python
