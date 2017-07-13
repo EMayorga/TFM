@@ -1,2 +1,8 @@
  
 Este es el repositorio que contiene un trabajo de fin de Máster!. Contiene tanto scripts en R y como un notebook de Jupyter. Hay disponible una memoria en PDF y en MarkDown a modo resumen del trabajo que hemos realizado.
+
+Las herramientas utilizadas han sido:
+
+* RStudio (Version 1.0.136)
+
+* Jupyter-Notebook (Python 2.7)
